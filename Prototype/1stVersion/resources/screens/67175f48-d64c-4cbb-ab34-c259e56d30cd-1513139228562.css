@@ -1,0 +1,17 @@
+#s-67175f48-d64c-4cbb-ab34-c259e56d30cd > #backgroundBox {
+  background-color: transparent;
+  background-image: none;
+  position: absolute;
+}
+#s-67175f48-d64c-4cbb-ab34-c259e56d30cd > #alignmentBox {
+  position: relative;
+  margin: 0 auto;
+  width: 1280px;
+  min-width: 1280px;
+  min-height: 800px;
+}
+#s-67175f48-d64c-4cbb-ab34-c259e56d30cd > #loadMark {
+  width: 1px;
+  visibility: hidden;
+  display: none;
+}
