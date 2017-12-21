@@ -12,4 +12,6 @@ def request_and_parse_json(url_string):
 
 event_raw = request_and_parse_json(event_url)
 events = pd.DataFrame(event_raw)
+
+
 print(events)

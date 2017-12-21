@@ -2,10 +2,108 @@
 
 <head>
   <script src="scripts/d3/d3.min.js"></script>
+  <script src="scripts/jquery-3.2.1.min.js"></script>
+  <script src="scripts/material.js"></script>
+  <script src="scripts/flat-ui.js"></script>
+  <script src="scripts/flatpickr.js"></script>
+  <!-- <script src="scripts/jquery-ui.min.js"></script> -->
   <script src="scripts/main.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="css/material.css">
+  <link rel="stylesheet" type="text/css" href="css/flatpickr.min.css">
+  <link rel="stylesheet" type="text/css" href="css/flat-ui.css">
+  <link rel="stylesheet" type="text/css" href="css/flatslider.css">
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+
+  <!-- <link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css"> -->
 </head>
 
 <body>
+  <div id = "container">
+    <div id = "main_panel">
+      <iframe id="google" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3727914.172595117!2d142.9456328629132!3d-36.447499635928125!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad4314b7e18954f%3A0x5a4efce2be829534!2sVictoria!5e0!3m2!1sen!2sau!4v1513659684347" frameborder="0" style="border:0" allowfullscreen></iframe>
+    </div>
+    <div id = "filter_panel" class="mdl-ta mdl-shadow--8dp">
+      <div id = "filter_top_panel" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+        <div class="mdl-tabs__tab-bar">
+          <a href="#map" class="mdl-tabs__tab is-active">
+            <img src="images/australia-map.svg" alt="Map">
+          </a>
+          <a href="#list" class="mdl-tabs__tab">
+            <img src="images/list.svg" alt="List">
+          </a>
+          <a href="#charts" class="mdl-tabs__tab">
+            <img src="images/icon-chart.svg" alt="Chart">
+          </a>
+        </div>
+      </div>
+
+      <div class = "col-xs-12">
+        <div class = "container-center col-xs-12">
+          <a href="#fakelink" class="reset-btn btn btn-block btn-lg btn-danger">Reset Filter</a>
+        </div>
+        <div class="tagsinput-primary col-xs-12">
+          <input name="tagsinput" class="tagsinput form-control" data-role="tagsinput" value="" style="display: none;">
+        </div>
+        <hr>
+        <div class = "filter-group container-center col-xs-12">
+
+          <input type="text" name="date_range" placeholder="Date/s" id ="date_picker" class = "filter_content form-control">
+
+          <div href="#fakelink" class="mdl-shadow--2dp  filter_content reset-btn btn btn-block btn-lg btn-inverse">
+            <div class = "display-inline-block float-left">
+              Venue
+            </div>
+            <div class = "display-inline-block float-right">
+              0
+            </div>
+            <div style="clear: both;"></div>
+          </div>
+
+          <div href="#fakelink" class="mdl-shadow--2dp  filter_content reset-btn btn btn-block btn-lg btn-inverse">
+            <div class = "display-inline-block float-left">
+              Participating School/s
+            </div>
+            <div class = "display-inline-block float-right">
+              0
+            </div>
+            <div style="clear: both;"></div>
+          </div>
+
+          <div href="#fakelink" class="mdl-shadow--2dp filter_content reset-btn btn btn-block btn-lg btn-inverse">
+            <div class = "display-inline-block float-left">
+              Type
+            </div>
+            <div class = "display-inline-block float-right">
+              0
+            </div>
+            <div style="clear: both;"></div>
+          </div>
+        </div>
+        <div class = "filter-group container-center col-xs-12">
+
+          <small id = "popover-age">Age <span id = "popover-age-info" class="info fui-info-circle" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."></span></small>
+          <div class="flat-slider" id="flat-slider-age"></div>
+          <div class="slider-value">
+            <small id="min-age"></small> - <small id="max-age"></small>
+          </div>
+
+          <small>Household Income <span class="info fui-info-circle"></span></small>
+          <div class="flat-slider" id="flat-slider-household"></div>
+          <div class="slider-value">
+            <small id="min-income"></small> - <small id="max-income"></small>
+          </div>
+
+          <div href="#fakelink" class="mdl-shadow--2dp  filter_content reset-btn btn btn-block btn-lg btn-inverse">
+            <div class = "">
+              Ethnicity
+            </div>
+            <div style="clear: both;"></div>
+          </div>
+        </div>
+      </div>
+    <div>
+  </div>
 </body>
 
 </html>
