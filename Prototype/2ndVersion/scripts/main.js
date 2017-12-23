@@ -37,4 +37,84 @@ $( function() {
       trigger: 'hover',
       container: '#filter_panel'
       });
+
+    $('#popover-income-info').popover({
+      trigger: 'hover',
+      container: '#filter_panel'
+      });
+
+    $('.list-item').click(function() {
+      if ($(this).hasClass("active")) {
+        $(this).removeClass("active");
+      } else {
+        $(this).addClass("active");
+      }
+    })
+
+    $('.reset-btn').click(function() {
+
+
+      $('.filter-group, #main-search-panel').animate({
+        left: -$('#filter_panel').width(),
+      }, 200, function() {
+        // Animation complete.
+        }
+      );
+      $('.options-pane').animate({
+        right: 0,
+      }, 200, function() {
+        // Animation complete.
+        }
+      );
+    })
+
+    $('.back-button').click(function() {
+      $('.filter-group, #main-search-panel').animate({
+        left: 0,
+      }, 200, function() {
+        // Animation complete.
+        }
+      );
+      $('.options-pane').animate({
+        right: -$('#filter_panel').width(),
+      }, 200, function() {
+        // Animation complete.
+        }
+      );
+    })
+
+    $('#tab-buttons a').click(function(){
+      var $index = $(this).index();
+      console.log($index);
+      $('#main-panel-container').animate({
+        left: -$('#main_panel').width() * $index
+      }, 400);
+    });
+
+    $('.tagsinput-primary, .bootstrap-tagsinput, .bootstrap-tagsinput > input, .tagsinput').focusin(function(){
+      $('.tagsinput-primary').css({
+        'max-height': 'none',
+        'height': 'auto'
+      });
+    });
+
+    $('.bootstrap-tagsinput > input').focusout(function(){
+    console.log(!$('.tag').data('clicked'));
+      if (!$('.tag').data('clicked')){
+        $('.tag').data('clicked', false);
+        $('.tagsinput-primary').animate({
+          height: '40px'
+        }, 200, function() {
+          $('.tagsinput-primary').css({
+              'max-height': '40px'
+          });
+        });
+      }
+    });
+
+    // if($('.tagsinput-primary .bootstrap-tagsinput').hasClass("expanded")) {
+    //
+    // }
+
+
  } );

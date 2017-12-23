@@ -21,11 +21,15 @@
 <body>
   <div id = "container">
     <div id = "main_panel">
-      <iframe id="google" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3727914.172595117!2d142.9456328629132!3d-36.447499635928125!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad4314b7e18954f%3A0x5a4efce2be829534!2sVictoria!5e0!3m2!1sen!2sau!4v1513659684347" frameborder="0" style="border:0" allowfullscreen></iframe>
+      <div id = "main-panel-container">
+        <iframe id="google first-panel" class = "main-panel-item" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3727914.172595117!2d142.9456328629132!3d-36.447499635928125!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad4314b7e18954f%3A0x5a4efce2be829534!2sVictoria!5e0!3m2!1sen!2sau!4v1513659684347" frameborder="0" style="border:0" allowfullscreen></iframe><!--
+        --><div id="second-panel" class = "main-panel-item"></div><!--
+        --><div id="third-panel" class= "main-panel-item"></div>
+      </div>
     </div>
     <div id = "filter_panel" class="mdl-ta mdl-shadow--8dp">
       <div id = "filter_top_panel" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
-        <div class="mdl-tabs__tab-bar">
+        <div id = "tab-buttons" class="mdl-tabs__tab-bar">
           <a href="#map" class="mdl-tabs__tab is-active">
             <img src="images/australia-map.svg" alt="Map">
           </a>
@@ -38,14 +42,43 @@
         </div>
       </div>
 
+      <!-- Options Pane Start Here -->
+      <div class = "options-pane mdl-shadow--4dp container-center col-xs-12">
+        <div class = "options-pane-head mdl-shadow--4dp">
+          <div class = "back-button">
+            <span class="fui-arrow-left"></span>
+          </div>
+          <div class = "title">TITLE
+          </div>
+          <div class = "check-button">
+            <!-- <span class="fui-check"></span> -->
+          </div>
+        </div>
+        <div class = "options-pane-body container">
+          <div class = "list-item check-all btn btn-block btn-lg btn-info">
+            Check All
+          </div>
+          <ul>
+            <li class = "list-item btn btn-block btn-lg btn-info active">Venue 1</li>
+            <li class = "list-item btn btn-block btn-lg btn-info">Venue 2</li>
+            <li class = "list-item btn btn-block btn-lg btn-info">Venue 3</li>
+          </ul>
+        </div>
+      </div>
+      <!-- Options Pane End Here-->
+
       <div class = "col-xs-12">
-        <div class = "container-center col-xs-12">
-          <a href="#fakelink" class="reset-btn btn btn-block btn-lg btn-danger">Reset Filter</a>
+        <div id = 'main-search-panel'>
+          <div class = "container-center col-xs-12">
+            <a href="#fakelink" class="reset-btn btn btn-block btn-lg btn-danger">Reset Filter</a>
+          </div>
+          <div class="tagsinput-primary col-xs-12">
+            <input name="tagsinput" class="tagsinput form-control" data-role="tagsinput" value="" style="display: none;">
+            <!-- <div style="position: absolute;top:0;left:0;width: 100%;height:40px;background-color: blue;z-index:2;opacity:0.4;filter: alpha(opacity = 50)"></div> -->
+          </div>
+          <hr>
         </div>
-        <div class="tagsinput-primary col-xs-12">
-          <input name="tagsinput" class="tagsinput form-control" data-role="tagsinput" value="" style="display: none;">
-        </div>
-        <hr>
+
         <div class = "filter-group container-center col-xs-12">
 
           <input type="text" name="date_range" placeholder="Date/s" id ="date_picker" class = "filter_content form-control">
@@ -82,13 +115,13 @@
         </div>
         <div class = "filter-group container-center col-xs-12">
 
-          <small id = "popover-age">Age <span id = "popover-age-info" class="info fui-info-circle" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."></span></small>
+          <small id = "popover-age">Age <span id = "popover-age-info" class="info fui-info-circle" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Age is actually median age of a particular area. The data are collected from ABS."></span></small>
           <div class="flat-slider" id="flat-slider-age"></div>
           <div class="slider-value">
             <small id="min-age"></small> - <small id="max-age"></small>
           </div>
 
-          <small>Household Income <span class="info fui-info-circle"></span></small>
+          <small id = "popover-income">Household Income <span id = "popover-income-info" class="info fui-info-circle" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Household Income is actually median of weekly household income of a particular area. The data are collected from ABS."></span></small>
           <div class="flat-slider" id="flat-slider-household"></div>
           <div class="slider-value">
             <small id="min-income"></small> - <small id="max-income"></small>
