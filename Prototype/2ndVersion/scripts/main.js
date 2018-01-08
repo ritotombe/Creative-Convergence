@@ -55,26 +55,26 @@ $( function() {
     // Main Pane Selector - END
 
     // Main Search
-    $('.tagsinput-primary, .bootstrap-tagsinput, .bootstrap-tagsinput > input, .tagsinput').focusin(function(){
-      $('.tagsinput-primary').css({
-        'max-height': 'none',
-        'height': 'auto'
-      });
-    });
-
-    $('.bootstrap-tagsinput > input').focusout(function(){
-    console.log(!$('.tag').data('clicked'));
-      if (!$('.tag').data('clicked')){
-        $('.tag').data('clicked', false);
-        $('.tagsinput-primary').animate({
-          height: '40px'
-        }, 200, function() {
-          $('.tagsinput-primary').css({
-              'max-height': '40px'
-          });
-        });
-      }
-    });
+    // $('.tagsinput-primary, .bootstrap-tagsinput, .bootstrap-tagsinput > input, .tagsinput').focusin(function(){
+    //   $('.tagsinput-primary').css({
+    //     'max-height': 'none',
+    //     'height': 'auto'
+    //   });
+    // });
+    //
+    // $('.bootstrap-tagsinput > input').focusout(function(){
+    // console.log(!$('.tag').data('clicked'));
+    //   if (!$('.tag').data('clicked')){
+    //     $('.tag').data('clicked', false);
+    //     $('.tagsinput-primary').animate({
+    //       height: '40px'
+    //     }, 200, function() {
+    //       $('.tagsinput-primary').css({
+    //           'max-height': '40px'
+    //       });
+    //     });
+    //   }
+    // });
     // Main Search - END
 
     function initiateSliders(){
