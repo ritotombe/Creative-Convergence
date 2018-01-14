@@ -47,7 +47,6 @@ $( function() {
     // Main Pane Selector
     $('#tab-buttons a').click(function(){
       var $index = $(this).index();
-      console.log($index);
       $('#main-panel-container').animate({
         left: -$('#main_panel').width() * $index
       }, 400);
