@@ -6753,7 +6753,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
     this.$element.after(this.$container);
 
     var inputWidth = (this.inputSize < 3 ? 3 : this.inputSize) + "em";
-    this.$input.get(0).style.cssText = "width: " + inputWidth + " !important;";
+    this.$input.get(0).style.cssText = "width: " + inputWidth ;
     this.build(options);
   }
 

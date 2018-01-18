@@ -1,5 +1,14 @@
+var venues = {};
+var companies = {};
+var place = {};
+var events = [];
+var mainData = []; // venues -> organisation
+var completeData = []; //events -> organisation, venue
+var csvDict = [];
+var ABSData = [];
+var adjency = {}
 
-$( function(){
+// $( function(){
 
   // $.ajaxSetup({
   //    timeout: 1000
@@ -15,16 +24,6 @@ $( function(){
     "HotHouse Theatre": 798, //HotHouse Theatre
     "Melbourne Theatre Company": 2, //Melbourne Theatre Company
   };
-
-  var venues = {};
-  var companies = {};
-  var place = {};
-  var events = [];
-  var mainData = []; // venues -> organisation
-  var completeData = []; //events -> organisation, venue
-  var csvDict = [];
-  var ABSData = [];
-  var adjency = {}
 
   const ausstageEventsURI = "https://www.ausstage.edu.au/opencms/events?" //venue id and  company id required
   const ausstageVenuesURI = "https://www.ausstage.edu.au/opencms/markers?" //company id required
@@ -66,6 +65,7 @@ if (localStorage.getItem("data") == null || localStorage.getItem("data").length 
           }
         }
       }
+      // venues.sort()
 
       // Populate companies - fetch all company names from mainData and store it to companies (variable)
       for (data in mainData) {
@@ -120,6 +120,14 @@ if (localStorage.getItem("data") == null || localStorage.getItem("data").length 
         }
       });
     });
+} else {
+   let data = JSON.parse(localStorage.getItem("data"))
+   for (item in data){
+     if (!(data[item].venue in venues)){
+       venues[data[item].venue] = data[item].venue
+     }
+   }
+   // venues = venues.sort()
 }
 
 
@@ -159,4 +167,4 @@ if (localStorage.getItem("data") == null || localStorage.getItem("data").length 
     return inside;
   };
 
-});
+// });

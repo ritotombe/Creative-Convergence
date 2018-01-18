@@ -1,5 +1,6 @@
 body {
   margin : 0;
+  font-family: "Lato", Helvetica, Arial, sans-serif !important;
 }
 
 #container {
@@ -58,7 +59,11 @@ hr {
 }
 
 #second-panel{
-  background: red;
+  /* background: red; */
+}
+
+#third-panel{
+  width: 33%;
 }
 
 #filter_panel {
@@ -194,11 +199,51 @@ hr {
   color: #0c304a;
 }
 
+#options-container{
+  overflow-y: scroll;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.league-name {
+  margin: 0 20px 5px 20px;
+  padding: 3px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.notransition {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -o-transition: none !important;
+  transition: none !important;
+}
+
+#options{
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.tt-cursor {
+  background-color: #0c304a !important;
+}
+
 .list-item.active {
   cursor: pointer;
   color: #0c304a;
   background-color: #fffbcc;
   border-bottom: 1px  #ddd9aa solid;
+}
+
+.label-brown, .label-brown:hover  {
+  background-color: #aa6a00 !important;
+}
+
+.label-green, .label-green:hover{
+  background-color: #a8af17 !important;
+}
+
+.label-blue, .label-blue:hover{
+  background-color: #006edf !important;
 }
 
 /* MATERIAL DESIGN MODIFICATION */
@@ -241,7 +286,7 @@ hr {
   border: 1px solid #304e64;
 }
 .tagsinput-primary {
-  overflow-y: scroll;
+  overflow: visible;
   border-radius: 6px;
 }
 
@@ -249,12 +294,16 @@ hr {
   height: auto;
 }
 
-.tagsinput-primary .tag {
+.bootstrap-tagsinput {
+  padding: 5px 12px !important;
+}
+
+/* .tagsinput-primary .tag {
     background-color: #0c304a;
 }
 
 .tagsinput-primary .tag:hover {
-    background-color: #0c304a;
+    background-color: #0c304a; */
 }
 .form-group.focus .form-control, .form-control:focus {
   border: 1px solid #304e64;
@@ -290,6 +339,58 @@ small {
   height: auto;
 }
 
+
+
+.pagination li.active > a,
+.pagination li.active > span,
+.pagination li.active > a:hover,
+.pagination li.active > span:hover,
+.pagination li.active > a:focus,
+.pagination li.active > span:focus {
+  background-color: #0c304a !important;
+}
+
+
+.pagination li > a:hover,
+.pagination li > span:hover,
+.pagination li > a:focus,
+.pagination li > span:focus {
+  background-color: #0c304a !important;
+}
+
+.tt-dropdown-menu{
+  border: none !important;
+  color: black;
+  -webkit-box-shadow: 1px 0 0 #e6e6e6, -1px 0 0 #e6e6e6, 0 1px 0 #e6e6e6, 0 -1px 0 #e6e6e6, 0 3px 13px rgba(0,0,0,0.08);
+  box-shadow: 1px 0 0 #e6e6e6, -1px 0 0 #e6e6e6, 0 1px 0 #e6e6e6, 0 -1px 0 #e6e6e6, 0 3px 13px rgba(0,0,0,0.08);
+  width: 100% !important;
+}
+
+.tt-category-header{
+  font-weight: bold;
+  padding: 6px 10px !important;
+}
+
+input.tt-input, input.tt-hint{
+  width: 100% !important;
+}
+
+.twitter-typeahead input{
+  width: 100% !important;
+}
+
+.bootstrap-tagsinput input[type="text"]::-webkit-input-placeholder {
+    color: #bdc3c7;
+}
+.bootstrap-tagsinput input[type="text"]::-moz-placeholder{
+    color: #bdc3c7;
+}
+.bootstrap-tagsinput input[type="text"]:-ms-input-placeholder {
+    color: #bdc3c7;
+}
+.bootstrap-tagsinput input[type="text"]:-moz-placeholder{
+    color: #bdc3c7;
+}
 /* MAPPING */
 
 .stations, .stations svg {
@@ -325,4 +426,54 @@ small {
 
 #legend h3{
   margin: 5px;
+}
+
+/* Datatables */
+
+.pagination li > a, .pagination li > span {
+    min-height: 2px !important;
+}
+
+#raw-data, #raw-data_wrapper, table.dataTable thead, #raw-data_length label{
+  font-size: small !important;
+}
+
+#raw-data_wrapper{
+  margin: 10px;
+}
+
+#raw-data_length, th {
+  margin-bottom: 20px !important;
+}
+
+#raw-data_length {
+  display: inline-block;
+}
+
+table.dataTable thead > tr > th.sorting_asc,
+table.dataTable thead > tr > th.sorting_desc,
+table.dataTable thead > tr > th.sorting,
+table.dataTable thead > tr > td.sorting_asc,
+table.dataTable thead > tr > td.sorting_desc,
+table.dataTable thead > tr > td.sorting {
+    padding: 10px 20px 10px 0px;
+}
+
+.buttons-excel{
+  color: #569ff7;
+  cursor: pointer;
+}
+
+.buttons-excel:hover {
+  color: #34495e;
+}
+
+.dt-buttons {
+  display: inline-block;
+  float: right;
+  cursor: pointer !important;
+}
+
+.dataTables_scroll {
+  min-width: 100% !important;
 }

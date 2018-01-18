@@ -1,17 +1,27 @@
+var rawDataTable;
+var searchQuery = []
+var selectedCompany = [];
+var selectedWork = [];
+var selectedPlace = [];
+
 $( function() {
 
     initiateDatePicker();
     initiateSliders();
     initiateInfo();
+    initiateTypeahead();
 
-    // List Selection Drawer
-    $('.list-item').click(function() {
-      if ($(this).hasClass("active")) {
-        $(this).removeClass("active");
-      } else {
-        $(this).addClass("active");
-      }
-    })
+    rawDataTable = initiateRawData();
+
+    $("#options-container").css('height',
+      $("#filter_panel").height() -
+        (
+          $(".options-pane").offset().top +
+          $(".options-pane-head").height() +
+          $(".check-all").height() +
+          parseInt($("#tab-buttons").css("marginBottom")) + 3
+        )
+      )
 
     $('.reset-btn').click(function() {
       $('.filter-group, #main-search-panel').animate({
@@ -51,6 +61,11 @@ $( function() {
         left: -$('#main_panel').width() * $index
       }, 400);
     });
+
+
+
+
+
     // Main Pane Selector - END
 
     // Main Search
@@ -125,4 +140,148 @@ $( function() {
             dateFormat: "d/m/Y"
           });
      }
+
+     function initiateRawData() {
+       return $('#raw-data').DataTable( {
+         data: JSON.parse(localStorage.getItem("data")),
+         columns: [
+           { "data": "company" },
+           { "data": "creative_work" },
+           { "data": "venue" },
+           { "data": "latitude" },
+           { "data": "longitude" },
+           { "data": "date" }
+         ],
+         // searching: false,
+         dom: 'flBtip',
+         buttons: [{
+            extend: 'excel',
+            text: 'Export to Spreadsheet..',
+            exportOptions: {
+                modifier: {
+                    search: 'none'
+                }
+            }
+        }],
+        scrollX: true
+       } );
+     }
+
+    function initiateTypeahead(){
+      let companyNames = []
+      let workNames =[]
+      let placeNames = []
+
+      let filter = function(suggestions, selected) {
+        return $.grep(suggestions, function(suggestion) {
+            return $.inArray(suggestion, selected) === -1;
+        });
+      }
+
+      let data = JSON.parse(localStorage.getItem("data"))
+      for (item in data) {
+        if (companyNames.indexOf(data[item].company) == -1){
+          companyNames.push(data[item].company)
+        }
+        if (workNames.indexOf(data[item].creative_work) == -1){
+          workNames.push(data[item].creative_work)
+        }
+        if (placeNames.indexOf(data[item].venue.split(', ')[1]) == -1){
+          placeNames.push(data[item].venue.split(', ')[1])
+        }
+      }
+
+      let company = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.whitespace,
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        limit: 5,
+        local: companyNames
+      });
+
+      let work = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.whitespace,
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        limit:5,
+        local: workNames
+      });
+
+      let place = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.whitespace,
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        limit:5,
+        local: placeNames
+      });
+
+      company.initialize()
+      work.initialize()
+      place.initialize()
+
+      $(".tagsinput").tagsinput({
+        tagClass: function(item) {
+          switch (item.kind) {
+            case 'company' : return 'label label-blue';
+            case 'work' : return 'label label-green';
+            case 'place' : return 'label label-brown';
+          }
+        },
+        itemValue: 'text',
+        itemText: 'text'
+      });
+
+      $('.bootstrap-tagsinput input').attr("placeholder", "Companies or Work Title");
+
+      $('.bootstrap-tagsinput input').typeahead({
+        highlight: true
+      },
+      {
+        name: 'company',
+        source: function(query, cb) {
+            company.get(query, function(suggestions) {
+                cb(filter(suggestions, searchQueryCompany));
+            });
+        },
+        displayKey: function(s) { return s },
+        templates: {
+          header: '<hr><small class="tt-category-header">Company</small><hr>'
+        }
+      },
+      {
+        name: 'work',
+        source: function(query, cb) {
+            work.get(query, function(suggestions) {
+                cb(filter(suggestions, searchQueryWork));
+            });
+        },
+        displayKey: function(s) { return s },
+        templates: {
+          header: '<hr><small class="tt-category-header">Creative Work</small><hr>'
+        }
+      },
+      {
+        name: 'place',
+        source: function(query, cb) {
+            place.get(query, function(suggestions) {
+                cb(filter(suggestions, searchQueryLocation));
+            });
+        },
+        displayKey: function(s) { return s },
+        templates: {
+          header: '<hr><small class="tt-category-header">Place</small><hr>'
+        }
+      }
+    )
+      .on('typeahead:selected', function(ev, s, dsName) {
+        if (dsName == 'company'){
+          selectedCompany.push(s)
+        } else if(dsName == 'work') {
+          selectedWork.push(s)
+        } else if(dsName == 'place') {
+          selectedPlace.push(s)
+        }
+
+        $('.tagsinput').tagsinput('add', {text: s, kind: dsName})
+        $('.bootstrap-tagsinput input').typeahead('close');
+        $('.bootstrap-tagsinput input').typeahead('val', '');
+      });
+    }
  } );

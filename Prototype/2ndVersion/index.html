@@ -3,22 +3,11 @@
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
 <head>
 
-  <script src="scripts/d3/d3.min.js"></script>
-  <script src="scripts/jquery-3.2.1.min.js"></script>
-  <script src="scripts/material.js"></script>
-  <script src="scripts/flat-ui.js"></script>
-  <script src="scripts/flatpickr.js"></script>
-  <!-- <script src="scripts/jquery-ui.min.js"></script> -->
-  <script src="scripts/victoria_polygon.js"></script>
-  <script src="https://maps.google.com/maps/api/js?sensor=true"></script>
-  <script src="scripts/main.js"></script>
-  <script src="scripts/data.js"></script>
-  <script src="config/config.js"></script>
-
   <link rel="stylesheet" type="text/css" href="css/material.css">
   <link rel="stylesheet" type="text/css" href="css/flatpickr.min.css">
   <link rel="stylesheet" type="text/css" href="css/flat-ui.css">
   <link rel="stylesheet" type="text/css" href="css/flatslider.css">
+  <link rel="stylesheet" type="text/css" href="css/datatables.css"/>
   <link rel="stylesheet" type="text/css" href="css/main.css">
   <!-- <link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css"> -->
 </head>
@@ -27,9 +16,23 @@
   <div id = "container">
     <div id = "main_panel">
       <div id = "main-panel-container">
-        <div id="map" class= "main-panel-item"></div><div id="legend"><h3>Legend</h3></div><!--
-        --><div id="second-panel" class = "main-panel-item"></div><!--
-        --><div id="third-panel" class= "main-panel-item"></div>
+        <div id="map" class= "main-panel-item">
+        </div><div id="second-panel" class = "main-panel-item">
+            <table id="raw-data" class ="row-border stripe hover">
+              <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Creative Work</th>
+                    <th>Venue</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Date</th>                             
+                </tr>
+              </thead>
+
+            </table>
+          </div><div id="third-panel" class= "main-panel-item">
+          </div>
       </div>
     </div>
     <div id = "filter_panel" class="mdl-ta mdl-shadow--8dp">
@@ -60,25 +63,21 @@
           </div>
         </div>
         <div class = "options-pane-body container">
-          <div class = "list-item check-all btn btn-block btn-lg btn-info">
+          <div class = "list-item check-all btn btn-block btn-lg btn-info notransition">
             Check All
           </div>
-          <ul>
-            <li class = "list-item btn btn-block btn-lg btn-info active">Venue 1</li>
-            <li class = "list-item btn btn-block btn-lg btn-info">Venue 2</li>
-            <li class = "list-item btn btn-block btn-lg btn-info">Venue 3</li>
-          </ul>
+          <div id="options-container">
+            <ul id="options">
+            </ul>
+          </div>
         </div>
       </div>
       <!-- Options Pane End Here-->
 
       <div class = "col-xs-12">
         <div id = 'main-search-panel'>
-          <div class = "container-center col-xs-12">
-            <a href="#fakelink" class="reset-btn btn btn-block btn-lg btn-danger">Reset Filter</a>
-          </div>
           <div class="tagsinput-primary col-xs-12">
-            <input name="tagsinput" class="tagsinput form-control" data-role="tagsinput" value="" style="display: none;">
+            <input name="tagsinput" placeholder="" class="tagsinput form-control" value="" style="display: none;">
             <!-- <div style="position: absolute;top:0;left:0;width: 100%;height:40px;background-color: blue;z-index:2;opacity:0.4;filter: alpha(opacity = 50)"></div> -->
           </div>
           <hr>
@@ -88,31 +87,31 @@
 
           <input type="text" name="date_range" placeholder="Date/s" id ="date_picker" class = "filter_content form-control">
 
-          <div href="#fakelink" class="mdl-shadow--2dp  filter_content reset-btn btn btn-block btn-lg btn-inverse">
+          <div id="venues" class="mdl-shadow--2dp  filter_content reset-btn btn btn-block btn-lg btn-inverse">
             <div class = "display-inline-block float-left">
-              Venue
+              Venue/s
             </div>
-            <div class = "display-inline-block float-right">
+            <div id="venues-selected" class = "display-inline-block float-right">
               0
             </div>
             <div style="clear: both;"></div>
           </div>
 
-          <div href="#fakelink" class="mdl-shadow--2dp  filter_content reset-btn btn btn-block btn-lg btn-inverse">
+          <div id="schools" class="mdl-shadow--2dp  filter_content reset-btn btn btn-block btn-lg btn-inverse">
             <div class = "display-inline-block float-left">
               Participating School/s
             </div>
-            <div class = "display-inline-block float-right">
+            <div id="schools-selected" class = "display-inline-block float-right">
               0
             </div>
             <div style="clear: both;"></div>
           </div>
 
-          <div href="#fakelink" class="mdl-shadow--2dp filter_content reset-btn btn btn-block btn-lg btn-inverse">
+          <div id="type" class="mdl-shadow--2dp filter_content reset-btn btn btn-block btn-lg btn-inverse">
             <div class = "display-inline-block float-left">
-              Type
+              Type/s
             </div>
-            <div class = "display-inline-block float-right">
+            <div id="type-selected" class = "display-inline-block float-right">
               0
             </div>
             <div style="clear: both;"></div>
@@ -139,10 +138,31 @@
             <div style="clear: both;"></div>
           </div>
         </div>
+        <div class = "container-center col-xs-12">
+          <a href="#fakelink" class="reset-btn btn btn-block btn-lg btn-danger" style="margin:0 5px;">Clear All</a>
+        </div>
       </div>
     <div>
   </div>
+
+  <script src="scripts/d3/d3.min.js"></script>
+  <script src="scripts/jquery-3.2.1.min.js"></script>
+  <script src="scripts/data.js"></script>
+  <script src="scripts/material.js"></script>
+  <script src="scripts/flatpickr.js"></script>
+  <!-- <script src="scripts/jquery-ui.min.js"></script> -->
+  <script src="scripts/victoria_polygon.js"></script>
+  <script src="https://maps.google.com/maps/api/js?sensor=true"></script>
+  <script src="scripts/DataTables/datatables.min.js"></script>
+  <script src="scripts/typeahead.bundle.min.js"></script>
+  <script src="scripts/flat-ui.js"></script>
+  <script src="scripts/main.js"></script>
+
+  <script src="config/config.js"></script>
   <script src="scripts/mapping.js"></script>
+  <script src="scripts/prepare_filter.js"></script>
+  <script src="scripts/filter.js"></script>
+
 </body>
 
 </html>
