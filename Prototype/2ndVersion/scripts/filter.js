@@ -57,6 +57,31 @@ $(function() {
                 filteredData.push(test[item])
             }
         }
+        // // PANDORA BOX - Uncomment only if smart search turned on (only show data that has been filtered from the search bar)
+        // let data = JSON.parse(localStorage.getItem("data"))
+        // if (!(searchQueryCompany.length == 0 & searchQueryWork.length == 0 & searchQueryLocation.length == 0)){
+        //   if (searchQueryCompany.length == 0) {
+        //     for (item in data) {
+        //       if (searchQueryCompany.indexOf(data[item].company) == -1 & !containsObject(data[item], filteredData)){
+        //         searchQueryCompany.push(data[item].company)
+        //       }
+        //     }
+        //   }
+        //   if (searchQueryWork.length == 0) {
+        //     for (item in data) {
+        //       if (searchQueryWork.indexOf(data[item].creative_work) == -1 & !containsObject(data[item], filteredData)){
+        //         searchQueryWork.push(data[item].creative_work)
+        //       }
+        //     }
+        //   }
+        //   if (searchQueryLocation.length == 0) {
+        //     for (item in data) {
+        //       if (searchQueryLocation.indexOf(data[item].venue.split(', ')[1]) == -1 & !containsObject(data[item], filteredData)){
+        //         searchQueryLocation.push(data[item].venue.split(', ')[1])
+        //       }
+        //     }
+        //   }
+        // }
 
         renderMap(filteredData);
         populateVenues()
@@ -131,5 +156,43 @@ $(function() {
 
         populateLists()
     }
+
+    function containsObject(obj, list) {
+    var i;
+    for (i = 0; i < list.length; i++) {
+        if (isEquivalent(list[i], obj)) {
+            return true;
+        }
+    }
+
+    return false;
+    }
+
+    function isEquivalent(a, b) {
+      // Create arrays of property names
+      var aProps = Object.getOwnPropertyNames(a);
+      var bProps = Object.getOwnPropertyNames(b);
+
+      // If number of properties is different,
+      // objects are not equivalent
+      if (aProps.length != bProps.length) {
+          return false;
+      }
+
+      for (var i = 0; i < aProps.length; i++) {
+          var propName = aProps[i];
+
+          // If values of same property are not equal,
+          // objects are not equivalent
+          if (a[propName] !== b[propName]) {
+              return false;
+          }
+      }
+
+      // If we made it this far, objects
+      // are considered equivalent
+      return true;
+  }
+
 
 });
