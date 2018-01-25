@@ -1,10 +1,11 @@
+var map
 // Create the Google Map…
 
 function renderMap(filteredData) {
 
   $( '<div id="legend"><h3>Legend</h3></div>' ).insertAfter( "#map" );
 
-  var map = new google.maps.Map(d3.select("#map").node(), {
+    map = new google.maps.Map(d3.select("#map").node(), {
     zoom: 7,
     center: new google.maps.LatLng(-36.8, 145.246528),
     mapTypeId: google.maps.MapTypeId.TERRAIN,
@@ -290,6 +291,7 @@ function renderMap(filteredData) {
   if (filteredData){
     data = filteredData
   }
+  
 
   var overlay = new google.maps.OverlayView();
 
@@ -307,9 +309,8 @@ function renderMap(filteredData) {
       var projection = this.getProjection(),
           padding = 10;
 
-      var adjency = {}
+      adjency = {}
       var entries = d3.entries(data)
-
       layerArc.selectAll("path").remove()
 
       /////LINE
@@ -319,13 +320,12 @@ function renderMap(filteredData) {
         }
         adjency[entries[item].value.company].push(getIProjection(entries[item]))
       }
-
+   
       // Add Line
       for (company in adjency) {
+        
         createPath(company)
       }
-
-
       /////MARKER
       var marker = layer.selectAll("svg")
           .data(d3.entries(data))
@@ -377,7 +377,7 @@ function renderMap(filteredData) {
           .attr("stroke-dasharray", totalLength + " " + totalLength)
           .attr("stroke-dashoffset", totalLength)
           .transition()
-            .duration(4000)
+            .duration(50000)
             .ease(d3.easeLinear)
             .attr("stroke-dashoffset", 0);
       }
@@ -396,4 +396,4 @@ function renderMap(filteredData) {
   overlay.setMap(map);
 }
 
-renderMap();
+

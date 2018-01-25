@@ -2,6 +2,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
 <head>
+  <title>Creative Convergence Map</title>
 
   <link rel="stylesheet" type="text/css" href="css/material.css">
   <link rel="stylesheet" type="text/css" href="css/flatpickr.min.css">
@@ -26,7 +27,11 @@
                     <th>Venue</th>
                     <th>Latitude</th>
                     <th>Longitude</th>
-                    <th>Date</th>                             
+                    <th>Date</th>  
+                    <th>Schools Attended</th>  
+                    <th>Type</th>        
+                    <th>Median Age</th>
+                    <th>Median Household Income ($)</th>                     
                 </tr>
               </thead>
 
@@ -83,11 +88,12 @@
           <hr>
         </div>
 
+        <small class="filter-group-title">Company Data</small>
         <div class = "filter-group container-center col-xs-12">
 
           <input type="text" name="date_range" placeholder="Date/s" id ="date_picker" class = "filter_content form-control">
 
-          <div id="venues" class="mdl-shadow--2dp  filter_content reset-btn btn btn-block btn-lg btn-inverse">
+          <div id="venues" class="mdl-shadow--2dp  filter_content filter-btn btn btn-block btn-lg btn-inverse">
             <div class = "display-inline-block float-left">
               Venue/s
             </div>
@@ -97,7 +103,7 @@
             <div style="clear: both;"></div>
           </div>
 
-          <div id="schools" class="mdl-shadow--2dp  filter_content reset-btn btn btn-block btn-lg btn-inverse">
+          <div id="schools" class="mdl-shadow--2dp  filter_content filter-btn btn btn-block btn-lg btn-inverse">
             <div class = "display-inline-block float-left">
               Participating School/s
             </div>
@@ -107,39 +113,36 @@
             <div style="clear: both;"></div>
           </div>
 
-          <div id="type" class="mdl-shadow--2dp filter_content reset-btn btn btn-block btn-lg btn-inverse">
+          <div id="type" class="mdl-shadow--2dp filter_content filter-btn btn btn-block btn-lg btn-inverse">
             <div class = "display-inline-block float-left">
               Type/s
             </div>
-            <div id="type-selected" class = "display-inline-block float-right">
+            <div id="types-selected" class = "display-inline-block float-right">
               0
             </div>
             <div style="clear: both;"></div>
           </div>
         </div>
-        <div class = "filter-group container-center col-xs-12">
 
+    
+
+        <small class="filter-group-title">Socio-Economic</small>
+        <div class = "filter-group container-center col-xs-12">
+          
           <small id = "popover-age">Age <span id = "popover-age-info" class="info fui-info-circle" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Age is actually median age of a particular area. The data are collected from ABS."></span></small>
           <div class="flat-slider" id="flat-slider-age"></div>
           <div class="slider-value">
-            <small id="min-age"></small> - <small id="max-age"></small>
+            <small class="age-value" id="min-age"></small> - <small class="age-value" id="max-age"></small>
           </div>
 
           <small id = "popover-income">Household Income <span id = "popover-income-info" class="info fui-info-circle" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Household Income is actually median of weekly household income of a particular area. The data are collected from ABS."></span></small>
           <div class="flat-slider" id="flat-slider-household"></div>
           <div class="slider-value">
-            <small id="min-income"></small> - <small id="max-income"></small>
-          </div>
-
-          <div href="#fakelink" class="mdl-shadow--2dp  filter_content reset-btn btn btn-block btn-lg btn-inverse">
-            <div class = "">
-              Ethnicity
-            </div>
-            <div style="clear: both;"></div>
+            <small class="income-value" id="min-income"></small> - <small class="income-value" id="max-income"></small>
           </div>
         </div>
         <div class = "container-center col-xs-12">
-          <a href="#fakelink" class="reset-btn btn btn-block btn-lg btn-danger" style="margin:0 5px;">Clear All</a>
+          <a class="btn btn-block btn-lg btn-danger" id="reset-btn" style="margin:0 5px;">Clear All</a>
         </div>
       </div>
     <div>
@@ -147,6 +150,7 @@
 
   <script src="scripts/d3/d3.min.js"></script>
   <script src="scripts/jquery-3.2.1.min.js"></script>
+  <script src="scripts/papaparse.min.js"></script>
   <script src="scripts/data.js"></script>
   <script src="scripts/material.js"></script>
   <script src="scripts/flatpickr.js"></script>
@@ -155,7 +159,9 @@
   <script src="https://maps.google.com/maps/api/js?sensor=true"></script>
   <script src="scripts/DataTables/datatables.min.js"></script>
   <script src="scripts/typeahead.bundle.min.js"></script>
+  
   <script src="scripts/flat-ui.js"></script>
+  <script src="scripts/date.js"></script>
   <script src="scripts/main.js"></script>
 
   <script src="config/config.js"></script>

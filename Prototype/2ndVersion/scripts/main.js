@@ -1,10 +1,12 @@
+//  All component initiation
+
 var rawDataTable;
 var searchQuery = []
 var selectedCompany = [];
 var selectedWork = [];
 var selectedPlace = [];
 
-$( function() {
+// $( function() {
 
     initiateDatePicker();
     initiateSliders();
@@ -23,7 +25,7 @@ $( function() {
         )
       )
 
-    $('.reset-btn').click(function() {
+    $('.filter-btn').click(function() {
       $('.filter-group, #main-search-panel').animate({
         left: -$('#filter_panel').width(),
       }, 200, function() {
@@ -95,7 +97,7 @@ $( function() {
       $('#flat-slider-age').slider({
         orientation: 'horizontal',
         range:       true,
-        values:      [17,67],
+        values:      [3,90],
         max:         90,
         min:         3,
         slide: function( event, ui ) {
@@ -109,8 +111,8 @@ $( function() {
       $('#flat-slider-household').slider({
         orientation: 'horizontal',
         range:       true,
-        values:      [800,1500],
-        max:         2000,
+        values:      [200,3000],
+        max:         3000,
         min:         200,
         slide: function( event, ui ) {
             $( "#min-income" ).html("$" + ui.values[0]);
@@ -150,8 +152,13 @@ $( function() {
            { "data": "venue" },
            { "data": "latitude" },
            { "data": "longitude" },
-           { "data": "date" }
+           { "data": "date", "type": "date" },
+           { "data": "school" },
+           { "data": "type" },
+           { "data": "age" },
+           { "data": "income" },
          ],
+         order: [[ 5, "asc" ]],
          // searching: false,
          dom: 'flBtip',
          buttons: [{
@@ -284,4 +291,4 @@ $( function() {
         $('.bootstrap-tagsinput input').typeahead('val', '');
       });
     }
- } );
+//  } );

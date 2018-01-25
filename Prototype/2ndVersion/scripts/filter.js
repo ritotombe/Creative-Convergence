@@ -1,7 +1,13 @@
+// This to change state of data that shown in the main panel, for UI changes please check ./prepare_filter.js
+
 var filteredData = []
 var searchQueryCompany = []
 var searchQueryWork = []
 var searchQueryLocation = []
+var optionsTypes = {
+    "venues" : "venues"
+}
+var dateMin = 0, dateMax = 0
 
 $(function() {
 
@@ -48,16 +54,16 @@ $(function() {
            .draw();
         }
 
-        let test = rawDataTable.rows({
-            search: 'applied'
-        }).data()
+        // let test = rawDataTable.rows({
+        //     search: 'applied'
+        // }).data()
 
-        for (item in test) {
-            if (typeof test[item] == "object" && test[item].company) {
-                filteredData.push(test[item])
-            }
-        }
-        // // PANDORA BOX - Uncomment only if smart search turned on (only show data that has been filtered from the search bar)
+        // for (item in test) {
+        //     if (typeof test[item] == "object" && test[item].company) {
+        //         filteredData.push(test[item])
+        //     }
+        // }
+        // // PANDORA BOX - Uncomment only if smart (not really smart thou) search turned on (only show data that has been filtered from the search bar)
         // let data = JSON.parse(localStorage.getItem("data"))
         // if (!(searchQueryCompany.length == 0 & searchQueryWork.length == 0 & searchQueryLocation.length == 0)){
         //   if (searchQueryCompany.length == 0) {
@@ -83,38 +89,252 @@ $(function() {
         //   }
         // }
 
-        renderMap(filteredData);
-        populateVenues()
+        // renderMap(filteredData);
+        // populateVenues()
+
+        renderAll()
     })
 
-    // $('#options').on("click", ".list-item",function() {
-    //   filteredData = []
-    //
-    //   console.log(venuesSelected);
-    //
-    //   rawDataTable
-    //   .columns(2)
-    //   .search(prepareQuery(venuesSelected), true )
-    //   .draw();
-    //
-    //   let test = rawDataTable.rows( {search:'applied'} ).data()
-    //
-    //   for (item in test) {
-    //     if (typeof test[item] == "object" && test[item].company) {
-    //       filteredData.push(test[item])
-    //     }
-    //   }
-    //
-    //   console.log(1111, filteredData);
-    //
-    //   renderMap(filteredData);
-    //   console.log(filteredData);
-    //   // populateVenues();
-    // })
+    // Add custom search function for date filter
+    $.fn.dataTable.ext.search.push(
+        function( settings, data, dataIndex ) {
+
+            var date = Date.parse( data[5] ) || 0; 
+
+            if ( ( dateMin == 0 && dateMax == 0 ) ||
+                ( dateMin == 0 && date <= dateMax ) ||
+                ( dateMin <= date   && dateMax == 0  ) ||
+                ( dateMin <= date   && date <= dateMax ) )
+            {            
+                return true;
+            }
+            return false;
+        }
+    );
+
+    // Add custom search function for age filter
+    $.fn.dataTable.ext.search.push(
+        function( settings, data, dataIndex ) {
+
+            let minAge = $( "#flat-slider-age" ).slider( "values", 0 )
+            let maxAge = $( "#flat-slider-age" ).slider( "values", 1 )
+
+            var age = data[8] || 0; 
+            
+
+            if ( ( minAge == 0 && maxAge == 0 ) ||
+                ( minAge == 0 && age <= maxAge ) ||
+                ( minAge <= age   && maxAge == 0  ) ||
+                ( minAge <= age   && age <= maxAge ) )
+            {            
+                return true;
+            }
+            return false;
+        }
+    );
+
+    // Add custom search function for income filter
+    $.fn.dataTable.ext.search.push(
+        function( settings, data, dataIndex ) {
+
+            let minIncome = $( "#flat-slider-household" ).slider( "values", 0 )
+            let maxIncome = $( "#flat-slider-household" ).slider( "values", 1 )
+
+            var income = data[9] || 0; 
+            
+
+            if ( ( minIncome == 0 && maxIncome == 0 ) ||
+                ( minIncome == 0 && income <= maxIncome ) ||
+                ( minIncome <= income   && maxIncome == 0  ) ||
+                ( minIncome <= income   && income <= maxIncome ) )
+            {            
+                return true;
+            }
+            return false;
+        }
+    );
+
+    $('#date_picker').on('change keyup focus', function (){
+        filteredData = []
+        filteredDate = $(this).val()
+
+        var filteredDateSplitter = filteredDate.split(" ")
+        dateMin = getDateFromFormat(filteredDateSplitter[0], 'dd/MM/yyyy')
+        dateMax = getDateFromFormat(filteredDateSplitter[2], 'dd/MM/yyyy')
+        
+        $(".flatpickr-calendar").css('visibility', 'visible');
+
+        if (filteredDate.match(/\S*\ to\ \S*/g)){
+            $(".flatpickr-calendar").css('visibility', 'hidden');
+        }
+        
+        rawDataTable.draw()
+        renderAll()  
+    })
+
+    $('.age-value').on('DOMSubtreeModified', function (){
+        clearTimeout( $(this).data('keytimer') );
+
+        $(this).data('keytimer', setTimeout(function() {
+            filteredData = []
+            rawDataTable.draw()
+            renderAll() 
+        },500)); 
+    })
+
+    $('.income-value').on('DOMSubtreeModified', function (){
+        clearTimeout( $(this).data('keytimer') );
+
+        $(this).data('keytimer', setTimeout(function() {
+            filteredData = []
+            rawDataTable.draw()
+            renderAll() 
+        },500)); 
+    })
+
+
+    $('.check-all').click(function() {
+        filteredData = []
+
+        let columnNumber = ""
+        let source = ""
+
+        switch (filterSelected) {
+            case (VENUE_SELECTED):
+                columnNumber = 2
+                if (checkAllState.VENUE_SELECTED){
+                    venuesSelected = []
+                    checkAllState.VENUE_SELECTED = false
+                } else {
+                    venuesSelected = Object.keys(venues)
+                    checkAllState.VENUE_SELECTED = true
+                }
+                source = venuesSelected
+                break
+            case (SCHOOL_SELECTED):
+                columnNumber = 6
+                if (checkAllState.SCHOOL_SELECTED){
+                    schoolsSelected = []
+                    checkAllState.SCHOOL_SELECTED = false
+                } else {
+                    schoolsSelected = Object.keys(schools)
+                    checkAllState.SCHOOL_SELECTED = true
+                }
+                source = schoolsSelected
+                break
+            case (TYPE_SELECTED):
+                columnNumber = 7
+                if (checkAllState.TYPE_SELECTED){
+                    typesSelected = []
+                    checkAllState.TYPE_SELECTED = false 
+                } else {
+                    typesSelected = Object.keys(types)
+                    checkAllState.TYPE_SELECTED =  true
+                }
+                source = typesSelected
+                break
+        }
+
+        if (source.length == 0) {
+            rawDataTable
+            .columns(columnNumber)
+            .search("%%/", true, false)
+            .draw();
+        } else {
+            rawDataTable
+            .columns(columnNumber)
+            .search(prepareQuery(source), true, false)
+            .draw();
+        }
+      
+        let test = rawDataTable.rows( {search:'applied'} ).data()
+      
+        for (item in test) {
+          if (typeof test[item] == "object" && test[item].company) {
+            filteredData.push(test[item])
+          }
+        }
+      
+        renderMap(filteredData);
+        populateLists(1);
+      })
+
+    $('#options').on("click", ".list-item",function() {
+        filteredData = []
+
+        let columnNumber = ""
+        let source = ""
+
+        switch (filterSelected) {
+            case (VENUE_SELECTED):
+                columnNumber = 2
+                source = venuesSelected
+                break
+            case (SCHOOL_SELECTED):
+                columnNumber = 6
+                source = schoolsSelected
+                break
+            case (TYPE_SELECTED):
+                columnNumber = 7
+                source = typesSelected
+                break
+        }
+ 
+        if ($(this).hasClass("active")) {
+            source.push($(this).html())
+        } else {
+            var selectedItem = $(this).html()
+            source = removeHelper(source, source.indexOf(selectedItem))
+        }
+
+        queryData(columnNumber, source)
+      
+        let test = rawDataTable.rows( {search:'applied'} ).data()
+      
+        for (item in test) {
+          if (typeof test[item] == "object" && test[item].company) {
+            filteredData.push(test[item])
+          }
+        }
+      
+        renderMap(filteredData);
+        populateLists()
+    })
+
+    $("#reset-btn").on("click", function(){
+        $(".tagsinput").tagsinput("removeAll")
+        $("#date_picker").val("")
+        initiateSliders()
+
+        checkAllState.SCHOOL_SELECTED = true
+        checkAllState.TYPE_SELECTED = true
+        checkAllState.VENUE_SELECTED = true
+    })
+
+    function renderAll() {
+        let test = rawDataTable.rows({
+            search: 'applied'
+        }).data()
+
+        for (item in test) {
+            if (typeof test[item] == "object" && test[item].company) {
+                filteredData.push(test[item])
+            }
+        }
+    
+        renderMap(filteredData);
+        populateVenues()
+    }
+
+    function queryData(columnNumber, source){
+        rawDataTable
+        .columns(columnNumber)
+        .search(prepareQuery(source), true, false )
+        .draw();
+    }
 
     function searchBar(mode, queryTerms) {
         queryTerms = prepareQuery(queryTerms)
-
         switch (mode) {
             case 'company':
                 rawDataTable
@@ -139,7 +359,6 @@ $(function() {
     }
 
     function prepareQuery(queryTerms) {
-        // console.log(queryTerms);
         if (!queryTerms) return '';
         return queryTerms.join('|')
     }
@@ -147,25 +366,38 @@ $(function() {
     function populateVenues() {
         let data = filteredData
         venues = {}
+        schools = {}
+        types = {}
         venuesSelected = []
+        schoolsSelected = []
+        typesSelected = []
         for (item in data) {
             if (!(data[item].venue in venues)) {
                 venues[data[item].venue] = data[item].venue
             }
+            if (!(data[item].school in schools)) {
+                schools[data[item].school] = data[item].school
+            }
+            if (!(data[item].type in types)) {
+                types[data[item].type] = data[item].type
+            }
         }
 
-        populateLists()
+
+        venues =  sortOnKeys(venues)
+
+        populateLists(2)
     }
 
     function containsObject(obj, list) {
-    var i;
-    for (i = 0; i < list.length; i++) {
-        if (isEquivalent(list[i], obj)) {
-            return true;
+        var i;
+        for (i = 0; i < list.length; i++) {
+            if (isEquivalent(list[i], obj)) {
+                return true;
+            }
         }
-    }
 
-    return false;
+        return false;
     }
 
     function isEquivalent(a, b) {
@@ -194,5 +426,6 @@ $(function() {
       return true;
   }
 
+  renderAll()
 
 });

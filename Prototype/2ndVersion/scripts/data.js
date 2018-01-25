@@ -1,4 +1,6 @@
 var venues = {};
+var types = {};
+var schools = {};
 var companies = {};
 var place = {};
 var events = [];
@@ -122,12 +124,41 @@ if (localStorage.getItem("data") == null || localStorage.getItem("data").length 
     });
 } else {
    let data = JSON.parse(localStorage.getItem("data"))
+   let cnt = 0;
    for (item in data){
-     if (!(data[item].venue in venues)){
-       venues[data[item].venue] = data[item].venue
-     }
+      if (!(data[item].venue in venues)){
+        venues[data[item].venue] = data[item].venue
+      }
+
+       // TODO: for now this is hacky to add participants and type
+      if (!data[item].type){
+        data[item].type = "In Theatre"
+      }
+      types = {
+        "In Theatre": "In Theatre",
+        "In School": "In School"
+      }
+      if (!data[item].school){
+        data[item].school = "None"
+      }
+      schools = {
+        "None": "None",
+        "School A": "School A"
+      }
+      let ageData = [40,20,30]
+      if (!data[item].age){
+        data[item].age = ageData[cnt++ % 3]
+      }
+      let incomeData = [500,2000,1500]
+      // if (!data[item].income){
+        data[item].income = incomeData[cnt++ % 3]
+      // }
+
    }
-   // venues = venues.sort()
+
+   localStorage.setItem("data", JSON.stringify(data))
+ 
+
 }
 
 

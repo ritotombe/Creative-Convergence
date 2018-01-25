@@ -129,6 +129,11 @@ hr {
   margin-right: 12px;
 }
 
+.filter-group-title {
+  padding: 10px;
+  font-size: 12pt !important;
+}
+
 .slider-value {
   font-weight: lighter;
   color: #fffbcc;
@@ -139,8 +144,12 @@ hr {
   cursor: pointer;
 }
 
-.reset-btn {
+.filter-btn {
   margin-bottom: 10px;
+}
+
+#reset-btn {
+  cursor: pointer;
 }
 
 .options-pane {
@@ -476,4 +485,8 @@ table.dataTable thead > tr > td.sorting {
 
 .dataTables_scroll {
   min-width: 100% !important;
+}
+
+div.dataTables_filter {
+  visibility: hidden;
 }
