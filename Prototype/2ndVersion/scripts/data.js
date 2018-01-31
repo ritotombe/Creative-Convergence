@@ -10,11 +10,11 @@ var csvDict = [];
 var ABSData = [];
 var adjency = {}
 
+var SOURCE = 'data'
+
 // $( function(){
 
-  // $.ajaxSetup({
-  //    timeout: 1000
-  // });
+
   var dateNow = Math.floor(Date.now() / 1000);
 
   var partnerIDs = {
@@ -130,7 +130,7 @@ if (localStorage.getItem("data") == null || localStorage.getItem("data").length 
         venues[data[item].venue] = data[item].venue
       }
 
-       // TODO: for now this is hacky to add participants and type
+       // TODO: for now this is hacky to add participants and type age
       if (!data[item].type){
         data[item].type = "In Theatre"
       }

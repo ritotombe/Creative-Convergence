@@ -255,6 +255,50 @@ hr {
   background-color: #006edf !important;
 }
 
+.upload_btn{
+  position:absolute;
+  width:200px;
+  height:40px;
+  margin-top:-40px;
+  z-index:10;
+  opacity:0;
+}
+
+.form-group {
+  text-align: center;
+}
+
+.form-group label {
+  width: 15%;
+  margin-right: 10px;
+  padding: 11px 12px !important;
+  vertical-align: middle;
+}
+
+.form-control.file {
+  width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.btn {
+  cursor: pointer;
+}
+
+#raw-data_filter {
+  height:0;
+}
+
+#upload-status{
+  color:#27ae60;
+  margin-right: 10px;
+  width: 15%;
+}
+
+
 /* MATERIAL DESIGN MODIFICATION */
 .mdl-tabs__tab {
   color: #ffffff;

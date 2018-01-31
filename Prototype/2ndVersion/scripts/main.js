@@ -145,7 +145,7 @@ var selectedPlace = [];
 
      function initiateRawData() {
        return $('#raw-data').DataTable( {
-         data: JSON.parse(localStorage.getItem("data")),
+         data: JSON.parse(localStorage.getItem(SOURCE)),
          columns: [
            { "data": "company" },
            { "data": "creative_work" },
@@ -185,7 +185,7 @@ var selectedPlace = [];
         });
       }
 
-      let data = JSON.parse(localStorage.getItem("data"))
+      let data = JSON.parse(localStorage.getItem(SOURCE))
       for (item in data) {
         if (companyNames.indexOf(data[item].company) == -1){
           companyNames.push(data[item].company)
@@ -222,6 +222,8 @@ var selectedPlace = [];
       company.initialize()
       work.initialize()
       place.initialize()
+
+      // $(".tagsinput").tagsinput("removeAll");
 
       $(".tagsinput").tagsinput({
         tagClass: function(item) {

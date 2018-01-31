@@ -287,7 +287,7 @@ function renderMap(filteredData) {
   }
   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
 
-  var data = JSON.parse(localStorage.getItem("data"))
+  var data = JSON.parse(localStorage.getItem("company-data"))
   if (filteredData){
     data = filteredData
   }
@@ -377,7 +377,7 @@ function renderMap(filteredData) {
           .attr("stroke-dasharray", totalLength + " " + totalLength)
           .attr("stroke-dashoffset", totalLength)
           .transition()
-            .duration(50000)
+            .duration(4000)
             .ease(d3.easeLinear)
             .attr("stroke-dashoffset", 0);
       }

@@ -9,7 +9,7 @@ var optionsTypes = {
 }
 var dateMin = 0, dateMax = 0
 
-$(function() {
+// $(function() {
 
     $('.tagsinput-primary > input').on('change', () => {
         filteredData = []
@@ -428,4 +428,4 @@ $(function() {
 
   renderAll()
 
-});
+// });

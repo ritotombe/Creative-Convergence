@@ -19,6 +19,19 @@
       <div id = "main-panel-container">
         <div id="map" class= "main-panel-item">
         </div><div id="second-panel" class = "main-panel-item">
+          <div class = "form-group">
+                <label for = 'company-file-input' class= 'mdl-shadow--2dp filter_content btn btn-block btn-lg btn-inverse'>
+                    <div class="display-inline-block">
+                      Upload Company Data Here
+                    </div>
+                  <input class = 'form-control file' type = 'file' id='company-file-input'></input>
+                </label>
+                <small style='float: right;'>
+                  <span id='upload-status'>
+
+                  </span>
+                </small>
+            </div>
             <table id="raw-data" class ="row-border stripe hover">
               <thead>
                 <tr>
@@ -119,7 +132,7 @@
             </div>
             <div id="types-selected" class = "display-inline-block float-right">
               0
-            </div>
+             </div>
             <div style="clear: both;"></div>
           </div>
         </div>
@@ -168,6 +181,7 @@
   <script src="scripts/mapping.js"></script>
   <script src="scripts/prepare_filter.js"></script>
   <script src="scripts/filter.js"></script>
+  <script src="scripts/data-uploader.js"></script>
 
 </body>
 
