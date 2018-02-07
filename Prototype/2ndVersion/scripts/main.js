@@ -136,11 +136,18 @@ var selectedPlace = [];
      }
 
      function initiateDatePicker(){
-       $("#date_picker").flatpickr({
-            mode:"range",
+       $("#date_picker_from").flatpickr({
+            // mode:"range",
             allowInput: true,
             dateFormat: "d/m/Y"
-          });
+        });
+
+        $("#date_picker_to").flatpickr({
+          // mode:"range",
+          allowInput: true,
+          dateFormat: "d/m/Y"
+        });
+        
      }
 
      function initiateRawData() {

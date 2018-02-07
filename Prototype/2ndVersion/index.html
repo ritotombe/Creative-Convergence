@@ -103,8 +103,10 @@
 
         <small class="filter-group-title">Company Data</small>
         <div class = "filter-group container-center col-xs-12">
-
-          <input type="text" name="date_range" placeholder="Date/s" id ="date_picker" class = "filter_content form-control">
+          <div class = "date-filter-group">
+            <input type="text" name="date_range" placeholder="From Date" id ="date_picker_from" class = "filter_content form-control date-picker">
+            <input type="text" name="date_range" placeholder="To Date" id ="date_picker_to" class = "filter_content form-control date-picker">
+          </div>
 
           <div id="venues" class="mdl-shadow--2dp  filter_content filter-btn btn btn-block btn-lg btn-inverse">
             <div class = "display-inline-block float-left">

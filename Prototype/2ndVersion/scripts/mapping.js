@@ -29,7 +29,7 @@ var pos = {
 
 function renderMap(filteredData) {
 
-  $( '<div id="legend"><h3>Legend</h3></div>' ).insertAfter( "#map" );
+  $( '<div id="legend"><h4>Companies</h4></div>' ).insertAfter( "#map" );
 
     map = new google.maps.Map(d3.select("#map").node(), {
     zoom: 7,

@@ -335,6 +335,17 @@ hr {
   color: white;
 }
 
+.date-picker{
+  width: 49%;
+  display: inline-block;
+}
+
+.date-filter-group{
+  margin: auto;
+  margin-top: 10px;
+  width: 95%;
+}
+
 /* MATERIAL DESIGN MODIFICATION */
 .mdl-tabs__tab {
   color: #ffffff;

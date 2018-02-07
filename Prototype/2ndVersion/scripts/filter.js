@@ -19,7 +19,7 @@ var dateMin = 0, dateMax = 0
 
         searchQuery = $('.tagsinput-primary > input').tagsinput('items');
         if (searchQuery.length > 0) {
-            // console.log(searchQuery);
+      
             kind = searchQuery[0].kind
             for (item in searchQuery) {
               if (searchQuery[item].kind == 'company') {
@@ -91,13 +91,19 @@ var dateMin = 0, dateMax = 0
 
         // renderMap(filteredData);
         // populateVenues()
-
+    
+        
         renderAll()
     })
 
     // Add custom search function for date filter
     $.fn.dataTable.ext.search.push(
         function( settings, data, dataIndex ) {
+
+            // if (data[1]=="The Importance of Being Earnest"){
+                // console.log(( Date.parse( data[5] ) ? Date.parse( data[5] )  0), data);
+                
+            // }
 
             var date = Date.parse( data[5] ) || 0; 
 
@@ -108,6 +114,7 @@ var dateMin = 0, dateMax = 0
             {            
                 return true;
             }
+            
             return false;
         }
     );
@@ -122,13 +129,16 @@ var dateMin = 0, dateMax = 0
             var age = data[8] || 0; 
             
 
-            if ( ( minAge == 0 && maxAge == 0 ) ||
-                ( minAge == 0 && age <= maxAge ) ||
-                ( minAge <= age   && maxAge == 0  ) ||
+            if ( ( minAge == 3 && maxAge == 90 ) ||
+                ( minAge == 3 && age <= maxAge ) ||
+                ( minAge <= age   && maxAge == 90 ) ||
                 ( minAge <= age   && age <= maxAge ) )
             {            
                 return true;
             }
+
+
+            
             return false;
         }
     );
@@ -150,27 +160,26 @@ var dateMin = 0, dateMax = 0
             {            
                 return true;
             }
+       
+            
             return false;
         }
     );
 
-    $('#date_picker').on('change keyup focus', function (){
+    $('#date_picker_from, #date_picker_to').on('change', changeDate)
+
+    function changeDate(){
         filteredData = []
-        filteredDate = $(this).val()
 
-        var filteredDateSplitter = filteredDate.split(" ")
-        dateMin = getDateFromFormat(filteredDateSplitter[0], 'dd/MM/yyyy')
-        dateMax = getDateFromFormat(filteredDateSplitter[2], 'dd/MM/yyyy')
-        
-        $(".flatpickr-calendar").css('visibility', 'visible');
-
-        if (filteredDate.match(/\S*\ to\ \S*/g)){
-            $(".flatpickr-calendar").css('visibility', 'hidden');
-        }
+        filteredDateMin = $("#date_picker_from").val()
+        filteredDateMax = $("#date_picker_to").val()
+      
+        dateMin = getDateFromFormat(filteredDateMin, 'dd/MM/yyyy')
+        dateMax = getDateFromFormat(filteredDateMax, 'dd/MM/yyyy')
         
         rawDataTable.draw()
         renderAll()  
-    })
+    }
 
     $('.age-value').on('DOMSubtreeModified', function (){
         clearTimeout( $(this).data('keytimer') );
@@ -188,6 +197,8 @@ var dateMin = 0, dateMax = 0
         $(this).data('keytimer', setTimeout(function() {
             filteredData = []
             rawDataTable.draw()
+       
+            
             renderAll() 
         },500)); 
     })
@@ -302,13 +313,18 @@ var dateMin = 0, dateMax = 0
     })
 
     $("#reset-btn").on("click", function(){
+        filteredData = []
+
         $(".tagsinput").tagsinput("removeAll")
-        $("#date_picker").val("")
+        $("#date_picker_from").val("")
+        $("#date_picker_to").val("")
         initiateSliders()
+        dateMin = 0
+        dateMax = 0
 
         checkAllState.SCHOOL_SELECTED = true
         checkAllState.TYPE_SELECTED = true
-        checkAllState.VENUE_SELECTED = true
+        checkAllState.VENUE_SELECTED = true  
     })
 
     function renderAll() {
@@ -321,9 +337,8 @@ var dateMin = 0, dateMax = 0
                 filteredData.push(test[item])
             }
         }
-    
-        renderMap(filteredData);
         populateVenues()
+        renderMap(filteredData);
     }
 
     function queryData(columnNumber, source){
@@ -371,6 +386,8 @@ var dateMin = 0, dateMax = 0
         venuesSelected = []
         schoolsSelected = []
         typesSelected = []
+
+        
         for (item in data) {
             if (!(data[item].venue in venues)) {
                 venues[data[item].venue] = data[item].venue
