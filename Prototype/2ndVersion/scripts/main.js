@@ -223,7 +223,7 @@ var selectedPlace = [];
       work.initialize()
       place.initialize()
 
-      // $(".tagsinput").tagsinput("removeAll");
+      
 
       $(".tagsinput").tagsinput({
         tagClass: function(item) {

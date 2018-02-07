@@ -1,4 +1,30 @@
 var map
+var center = {
+  x: 0,
+  y: 0
+}
+
+var newPos = {
+  x: 0,
+  y: 0
+}
+
+var activePosition = {
+  value : 
+  {
+    latitude: 0,
+    longitude: 0
+  }
+}
+
+var pos = {
+  x: 0,
+  y: 0
+}
+
+
+
+
 // Create the Google Map…
 
 function renderMap(filteredData) {
@@ -277,41 +303,69 @@ function renderMap(filteredData) {
 
 
   var legend = document.getElementById('legend');
-  for (item in styleColor) {
-    var color = styleColor[item].color;
+  for (item in companyConfig) {
+    var color = companyConfig[item].color;
+    var label = companyConfig[item].label;
     var name = item;
-    var icon = `<svg height="20px" width="20px"><circle r="10" cx ="10" cy="10" fill="${color}"/></svg>`;
+    var icon = `
+      <svg height="20px" width="20px">  
+        <circle r="10" cx ="10" cy="10" fill="${color}"/>
+        <text x="50%" y="50%" text-anchor="middle" dy=".4em" fill="white">${label}</text>
+      </svg>`;
     var div = document.createElement('div');
     div.innerHTML = icon + name;
     legend.appendChild(div);
   }
   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
 
-  var data = JSON.parse(localStorage.getItem("company-data"))
+  var data = JSON.parse(localStorage.getItem(SOURCE))
   if (filteredData){
     data = filteredData
   }
   
-
   var overlay = new google.maps.OverlayView();
 
   overlay.onAdd = function() {
 
-    var layer = d3.select(this.getPanes().overlayLayer).append("div")
-        .attr("class", "stations");
+    
 
-    var layerArc = d3.select(this.getPanes().overlayLayer).append("div")
+    var layerArc = d3.select(this.getPanes().overlayMouseTarget).append("div")
         .attr("class", "arcs").append("svg");
 
-    // Draw each marker as a separate SVG element.
-    // We could use a single SVG, but what size would it have?
+        var layer = d3.select(this.getPanes().overlayMouseTarget).append("div")
+        .attr("class", "nodes")
+
+    var tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0)
+
+    tooltip.append('div')
+      .attr('class', 'close-btn')
+      .append('div')
+        .attr('class','fui-cross')
+
+    var tooltipTitle = tooltip.append('small')
+      .attr('class', 'tooltip-title')
+      .append('b')
+
+    var tooltipContent = tooltip.append('div')
+      .attr('class', 'tooltip-content')
+
+    
+
     overlay.draw = function() {
+
       var projection = this.getProjection(),
           padding = 10;
 
       adjency = {}
       var entries = d3.entries(data)
       layerArc.selectAll("path").remove()
+
+      // layerArc.append("rect")
+      // .attr("width", "100%")
+      // .attr("height", "100%")
+      // .on("mousemove", mousemoved);
 
       /////LINE
       for (item in entries){
@@ -322,25 +376,123 @@ function renderMap(filteredData) {
       }
    
       // Add Line
-      for (company in adjency) {
-        
+      for (company in adjency) { 
         createPath(company)
       }
+
       /////MARKER
       var marker = layer.selectAll("svg")
           .data(d3.entries(data))
           .each(transform) // update existing markers
         .enter().append("svg")
           .each(transform)
-          .attr("class", "marker");
-
-      // Add Marker
+          .attr('class', 'marker')
+          
+      // Add nodes (circles)
       marker.append("circle")
-          .attr("r", 10)
-          .attr("cx", padding)
-          .attr("cy", padding)
-          .style("fill", colorCoding)
-          .style("opacity", 0.85);
+        .attr("r", 10)
+        .attr("cx", padding)
+        .attr("cy", padding)
+        .style("fill", colorCoding)
+        .style("opacity", 0.7)
+
+      // Add Labels on each nodes
+      marker.append('text')
+        .attr('class', 'node-label')
+        .attr('x', "50%")
+        .attr('y', "50%")
+        .attr('dy', ".4em")
+        .style('fill', 'white')
+        .text(labelCoding)
+        .style("opacity", 0.7)
+      
+      pos = getIProjection(activePosition)
+      
+      tooltip
+         .style("left", (pos.x + newPos.x) + "px")
+         .style("top", (pos.y + newPos.y) + "px")
+
+      // console.log(1, newPos, pos, activePosition);
+
+      marker.on('click', function(d, i){
+        activePosition.value = {
+          latitude: d.value.latitude,
+          longitude: d.value.longitude
+        }
+        pos = getIProjection(d)
+        // console.log(124, newPos);
+        d = d.value
+        var overlappedPoints = getOverlaps(d.longitude, d.latitude)
+        var tooltipContentVal = []
+        for (i in overlappedPoints) {
+          var bgColour = colorCoding({
+            value: {
+              company : overlappedPoints[i].company
+            }
+          })
+          tooltipContentVal.push(
+            `
+              <div class='tooltip-content-item' style='background: ${bgColour}'>
+                <div>${overlappedPoints[i].creative_work}</div>
+                <div>${overlappedPoints[i].date}</div>
+              </div>
+            `
+          )
+        }
+        tooltip.transition()
+         .duration(10)
+         .style("opacity", .9)
+         .style("display", "block")
+        tooltipTitle.html(d.venue)
+        tooltipContent.html(tooltipContentVal.join(`\n`))
+        tooltip
+         .style("left", (pos.x + newPos.x) + "px")
+         .style("top", (pos.y + newPos.y) + "px")
+        layer.selectAll("circle")
+          .style("stroke", 'none')
+        d3.select(this).select("circle")
+          .style("stroke", 'white')
+          .style("stroke-width", 2)
+          // .moveToFront()
+      })
+      //Handle close button tooltip
+      var tooltipCloseBtn = $('.close-btn')
+      tooltipCloseBtn.on('click', function (){
+        layer.selectAll("circle")
+          .style("stroke", 'none')
+      tooltip.transition()
+        .duration(200)
+        .style("opacity", .0)
+        .style("display", "none")
+      })
+      //handle change of center point for tooltip
+      center = getIProjection({
+        value: {
+          latitude: map.getCenter().lat(),
+          longitude: map.getCenter().lng()
+        }
+      })   
+      map.addListener('center_changed', function(e){
+        var newCenter = getIProjection({
+          value: {
+            latitude: map.getCenter().lat(),
+            longitude: map.getCenter().lng()
+          }
+        })
+
+        newPos = {
+          x: center.x - newCenter.x,
+          y: center.y - newCenter.y,
+          latitude: map.getCenter().lat(),
+          longitude: map.getCenter().lng()
+        }
+
+        // console.log(2, pos, newPos)
+
+        tooltip
+          .style("left", (pos.x + newPos.x) + "px")
+          .style("top", (pos.y + newPos.y) + "px")
+      })
 
       function getIProjection(d) {
         d = new google.maps.LatLng(d.value.latitude, d.value.longitude);
@@ -349,10 +501,26 @@ function renderMap(filteredData) {
         return d
       }
 
+      function getOverlaps(longitude, latitude){
+
+        var dataPoints = []
+
+        for (i in data){
+          if (data[i].longitude == longitude && data[i].latitude == latitude){
+            dataPoints.push(data[i])
+          }
+        }
+        return dataPoints
+      }
+
+      function labelCoding(d){
+        var company = d.value.company;
+        return companyConfig[company].label;
+      }
+
       function colorCoding(d){
         var company = d.value.company;
-
-        return styleColor[company].color;
+        return companyConfig[company].color;
       }
 
       function createPath(company){
@@ -363,14 +531,42 @@ function renderMap(filteredData) {
         .curve(d3.curveMonotoneX);
 
         var svgPath = layerArc.append("path")
-          .attr("stroke", styleColor[company].color)
+          .attr("stroke", companyConfig[company].color)
           .attr("stroke-width", "1.5px")
           .attr("fill", "none")
           .style("opacity", 0.6);
 
-        svgPath
-          .attr("d", linePathGenerator(adjency[company]));
+        var line =  svgPath.attr("d", linePathGenerator(adjency[company]))
 
+
+        line
+          .on('click', function(){
+            if (!d3.select(this).classed("active")){
+              layerArc.selectAll('path')
+                .attr("stroke-width", "1.5px")
+                .style("opacity", 0.6);
+              d3.select(this)
+                .attr("stroke-width", 3)
+                .style("opacity", 1)
+                .attr("class", "active")
+              d3.selectAll(".nodes svg circle")
+                .style("stroke", 'none')
+              var circles = d3.selectAll(".nodes svg")
+              circles = circles.filter(function(d){
+                return d.value.company == company
+              })
+              circles.select('circle').style("stroke", 'white')
+              .style("stroke-width", 2)
+            } else {
+              layerArc.selectAll('path')
+                .attr("stroke-width", "1.5px")
+                .style("opacity", 0.6)
+                .attr("class", "deactive")
+              d3.selectAll(".nodes svg circle")
+                .style("stroke", 'none')
+            }
+          })
+      
         var totalLength = svgPath.node().getTotalLength();
 
         svgPath
@@ -379,7 +575,9 @@ function renderMap(filteredData) {
           .transition()
             .duration(4000)
             .ease(d3.easeLinear)
-            .attr("stroke-dashoffset", 0);
+            .attr("stroke-dashoffset", 0)
+
+       
       }
 
       function transform(d) {
@@ -387,13 +585,16 @@ function renderMap(filteredData) {
         d = projection.fromLatLngToDivPixel(d);
 
         return d3.select(this)
-            .style("left", (d.x - padding) + "px")
-            .style("top", (d.y - padding) + "px");
+            .attr("transform", "translate(" + (d.x - padding) + "," + (d.y - padding) + ")")
       }
     };
   };
 
   overlay.setMap(map);
+
+  
+  
 }
+
 
 

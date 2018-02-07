@@ -298,6 +298,42 @@ hr {
   width: 15%;
 }
 
+.close-btn {
+  width: 20px;
+  height: 15px;
+  margin-right: 0;
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.close-btn div {
+  margin: auto;
+  width: 100%;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.tooltip-title {
+  display: block;
+  line-height: 10pt;
+}
+
+.tooltip-content {
+  max-height: 200px;
+  overflow: scroll;
+  margin-top: 6px;
+}
+
+.tooltip-content-item{
+  padding: 6px;
+  border-bottom: 1px white solid;
+  border-radius: 4px;
+}
+.tooltip-content-item div{
+  display: block;
+  width: 100%;
+  color: white;
+}
 
 /* MATERIAL DESIGN MODIFICATION */
 .mdl-tabs__tab {
@@ -357,7 +393,7 @@ hr {
 
 .tagsinput-primary .tag:hover {
     background-color: #0c304a; */
-}
+/* } */
 .form-group.focus .form-control, .form-control:focus {
   border: 1px solid #304e64;
 }
@@ -446,23 +482,42 @@ input.tt-input, input.tt-hint{
 }
 /* MAPPING */
 
-.stations, .stations svg {
+.nodes, .nodes svg {
   position: absolute;
+  overflow: visible;
 }
 
-.stations svg {
-  width: 60px;
+.nodes svg {
+  width: 20px;
   height: 20px;
-  padding-right: 100px;
-  font: 10px sans-serif;
+  text-anchor: middle;
+}
+
+.nodes svg:hover, .arcs svg path:hover {
+  cursor: pointer;
 }
 
 .arcs{
   position: absolute;
+  height: 100vh;
+  width: 100%;
+  pointer-events: all;
+}
+
+.arcs svg, .nodes svg {
+  overflow: visible;
 }
 
 .arcs svg {
-  overflow: visible;
+  height: 100vh;
+  width: 100%;
+  pointer-events: all;
+}
+
+.arcs svg {
+  height: 100vh;
+  width: 100%;
+  pointer-events: all;
 }
 
 #legend {
@@ -479,6 +534,18 @@ input.tt-input, input.tt-hint{
 
 #legend h3{
   margin: 5px;
+}
+
+div.tooltip {
+  position: absolute;
+  width: 200px;
+  /* height: 28px; */
+  padding: 12px;
+  white-space: normal;
+  font: 12px sans-serif;
+  background: #fff;
+  border: 0px;
+  border-radius: 4px;
 }
 
 /* Datatables */

@@ -30,7 +30,7 @@ var SOURCE = 'data'
   const ausstageEventsURI = "https://www.ausstage.edu.au/opencms/events?" //venue id and  company id required
   const ausstageVenuesURI = "https://www.ausstage.edu.au/opencms/markers?" //company id required
 
-  const ABSAgeURI = "http://stat.data.abs.gov.au/sdmx-json/data/ABS_C16_T01_LGA/1+3+2.TT+0+A04+1+2+3+4+5+A59+6+7+8+9+10+A10+11+12+13+14+15+A15+16+17+18+19+20+A20+21+22+23+24+25+A25+26+27+28+29+30+A30+31+32+33+34+35+A35+36+37+38+39+40+A40+41+42+43+44+45+A45+46+47+48+49+50+A50+51+52+53+54+55+A55+56+57+58+59+60+A60+61+62+63+64+65+A65+66+67+68+69+70+A70+71+72+73+74+75+A75+76+77+78+79+80+A80+81+82+83+84+85+A85+86+87+88+89+90+A90+91+92+93+94+95+A95+96+97+98+99+100+A99+101+102+103+104+105+106+107+108+109+110+111+112+113+114+115.2.LGA2016.20260+20570+20660+20740+20830+20910+21010+21110+21180+21270+21370+21450+21610+21670+21750+21830+21890+22110+22170+22250+22310+22410+22490+22620+22670+22750+22830+22910+22980+23110+23190+23270+23350+23430+23670+23810+23940+24130+24210+24250+24330+24410+24600+24650+24780+24850+24900+24970+25060+25150+25250+25340+25430+25490+25620+25710+25810+25900+25990+26080+26170+26260+26350+26430+26490+26610+26670+26700+26730+26810+26890+26980+27070+27170+27260+27350+27450+27630/all?detail=Full&dimensionAtObservation=AllDimensions&startPeriod=2016"
+  const ABSAgeURI = "http://stat.data.abs.gov.au/sdmx-json/data/ABS_C16_T01_LGA/3.TT+0+A04+1+2+3+4+5+A59+6+7+8+9+10+A10+11+12+13+14+15+A15+16+17+18+19+20+A20+21+22+23+24+25+A25+26+27+28+29+30+A30+31+32+33+34+35+A35+36+37+38+39+40+A40+41+42+43+44+45+A45+46+47+48+49+50+A50+51+52+53+54+55+A55+56+57+58+59+60+A60+61+62+63+64+65+A65+66+67+68+69+70+A70+71+72+73+74+75+A75+76+77+78+79+80+A80+81+82+83+84+85+A85+86+87+88+89+90+A90+91+92+93+94+95+A95+96+97+98+99+100+A99+101+102+103+104+105+106+107+108+109+110+111+112+113+114+115.2.LGA2016.20260+20570+20660+20740+20830+20910+21010+21110+21180+21270+21370+21450+21610+21670+21750+21830+21890+22110+22170+22250+22310+22410+22490+22620+22670+22750+22830+22910+22980+23110+23190+23270+23350+23430+23670+23810+23940+24130+24210+24250+24330+24410+24600+24650+24780+24850+24900+24970+25060+25150+25250+25340+25430+25490+25620+25710+25810+25900+25990+26080+26170+26260+26350+26430+26490+26610+26670+26700+26730+26810+26890+26980+27070+27170+27260+27350+27450+27630/all?detail=Full&dimensionAtObservation=AllDimensions&startPeriod=2016"
   const ABSIncomeURI = "http://stat.data.abs.gov.au/sdmx-json/data/ABS_C16_T21_LGA/TOT+110+11+1+120+12+211+21+2+212+221+22+222+310+31+3+320+32+410+41+4+420+42.TOT+10+11+12+13+14+15+16+17+18+19+20+21+22+23+Z+01+02+03+04+05+06+07+08+09.2.LGA2016.20260+20570+20660+20740+20830+20910+21010+21110+21180+21270+21370+21450+21610+21670+21750+21830+21890+22110+22170+22250+22310+22410+22490+22620+22670+22750+22830+22910+22980+23110+23190+23270+23350+23430+23670+23810+23940+24130+24210+24250+24330+24410+24600+24650+24780+24850+24900+24970+25060+25150+25250+25340+25430+25490+25620+25710+25810+25900+25990+26080+26170+26260+26350+26430+26490+26610+26670+26700+26730+26810+26890+26980+27070+27170+27260+27350+27450+27630/all?detail=Full&dimensionAtObservation=AllDimensions&startPeriod=2016"
   const ABSLanguageURI = "http://stat.data.abs.gov.au/sdmx-json/data/ABS_C16_T09_LGA/3.1201+1301+1401+1403+2101+2201+2401+3301+3402+3503+3504+3602+3901+4105+4107+4202+4301+5102+5203+5206+5207+5211+6103+6301+6302+6402+6511+6512+7102+7104+7201+7301+9216+9231+9701+0007.2.LGA2016+LGA.20260+20570+20660+20740+20830+20910+21010+21110+21180+21270+21370+21450+21610+21670+21750+21830+21890+22110+22170+22250+22310+22410+22490+22620+22670+22750+22830+22910+22980+23110+23190+23270+23350+23430+23670+23810+23940+24130+24210+24250+24330+24410+24600+24650+24780+24850+24900+24970+25060+25150+25250+25340+25430+25490+25620+25710+25810+25900+25990+26080+26170+26260+26350+26430+26490+26610+26670+26700+26730+26810+26890+26980+27070+27170+27260+27350+27450+27630/all?detail=Full&dimensionAtObservation=AllDimensions&startPeriod=2016"
 
@@ -40,9 +40,10 @@ var ABSIncome;
 
 var dataJson = JSON.parse(localStorage.getItem("data"))
 
-if (localStorage.getItem("data") == null || localStorage.getItem("data").length == 0){
 
+if (localStorage.getItem("data") == null || localStorage.getItem("data").length == 0){
   getABSData();
+  
   //Initial data collection getting list of venues from given partners ids and store it at mainData
   if (mainData.length == 0){
     for (key in partnerIDs) {
@@ -123,44 +124,50 @@ if (localStorage.getItem("data") == null || localStorage.getItem("data").length 
       });
     });
 } else {
-   let data = JSON.parse(localStorage.getItem("data"))
-   let cnt = 0;
+   var data = JSON.parse(localStorage.getItem("data"))
+   var absData = JSON.parse(localStorage.getItem("abs-data"))
+   var lgaPolygon = JSON.parse(lga_polygon)
+   var polygonFeatures = lgaPolygon.features
+
+   var medianAge = {}
+   if (localStorage.getItem("median-age")){
+    medianAge =  JSON.parse(localStorage.getItem("median-age"))
+   }
+  
+   var cnt = 0;
    for (item in data){
+
       if (!(data[item].venue in venues)){
         venues[data[item].venue] = data[item].venue
       }
 
-       // TODO: for now this is hacky to add participants and type age
-      if (!data[item].type){
-        data[item].type = "In Theatre"
-      }
-      types = {
-        "In Theatre": "In Theatre",
-        "In School": "In School"
-      }
-      if (!data[item].school){
-        data[item].school = "None"
-      }
-      schools = {
-        "None": "None",
-        "School A": "School A"
-      }
-      let ageData = [40,20,30]
-      if (!data[item].age){
-        data[item].age = ageData[cnt++ % 3]
-      }
-      let incomeData = [500,2000,1500]
-      // if (!data[item].income){
-        data[item].income = incomeData[cnt++ % 3]
-      // }
+      var lon = data[item].longitude
+      var lat = data[item].latitude
 
+      // for (i in polygonFeatures) {
+      //   //Get the lga name if we found the lga of data item
+      //   if(inside([lon, lat], polygonFeatures[i].geometry.coordinates[0][0])){
+
+      //     let lgaName = polygonFeatures[i].properties.vic_lga__3
+      //     if (medianAge[lgaName]) {
+      //       data[item].age = medianAge[lgaName]
+      //     } else {
+      //       //Match the lga name with the abs data then map the socio economic data in to the main data
+      //       var absAge = absData['age'][lgaName.toLowerCase()]
+      //       data[item].age = getMedian(absAge)
+      //       medianAge[lgaName] = data[item].age 
+
+      //       //Todo income
+
+      //       //Todo ethnicity
+      //     }
+      //   }
+      // }
    }
 
    localStorage.setItem("data", JSON.stringify(data))
- 
 
 }
-
 
   function getCompaniesVenues(key){
     return $.getJSON(ausstageVenuesURI+"type=organisation&id="+partnerIDs[key]+"&callback=?",function(json){
@@ -168,22 +175,86 @@ if (localStorage.getItem("data") == null || localStorage.getItem("data").length 
     });
   }
 
-  function getABSData(key){
-    $.getJSON(ABSLanguageURI,function(json){
-      ABSLanguage = json;
-    });
-    $.getJSON(ABSAgeURI,function(json){
-      ABSAge = json;
-    });
-    $.getJSON(ABSIncomeURI,function(json){
-      ABSIncome = json;
-    });
+
+  function getMedian(obj) {
+    // console.log(obj);
+    
+    var range = []
+    for (i in obj) {
+      for (var j = 0; j < obj[i]; j++) {
+        if (!isNaN(parseInt(i))){
+          range.push(parseInt(i))
+        }
+      }
+    }
+
+    var half = Math.floor(range.length/2);
+
+    let data = 0
+
+    if(range.length % 2)
+      data = range[half];
+    else
+      data = (range[half-1] + range[half]) / 2.0;
+
+    if (isNaN(data)){
+      return 0
+    } 
+
+    return data
+    
+  }
+
+  function getABSData(){
+    var promises = []
+
+    promises.push($.getJSON(ABSLanguageURI))
+    promises.push($.getJSON(ABSAgeURI))
+    promises.push($.getJSON(ABSIncomeURI))
+
+    $.when.apply($, promises).then(function(){
+      ABSLanguage = arguments[0][0];
+      ABSAge = arguments[1][0];
+      ABSIncome = arguments[2][0];
+
+      var jsonLanguageData = extractDataBasedOnAreaAndCategory(ABSLanguage)
+      var jsonIncomeData = extractDataBasedOnAreaAndCategory(ABSIncome)
+      var jsonAgeData =  extractDataBasedOnAreaAndCategory(ABSAge)
+      
+      localStorage.setItem('abs-data', JSON.stringify({
+        'language': jsonLanguageData,
+        'income': jsonIncomeData,
+        'age': jsonAgeData,
+      }))
+
+    })
+  }
+
+
+  function extractDataBasedOnAreaAndCategory(source){
+
+      var data = {}
+
+      var observations = source.dataSets[0].observations // _:language_names:_:_:areas:_
+      var areaNames = source.structure.dimensions.observation[4].values //get LGA areas
+      var objectNames = source.structure.dimensions.observation[1].values // get languange names
+      
+      for(i in areaNames) {
+        var areaName = areaNames[i].name.split(" ")[0].toLowerCase()
+        data[areaName] = {}
+        for (j in objectNames) {
+          data[areaName][objectNames[j].name] = observations[`0:${j}:0:0:${i}:0`][0]
+        }
+      }
+
+      return data
   }
 
 
   function inside(point, vs) {
     // ray-casting algorithm based on
     // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+
     var x = point[0], y = point[1];
 
     var inside = false;
