@@ -327,8 +327,6 @@ function renderMap(filteredData) {
 
   overlay.onAdd = function() {
 
-    
-
     var layerArc = d3.select(this.getPanes().overlayMouseTarget).append("div")
         .attr("class", "arcs").append("svg");
 
@@ -351,8 +349,6 @@ function renderMap(filteredData) {
     var tooltipContent = tooltip.append('div')
       .attr('class', 'tooltip-content')
 
-    
-
     overlay.draw = function() {
 
       var projection = this.getProjection(),
@@ -360,13 +356,7 @@ function renderMap(filteredData) {
 
       adjency = {}
       var entries = d3.entries(data)
-      layerArc.selectAll("path").remove()
-
-      // layerArc.append("rect")
-      // .attr("width", "100%")
-      // .attr("height", "100%")
-      // .on("mousemove", mousemoved);
-
+                    
       /////LINE
       for (item in entries){
         if (!adjency[entries[item].value.company]){
@@ -374,11 +364,12 @@ function renderMap(filteredData) {
         }
         adjency[entries[item].value.company].push(getIProjection(entries[item]))
       }
-   
-      // Add Line
-      for (company in adjency) { 
-        createPath(company)
-      }
+
+      var paths = layerArc.selectAll("path")
+                    .data(d3.entries(adjency))
+                    .each(createPath)
+                  .enter().append("path")
+                    .each(createPath) 
 
       /////MARKER
       var marker = layer.selectAll("svg")
@@ -406,13 +397,12 @@ function renderMap(filteredData) {
         .text(labelCoding)
         .style("opacity", 0.7)
       
+      // tooltip position after make larger
       pos = getIProjection(activePosition)
       
       tooltip
          .style("left", (pos.x + newPos.x) + "px")
          .style("top", (pos.y + newPos.y) + "px")
-
-      // console.log(1, newPos, pos, activePosition);
 
       marker.on('click', function(d, i){
         activePosition.value = {
@@ -420,7 +410,7 @@ function renderMap(filteredData) {
           longitude: d.value.longitude
         }
         pos = getIProjection(d)
-        // console.log(124, newPos);
+
         d = d.value
         var overlappedPoints = getOverlaps(d.longitude, d.latitude)
         var tooltipContentVal = []
@@ -439,6 +429,7 @@ function renderMap(filteredData) {
             `
           )
         }
+
         tooltip.transition()
          .duration(10)
          .style("opacity", .9)
@@ -455,6 +446,7 @@ function renderMap(filteredData) {
           .style("stroke-width", 2)
           // .moveToFront()
       })
+
       //Handle close button tooltip
       var tooltipCloseBtn = $('.close-btn')
       tooltipCloseBtn.on('click', function (){
@@ -465,13 +457,17 @@ function renderMap(filteredData) {
         .style("opacity", .0)
         .style("display", "none")
       })
+
       //handle change of center point for tooltip
-      center = getIProjection({
-        value: {
-          latitude: map.getCenter().lat(),
-          longitude: map.getCenter().lng()
-        }
-      })   
+      if (center.x == 0 && center.y == 0){
+        center = getIProjection({
+          value: {
+            latitude: map.getCenter().lat(),
+            longitude: map.getCenter().lng()
+          }
+        })   
+      }
+      
       map.addListener('center_changed', function(e){
         var newCenter = getIProjection({
           value: {
@@ -486,8 +482,6 @@ function renderMap(filteredData) {
           latitude: map.getCenter().lat(),
           longitude: map.getCenter().lng()
         }
-
-        // console.log(2, pos, newPos)
 
         tooltip
           .style("left", (pos.x + newPos.x) + "px")
@@ -523,28 +517,39 @@ function renderMap(filteredData) {
         return companyConfig[company].color;
       }
 
-      function createPath(company){
-        // console.log(company);
+      function createPath(d){
+
+        var thisPath = d3.select(this)
+        
+        //Create Paths Line
         var linePathGenerator = d3.line()
         .x(function(d) { return d.x; })
         .y(function(d) { return d.y; })
         .curve(d3.curveMonotoneX);
 
-        var svgPath = layerArc.append("path")
-          .attr("stroke", companyConfig[company].color)
+        // Add Path to the Line Layer
+        if (!thisPath.classed('active')){
+          thisPath
+          .attr("stroke", companyConfig[d.key].color)
           .attr("stroke-width", "1.5px")
           .attr("fill", "none")
+          .attr("pointer-events", "visibleStroke")
           .style("opacity", 0.6);
+        }
+        
+        var lineData = linePathGenerator(d.value)
+        var line =  thisPath.attr("d", lineData)
 
-        var line =  svgPath.attr("d", linePathGenerator(adjency[company]))
-
-
+        var company = d.key
+        
+        // Click Listener 
         line
           .on('click', function(){
             if (!d3.select(this).classed("active")){
               layerArc.selectAll('path')
                 .attr("stroke-width", "1.5px")
-                .style("opacity", 0.6);
+                .style("opacity", 0.6)
+                .classed("active", false)
               d3.select(this)
                 .attr("stroke-width", 3)
                 .style("opacity", 1)
@@ -561,23 +566,32 @@ function renderMap(filteredData) {
               layerArc.selectAll('path')
                 .attr("stroke-width", "1.5px")
                 .style("opacity", 0.6)
-                .attr("class", "deactive")
+                .classed("active", false)
               d3.selectAll(".nodes svg circle")
                 .style("stroke", 'none')
             }
           })
+          .on('mouseover', function() {
+              layerArc.selectAll('path')
+                .attr("stroke-width", function(){
+                  return d3.select(this).classed("active") ? 3 : 1.5
+                })
+                .style("opacity", function(){
+                  return d3.select(this).classed("active") ? 1 : 0.6
+                });
+              d3.select(this)
+                .style("opacity", 1)
+          })
       
-        var totalLength = svgPath.node().getTotalLength();
+        var totalLength = thisPath.node().getTotalLength();
 
-        svgPath
+        thisPath
           .attr("stroke-dasharray", totalLength + " " + totalLength)
           .attr("stroke-dashoffset", totalLength)
           .transition()
             .duration(4000)
             .ease(d3.easeLinear)
             .attr("stroke-dashoffset", 0)
-
-       
       }
 
       function transform(d) {
@@ -591,9 +605,6 @@ function renderMap(filteredData) {
   };
 
   overlay.setMap(map);
-
-  
-  
 }
 
 
