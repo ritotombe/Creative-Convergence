@@ -144,13 +144,13 @@
         <small class="filter-group-title">Socio-Economic</small>
         <div class = "filter-group container-center col-xs-12">
           
-          <small id = "popover-age">Age <span id = "popover-age-info" class="info fui-info-circle" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Age is actually median age of a particular area. The data are collected from ABS."></span></small>
+          <small id = "popover-age">Age <span id = "popover-age-info" class="info fui-info-circle" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Age is actually median age of a particular area. The data are collected from ABS. Data points that shows Age 0 means there is no data on the area or failed to fetch data from ABS"></span></small>
           <div class="flat-slider" id="flat-slider-age"></div>
           <div class="slider-value">
             <small class="age-value" id="min-age"></small> - <small class="age-value" id="max-age"></small>
           </div>
 
-          <small id = "popover-income">Household Income <span id = "popover-income-info" class="info fui-info-circle" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Household Income is actually median of weekly household income of a particular area. The data are collected from ABS."></span></small>
+          <small id = "popover-income">Household Income <span id = "popover-income-info" class="info fui-info-circle" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Household Income is actually median of weekly household income of a particular area. Data points that show Income 0 means there is no data on the area or failed to fetch data from ABS."></span></small>
           <div class="flat-slider" id="flat-slider-household"></div>
           <div class="slider-value">
             <small class="income-value" id="min-income"></small> - <small class="income-value" id="max-income"></small>
@@ -166,6 +166,8 @@
   <script src="scripts/d3/d3.min.js"></script>
   <script src="scripts/jquery-3.2.1.min.js"></script>
   <script src="scripts/lga-polygon.js"></script>
+  <script src="scripts/lga-polygon-2016.js"></script>
+  <script src="scripts/AURIN-LGA-data.js"></script>
   <script src="scripts/papaparse.min.js"></script>
   <script src="scripts/data.js"></script>
   <script src="scripts/material.js"></script>

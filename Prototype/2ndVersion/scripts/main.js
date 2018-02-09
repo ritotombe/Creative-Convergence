@@ -244,7 +244,7 @@ var selectedPlace = [];
         itemText: 'text'
       });
 
-      $('.bootstrap-tagsinput input').attr("placeholder", "Companies or Work Title");
+      $('.bootstrap-tagsinput input').attr("placeholder", "Companies/Work Titles/Places");
 
       $('.bootstrap-tagsinput input').typeahead({
         highlight: true
