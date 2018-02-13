@@ -1,6 +1,7 @@
 // 20180209131932
 // https://portal.aurin.org.au/api/v1/geoinfo/ste/2006/2/lga2016?includegeom=true&format=geojson&zoom=6&bbox=127.01214924212,-53.322673554799,166.34320392258,-21.895784840799
 
+
 var lgaPolygon2016 = {
   "type": "FeatureCollection",
   "crs": {

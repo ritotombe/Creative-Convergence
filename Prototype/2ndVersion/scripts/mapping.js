@@ -328,26 +328,33 @@ function renderMap(filteredData) {
   overlay.onAdd = function() {
 
     var layerArc = d3.select(this.getPanes().overlayMouseTarget).append("div")
-        .attr("class", "arcs").append("svg");
+      .attr("class", "arcs").append("svg");
 
-        var layer = d3.select(this.getPanes().overlayMouseTarget).append("div")
-        .attr("class", "nodes")
+    var layer = d3.select(this.getPanes().overlayMouseTarget).append("div")
+      .attr("class", "nodes")
 
-    var tooltip = d3.select("body").append("div")
+    var tooltip = d3.select("body").select(".tooltip")
+    var tooltipTitle = tooltip.select(".tooltip-title")
+    var tooltipContent = tooltip.select(".tooltip-content")
+
+    if (!tooltip._groups[0][0]){
+      tooltip = d3.select("body")
+      .append("div")
         .attr("class", "tooltip")
         .style("opacity", 0)
 
-    tooltip.append('div')
+      tooltip.append('div')
       .attr('class', 'close-btn')
       .append('div')
         .attr('class','fui-cross')
 
-    var tooltipTitle = tooltip.append('small')
-      .attr('class', 'tooltip-title')
-      .append('b')
-
-    var tooltipContent = tooltip.append('div')
-      .attr('class', 'tooltip-content')
+      tooltipTitle = tooltip.append('small')
+        .attr('class', 'tooltip-title')
+        .append('b')
+  
+      tooltipContent = tooltip.append('div')
+        .attr('class', 'tooltip-content')
+    }
 
     overlay.draw = function() {
 

@@ -166,15 +166,13 @@ var selectedPlace = [];
            { "data": "income" },
          ],
          order: [[ 5, "asc" ]],
-         // searching: false,
+        //  searching: false,
          dom: 'flBtip',
          buttons: [{
             extend: 'excel',
             text: 'Export to Spreadsheet..',
             exportOptions: {
-                modifier: {
-                    search: 'none'
-                }
+              rows: ':visible'
             }
         }],
         scrollX: true

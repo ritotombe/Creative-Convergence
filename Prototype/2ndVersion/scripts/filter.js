@@ -153,9 +153,9 @@ var dateMin = 0, dateMax = 0
             var income = data[9] || 0; 
             
 
-            if ( ( minIncome == 0 && maxIncome == 0 ) ||
-                ( minIncome == 0 && income <= maxIncome ) ||
-                ( minIncome <= income   && maxIncome == 0  ) ||
+            if ( ( minIncome == 200 && maxIncome == 3000 ) ||
+                ( minIncome == 200 && income <= maxIncome ) ||
+                ( minIncome <= income   && maxIncome == 3000  ) ||
                 ( minIncome <= income   && income <= maxIncome ) )
             {            
                 return true;
