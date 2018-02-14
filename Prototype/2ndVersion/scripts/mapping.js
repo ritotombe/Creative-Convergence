@@ -4,10 +4,6 @@ var center = {
   y: 0
 }
 
-var newPos = {
-  x: 0,
-  y: 0
-}
 
 var activePosition = {
   value : 
@@ -35,6 +31,7 @@ function renderMap(filteredData) {
     zoom: 7,
     center: new google.maps.LatLng(-36.8, 145.246528),
     mapTypeId: google.maps.MapTypeId.TERRAIN,
+    gestureHandling: 'cooperative',
     styles:[
     {
       "elementType": "geometry",
@@ -328,17 +325,17 @@ function renderMap(filteredData) {
   overlay.onAdd = function() {
 
     var layerArc = d3.select(this.getPanes().overlayMouseTarget).append("div")
-      .attr("class", "arcs").append("svg");
+    .attr("class", "arcs").append("svg");
 
     var layer = d3.select(this.getPanes().overlayMouseTarget).append("div")
-      .attr("class", "nodes")
+    .attr("class", "nodes")
 
-    var tooltip = d3.select("body").select(".tooltip")
+    var tooltip = layer.select(".tooltip")
     var tooltipTitle = tooltip.select(".tooltip-title")
     var tooltipContent = tooltip.select(".tooltip-content")
 
     if (!tooltip._groups[0][0]){
-      tooltip = d3.select("body")
+      tooltip = layer
       .append("div")
         .attr("class", "tooltip")
         .style("opacity", 0)
@@ -408,8 +405,8 @@ function renderMap(filteredData) {
       pos = getIProjection(activePosition)
       
       tooltip
-         .style("left", (pos.x + newPos.x) + "px")
-         .style("top", (pos.y + newPos.y) + "px")
+         .style("left", (pos.x) + "px")
+         .style("top", (pos.y ) + "px")
 
       marker.on('click', function(d, i){
         activePosition.value = {
@@ -444,8 +441,8 @@ function renderMap(filteredData) {
         tooltipTitle.html(d.venue)
         tooltipContent.html(tooltipContentVal.join(`\n`))
         tooltip
-         .style("left", (pos.x + newPos.x) + "px")
-         .style("top", (pos.y + newPos.y) + "px")
+         .style("left", (pos.x) + "px")
+         .style("top", (pos.y) + "px")
         layer.selectAll("circle")
           .style("stroke", 'none')
         d3.select(this).select("circle")
@@ -482,17 +479,10 @@ function renderMap(filteredData) {
             longitude: map.getCenter().lng()
           }
         })
-
-        newPos = {
-          x: center.x - newCenter.x,
-          y: center.y - newCenter.y,
-          latitude: map.getCenter().lat(),
-          longitude: map.getCenter().lng()
-        }
-
+        
         tooltip
-          .style("left", (pos.x + newPos.x) + "px")
-          .style("top", (pos.y + newPos.y) + "px")
+          .style("left", (pos.x) + "px")
+          .style("top", (pos.y) + "px")
       })
 
       function getIProjection(d) {

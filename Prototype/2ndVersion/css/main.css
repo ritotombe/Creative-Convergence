@@ -521,7 +521,7 @@ input.tt-input, input.tt-hint{
   overflow: visible;
 }
 
-.arcs svg {
+/* .arcs svg {
   height: 100vh;
   width: 100%;
   pointer-events: all;
@@ -531,7 +531,7 @@ input.tt-input, input.tt-hint{
   height: 100vh;
   width: 100%;
   pointer-events: all;
-}
+} */
 
 #legend {
   padding: 10px;

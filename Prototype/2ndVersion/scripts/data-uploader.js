@@ -39,11 +39,9 @@ $(function () {
                         for (i in arguments) {
                             var data = arguments[i][0]
 
-                            let ageData = [40,20,30]
-                            mainData[i].age = ageData[i % 3]
-
-                            let incomeData = [500,2000,1500]
-                            mainData[i].income = incomeData[i % 3]
+                         
+                            mainData[i].age = 0
+                            mainData[i].income = 0
 
                             mainData[i].venue = `${mainData[i].venue}, ${mainData[i].suburb}`
                             
@@ -77,7 +75,22 @@ $(function () {
                                     // });
                                 }
                             }
+
+                                var AURINlocal = JSON.parse(localStorage.getItem('aurin-data'))
+                                    for (j in polygonFeatures) {
+                                        //Get the lga name if we found the lga of data item
+                                        if(inside([mainData[i].longitude, mainData[i].latitude ], polygonFeatures[j].geometry.coordinates)){
+                                        let lgaCode = polygonFeatures[j].properties.feature_code
+                                        //Match the lga name with the abs data then map the socio economic data in to the main data
+                                        var aurinAge = AURINlocal['age'][lgaCode]
+                                        var aurinIncome = AURINlocal['income'][lgaCode]
+                                        mainData[i].age = aurinAge
+                                        mainData[i].income = aurinIncome
+                                    }
+                            }
                         }
+
+                        
                         
                         localStorage.setItem("company-data", JSON.stringify(mainData))
                         localStorage.setItem("geocode", JSON.stringify(geocoded))

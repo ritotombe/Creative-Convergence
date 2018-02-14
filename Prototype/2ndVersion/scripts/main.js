@@ -97,16 +97,16 @@ var selectedPlace = [];
       $('#flat-slider-age').slider({
         orientation: 'horizontal',
         range:       true,
-        values:      [3,90],
-        max:         90,
-        min:         3,
+        values:      [0,30],
+        max:         30,
+        min:         0,
         slide: function( event, ui ) {
-            $( "#min-age" ).html(ui.values[0]);
-            $( "#max-age" ).html(ui.values[1]);
+            $( "#min-age" ).html(ui.values[0]+" %");
+            $( "#max-age" ).html(ui.values[1]+" %");
         }
         });
-      $( "#min-age" ).html($( "#flat-slider-age" ).slider( "values", 0 ));
-      $( "#max-age" ).html($( "#flat-slider-age" ).slider( "values", 1 ));
+      $( "#min-age" ).html($( "#flat-slider-age" ).slider( "values", 0 ) +" %");
+      $( "#max-age" ).html($( "#flat-slider-age" ).slider( "values", 1 ) +" %");
 
       $('#flat-slider-household').slider({
         orientation: 'horizontal',

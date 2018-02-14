@@ -129,9 +129,9 @@ var dateMin = 0, dateMax = 0
             var age = data[8] || 0; 
             
 
-            if ( ( minAge == 3 && maxAge == 90 ) ||
-                ( minAge == 3 && age <= maxAge ) ||
-                ( minAge <= age   && maxAge == 90 ) ||
+            if ( ( minAge == 0 && maxAge == 30 ) ||
+                ( minAge == 0 && age <= maxAge ) ||
+                ( minAge <= age   && maxAge == 30 ) ||
                 ( minAge <= age   && age <= maxAge ) )
             {            
                 return true;
