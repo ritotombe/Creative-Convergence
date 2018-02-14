@@ -285,20 +285,6 @@ function renderMap(filteredData) {
   ]
   });
 
-
-  // [
-  //         {
-  //           featureType: 'poi.business',
-  //           stylers: [{visibility: 'off'}]
-  //         },
-  //         {
-  //           featureType: 'road',
-  //           elementType: 'labels',
-  //           stylers: [{visibility: 'off'}]
-  //         }
-  //       ]
-
-
   var legend = document.getElementById('legend');
   for (item in companyConfig) {
     var color = companyConfig[item].color;

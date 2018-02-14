@@ -84,7 +84,10 @@ $(function () {
                                         //Match the lga name with the abs data then map the socio economic data in to the main data
                                         var aurinAge = AURINlocal['age'][lgaCode]
                                         var aurinIncome = AURINlocal['income'][lgaCode]
-                                        mainData[i].age = aurinAge
+                                        console.log(i);
+                                        
+                                        mainData[i].age = extractYoungPeoplePercentage(absData.age[lgaCode]).toFixed(2)
+                                        console.log(i);
                                         mainData[i].income = aurinIncome
                                     }
                             }

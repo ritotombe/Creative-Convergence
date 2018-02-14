@@ -196,7 +196,7 @@ function extractYoungPeoplePercentage(ageData) {
 
   var totalYoungPeople = 0
 
-  for (i in ageData){
+  for (let i in ageData){
     if (!isNaN(parseInt(i))) {
       var age = parseInt(i)
       if (age < 18){
