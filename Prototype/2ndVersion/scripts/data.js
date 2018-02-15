@@ -122,11 +122,10 @@ if (localStorage.getItem("data") == null || localStorage.getItem("data").length 
 } else {
 
 	var data = JSON.parse(localStorage.getItem("data"))
-	var absData = JSON.parse(localStorage.getItem("abs-data"))
-	var lgaPolygon = lgaPolygon2016 // JSON.parse(lga_polygon) for v0.1
+  var absData = JSON.parse(localStorage.getItem("abs-data"))
+	var lgaPolygon = Object.assign({}, lgaPolygon2016) // JSON.parse(lga_polygon) for v0.1
 	var polygonFeatures = lgaPolygon.features
-
-
+  
 	var medianAge = {}
 	if (localStorage.getItem("median-age")) {
 		medianAge = JSON.parse(localStorage.getItem("median-age"))
@@ -217,18 +216,32 @@ function getCompaniesVenues(key) {
 
 function extractAURINData(AURINData) {
 	var ageData = {}
-	var incomeData = {}
+  var incomeData = {}
+  var populationData = {}
+  var areaData = {}
 	for (i in AURINData.features) {
 		var code = AURINData.features[i].properties.lga_code_2016
 		var age = AURINData.features[i].properties.median_age_persons
 		var income = AURINData.features[i].properties.median_tot_hhd_inc_weekly
 		ageData[code] = age
 		incomeData[code] = income
-	}
+  }
+  
+  for (i in AURINPopulation.features){
+    var code = AURINPopulation.features[i].properties.lga_code16
+    var population = AURINPopulation.features[i].properties.erp_2016pr
+    var area = AURINPopulation.features[i].properties.areasqkm16
+    
+    populationData[code] = population
+    areaData[code] = area
+
+  }
 
 	localStorage.setItem('aurin-data', JSON.stringify({
 		'age': ageData,
-		'income': incomeData,
+    'income': incomeData,
+    'population': populationData,
+    'area': areaData
 	}))
 }
 

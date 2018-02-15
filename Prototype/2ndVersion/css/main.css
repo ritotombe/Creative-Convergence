@@ -506,18 +506,17 @@ input.tt-input, input.tt-hint{
   text-anchor: middle;
 }
 
-.nodes svg:hover, .arcs svg path:hover {
+.nodes svg:hover, .arcs svg path:hover, .population svg path:hover {
   cursor: pointer;
 }
 
-.arcs{
+.arcs, .population{
   position: absolute;
-  height: 100vh;
-  width: 100%;
-  pointer-events: all;
 }
 
-.arcs svg, .nodes svg {
+
+
+.arcs svg, .nodes svg, .population svg {
   overflow: visible;
 }
 
