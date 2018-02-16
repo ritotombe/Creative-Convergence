@@ -1,7 +1,8 @@
 var map
-var center = {
-	x: 0,
-	y: 0
+
+var mapState = {
+	zoom: 7,
+	center: [-36.8, 145.246528]
 }
 
 var activePosition = {
@@ -23,8 +24,8 @@ function renderMap(filteredData) {
 	$('<div id="legend"><h4>Companies</h4></div>').insertAfter("#map");
 
 	map = new google.maps.Map(d3.select("#map").node(), {
-		zoom: 7,
-		center: new google.maps.LatLng(-36.8, 145.246528),
+		zoom: mapState.zoom,
+		center: new google.maps.LatLng(mapState.center[0], mapState.center[1]),
 		mapTypeId: google.maps.MapTypeId.TERRAIN,
 		gestureHandling: 'cooperative',
 		styles: [{
@@ -426,28 +427,14 @@ function renderMap(filteredData) {
 					.style("display", "none")
 			})
 
-			//handle change of center point for tooltip
-			if (center.x == 0 && center.y == 0) {
-				center = getIProjection({
-					value: {
-						latitude: map.getCenter().lat(),
-						longitude: map.getCenter().lng()
-					}
-				})
-			}
-
+			mapState.center[0] =  map.getCenter().lat()
+			mapState.center[1] = map.getCenter().lng()
+			mapState.zoom = map.getZoom()
+					
 			map.addListener('center_changed', function(e) {
-				var newCenter = getIProjection({
-					value: {
-						latitude: map.getCenter().lat(),
-						longitude: map.getCenter().lng()
-					}
-				})
-
 				tooltip
 					.style("left", (pos.x) + "px")
 					.style("top", (pos.y) + "px")
-
 			})
 
 			function LGAGeoPathProjection() {
