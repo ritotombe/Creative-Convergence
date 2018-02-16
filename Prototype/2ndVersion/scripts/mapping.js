@@ -258,6 +258,22 @@ function renderMap(filteredData) {
 		var layer = d3.select(this.getPanes().overlayMouseTarget).append("div")
 			.attr("class", "nodes")
 
+		var populationTooltip = d3.select('body').append('svg')
+									.attr("class", "population-tooltip")
+		var populationTooltipText = populationTooltip.append('text')
+										.attr('x', "50%")
+										.attr('y', "50%")
+										.attr('dy', ".4em")
+										.style('fill', 'white')
+										.style('font-size', '10pt')
+					
+		var populationTooltipTextName = populationTooltipText.append('tspan')
+											.attr('x', 0)
+											.attr('dy', "1.2em")
+		var populationTooltipTextDensity= populationTooltipText.append('tspan')
+											.attr('x', 0)
+											.attr('dy', "1.2em")
+
 		var tooltip = layer.select(".tooltip")
 		var tooltipTitle = tooltip.select(".tooltip-title")
 		var tooltipContent = tooltip.select(".tooltip-content")
@@ -299,6 +315,12 @@ function renderMap(filteredData) {
 				.each(createLGAPath)
 				.enter().append("path")
 				.each(createLGAPath)
+
+				if($('.bootstrap-switch').hasClass('bootstrap-switch-on')){
+					$('.population').show()
+				} else {
+					$('.population').hide()
+				}
 
 			/////LINE
 			for (item in entries) {
@@ -497,14 +519,16 @@ function renderMap(filteredData) {
 			function createLGAPath(d) {
 				let thisPath = d3.select(this)
 
+				var aurinData = localStorage.getItem('aurin-data')
+				var populationData = JSON.parse(aurinData).population
+				var areaData = JSON.parse(aurinData).area
+
 				thisPath.attr("d", d3.geoPath())
 					.attr("fill", '#4ae')
 					.attr("stroke-width", '1px')
 					.attr("stroke", '#fff')
-					.style("opacity", function(d) {
-						var aurinData = localStorage.getItem('aurin-data')
-						var populationData = JSON.parse(aurinData).population
-						var areaData = JSON.parse(aurinData).area
+					.style("stroke-opacity", "0.6")
+					.style("fill-opacity", function(d) {
 						var max = 0
 						for (let i in populationData) {
 							if (populationData[i] / areaData[i] > max) {
@@ -516,8 +540,33 @@ function renderMap(filteredData) {
 					.attr("class", function(d) {
 						return d.properties.feature_name
 					})
-					.on("click", function(d) {
-						// console.log(d);
+					.on("mouseover mousemove", function(d) {
+						layerPopulation.selectAll("path")
+							.attr("stroke-width", '1px')
+							.style("stroke-opacity", "0.6")
+						d3.select(this)
+							.attr("stroke-width", '3px')
+							.style("stroke-opacity", "1")
+
+						populationTooltip
+							.style("left", d3.event.pageX)
+							.style("top", d3.event.pageY)
+							.style("position", "absolute")
+							.style("display", "block")
+						
+						populationTooltipTextName
+							.text(function(){
+								return d.properties.feature_name
+							})
+
+						populationTooltipTextDensity
+						.text(function(){
+							return `Density: ${(populationData[d.properties.feature_code] / areaData[d.properties.feature_code]).toFixed(2)}/km2`
+						})
+					})
+					.on("mouseout", function(d) {
+						populationTooltip
+							.style("display", "none")
 					})
 			}
 

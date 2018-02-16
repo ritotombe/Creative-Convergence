@@ -506,7 +506,7 @@ input.tt-input, input.tt-hint{
   text-anchor: middle;
 }
 
-.nodes svg:hover, .arcs svg path:hover, .population svg path:hover {
+.nodes svg:hover, .arcs svg path:hover{
   cursor: pointer;
 }
 
@@ -514,11 +514,23 @@ input.tt-input, input.tt-hint{
   position: absolute;
 }
 
-
-
-.arcs svg, .nodes svg, .population svg {
+.arcs svg, .population svg {
+  height: 1px;
+  width: 1px;
   overflow: visible;
 }
+
+.population svg{
+  pointer-events: all;
+}
+
+.population-tooltip{
+  height: 1px;
+  width: 1px;
+  margin-left: 10px;
+  overflow: visible;
+}
+
 
 /* .arcs svg {
   height: 100vh;
@@ -558,6 +570,11 @@ div.tooltip {
   background: #fff;
   border: 0px;
   border-radius: 4px;
+}
+
+.bootstrap-switch {
+  font-size: small;
+  margin-bottom: 10px;
 }
 
 /* Datatables */
