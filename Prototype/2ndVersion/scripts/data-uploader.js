@@ -30,6 +30,8 @@ $(function () {
                             searchCoordData.push(mainData[i])
                         }
                     }
+                    console.log(1, searchCoordData);
+                    
 
                     var i = 0
                     function f() {
@@ -39,8 +41,8 @@ $(function () {
                         calledObjects.push(`${searchCoordData[i].venue}, ${searchCoordData[i].suburb}`)
                         i++;
                         if( i < searchCoordData.length ){
-                            if (i % 5 == 0) {
-                                setTimeout(f, 800);
+                            if (i % 3 == 0) {
+                                setTimeout(f, 1001);
                             } else {
                                 f()
                             }
@@ -67,8 +69,12 @@ $(function () {
 
                     function load2(){
                         $.when.apply($, promises).then(function () {
+                            console.log(mainData);
                             for (i in mainData) {
                                 // var data = arguments[i][0]
+
+                                console.log(i);
+                                
     
                                 mainData[i].age = 0
                                 mainData[i].income = 0
@@ -76,11 +82,14 @@ $(function () {
                                 mainData[i].venue = `${mainData[i].venue}, ${mainData[i].suburb}`
 
                                 if(geocoded[mainData[i].venue]){
+                                    console.log(geocoded[mainData[i].venue], mainData[i].venue);
+                                    
                                     var coord = geocoded[mainData[i].venue]
                                     mainData[i].latitude = coord.lat
                                     mainData[i].longitude = coord.lng
                                 } else {
-                                    if (calledObjects.indexOf(mainData[i].venue)){
+                                    
+                                    if (calledObjects.indexOf(mainData[i].venue) >= 0){
                                         var argIndex = calledObjects.indexOf(mainData[i].venue)
                                         var data = arguments[argIndex][0]
 
