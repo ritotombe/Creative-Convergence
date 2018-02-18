@@ -1,230 +1,54 @@
+/*
+This file contains all the mapping logic. 
+This includes the attachment of the Google Map.
+Three layers on top of it consist of:
+	- Population density layer
+	- Arcs/lines between markers
+	- The venue/company/event marker layer
+
+Algorithm:
+	1. Map is wrapped into a function with a single paramater (filteredData), which convey the data that has been filtered. 
+	This to allow other functions to call it when there are changes in the map content.
+		2. Initialise Google Map
+		3. Initialise the three layers (Built with svg by D3) and tooltips (marker tooltip and population desity description)
+		4. Initialise the content of each layer.
+		5. Render map.
+*/
+
 var map
 
+// Initial map state, later changes programmatically
 var mapState = {
 	zoom: 7,
 	center: [-36.8, 145.246528]
 }
 
+//Position of markers' tooltip
 var activePosition = {
 	value: {
 		latitude: 0,
 		longitude: 0
 	}
 }
-
 var pos = {
 	x: 0,
 	y: 0
 }
+//--------------------------
 
-// Create the Google Map…
-
+// 1. Wrap the map in function
 function renderMap(filteredData) {
 
+	// START - 2. Initialises the Google Maps and its components 
 	$('<div id="legend"><h4>Companies</h4></div>').insertAfter("#map");
-
 	map = new google.maps.Map(d3.select("#map").node(), {
 		zoom: mapState.zoom,
 		center: new google.maps.LatLng(mapState.center[0], mapState.center[1]),
 		mapTypeId: google.maps.MapTypeId.TERRAIN,
 		gestureHandling: 'cooperative',
-		styles: [{
-				"elementType": "geometry",
-				"stylers": [{
-					"color": "#242f3e"
-				}]
-			},
-			{
-				"elementType": "labels.text.fill",
-				"stylers": [{
-					"color": "#746855"
-				}]
-			},
-			{
-				"elementType": "labels.text.stroke",
-				"stylers": [{
-					"color": "#242f3e"
-				}]
-			},
-			{
-				"featureType": "administrative",
-				"elementType": "geometry.stroke",
-				"stylers": [{
-						"color": "#d59563"
-					},
-					{
-						"weight": 1.5
-					}
-				]
-			},
-			{
-				"featureType": "administrative.land_parcel",
-				"elementType": "labels",
-				"stylers": [{
-					"visibility": "off"
-				}]
-			},
-			{
-				"featureType": "administrative.locality",
-				"elementType": "labels.text.fill",
-				"stylers": [{
-					"color": "#d59563"
-				}]
-			},
-			{
-				"featureType": "poi",
-				"elementType": "labels.text",
-				"stylers": [{
-					"visibility": "off"
-				}]
-			},
-			{
-				"featureType": "poi",
-				"elementType": "labels.text.fill",
-				"stylers": [{
-					"color": "#d59563"
-				}]
-			},
-			{
-				"featureType": "poi.business",
-				"stylers": [{
-					"visibility": "off"
-				}]
-			},
-			{
-				"featureType": "poi.park",
-				"elementType": "geometry",
-				"stylers": [{
-					"color": "#263c3f"
-				}]
-			},
-			{
-				"featureType": "poi.park",
-				"elementType": "labels.text.fill",
-				"stylers": [{
-					"color": "#6b9a76"
-				}]
-			},
-			{
-				"featureType": "road",
-				"elementType": "geometry",
-				"stylers": [{
-					"color": "#38414e"
-				}]
-			},
-			{
-				"featureType": "road",
-				"elementType": "geometry.stroke",
-				"stylers": [{
-					"color": "#212a37"
-				}]
-			},
-			{
-				"featureType": "road",
-				"elementType": "labels.icon",
-				"stylers": [{
-					"visibility": "off"
-				}]
-			},
-			{
-				"featureType": "road",
-				"elementType": "labels.text.fill",
-				"stylers": [{
-					"color": "#9ca5b3"
-				}]
-			},
-			{
-				"featureType": "road.arterial",
-				"elementType": "labels",
-				"stylers": [{
-					"visibility": "off"
-				}]
-			},
-			{
-				"featureType": "road.highway",
-				"elementType": "geometry",
-				"stylers": [{
-					"color": "#746855"
-				}]
-			},
-			{
-				"featureType": "road.highway",
-				"elementType": "geometry.stroke",
-				"stylers": [{
-					"color": "#1f2835"
-				}]
-			},
-			{
-				"featureType": "road.highway",
-				"elementType": "labels",
-				"stylers": [{
-					"visibility": "off"
-				}]
-			},
-			{
-				"featureType": "road.highway",
-				"elementType": "labels.text.fill",
-				"stylers": [{
-					"color": "#f3d19c"
-				}]
-			},
-			{
-				"featureType": "road.local",
-				"stylers": [{
-					"visibility": "off"
-				}]
-			},
-			{
-				"featureType": "road.local",
-				"elementType": "labels",
-				"stylers": [{
-					"visibility": "off"
-				}]
-			},
-			{
-				"featureType": "transit",
-				"stylers": [{
-					"visibility": "off"
-				}]
-			},
-			{
-				"featureType": "transit",
-				"elementType": "geometry",
-				"stylers": [{
-					"color": "#2f3948"
-				}]
-			},
-			{
-				"featureType": "transit.station",
-				"elementType": "labels.text.fill",
-				"stylers": [{
-					"color": "#d59563"
-				}]
-			},
-			{
-				"featureType": "water",
-				"elementType": "geometry",
-				"stylers": [{
-					"color": "#17263c"
-				}]
-			},
-			{
-				"featureType": "water",
-				"elementType": "labels.text.fill",
-				"stylers": [{
-					"color": "#515c6d"
-				}]
-			},
-			{
-				"featureType": "water",
-				"elementType": "labels.text.stroke",
-				"stylers": [{
-					"color": "#17263c"
-				}]
-			}
-		]
+		styles: mapConfig
 	});
-
+	// Initialise the legend
 	var legend = document.getElementById('legend');
 	for (item in companyConfig) {
 		var color = companyConfig[item].color;
@@ -241,24 +65,36 @@ function renderMap(filteredData) {
 	}
 	map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
 
+	//  determine which data that will be used in the map
+
+	// whole data
 	var data = JSON.parse(localStorage.getItem(SOURCE))
+	// filtered data
 	if (filteredData) {
 		data = filteredData
 	}
-
 	var overlay = new google.maps.OverlayView();
+	// END - Initialise the Google Maps
 
+	// START - 3. Initialise the Three Layers
 	overlay.onAdd = function() {
-
+		// Population layer
 		var layerPopulation = d3.select(this.getPanes().overlayMouseTarget).append("div")
 			.attr("class", "population").append("svg");
 
+		// Arcs layer
 		var layerArc = d3.select(this.getPanes().overlayMouseTarget).append("div")
 			.attr("class", "arcs").append("svg");
 
+		// Marker layer - Please notice that the other two layers are wrapped into one big svg tag.
+		// However, the marker layer did not do the same way because each marker has to be its own svg.
+		// In this way, I can put multiple svg compenent in a single marker (in this case the circle and label) 
 		var layer = d3.select(this.getPanes().overlayMouseTarget).append("div")
 			.attr("class", "nodes")
 
+		//START - Intitialise the tooltips
+		
+		// Population tooltip
 		var populationTooltip = d3.select('body').append('svg')
 									.attr("class", "population-tooltip")
 		var populationTooltipText = populationTooltip.append('text')
@@ -275,6 +111,7 @@ function renderMap(filteredData) {
 											.attr('x', 0)
 											.attr('dy', "1.2em")
 
+		// Marker tooltip 
 		var tooltip = layer.select(".tooltip")
 		var tooltipTitle = tooltip.select(".tooltip-title")
 		var tooltipContent = tooltip.select(".tooltip-content")
@@ -297,22 +134,22 @@ function renderMap(filteredData) {
 			tooltipContent = tooltip.append('div')
 				.attr('class', 'tooltip-content')
 		}
+		// END - Initialise the tooltips
+		// END - 3. Initialise the Three Layers
 
+		// This function will be called everytime the map is scrolled and zoomed
 		overlay.draw = function() {
 
 			var projection = this.getProjection(),
-				padding = 10;
+			padding = 10;
 
-			adjency = {}
+			adjacency = {}  // arcs' point to point coordinates
 			var entries = d3.entries(data)
 
-
-
-			/////POPULATION
-			// var LGAProjection = LGAGeoPathProjection()
-
+			// START - 4. Initialise the Content of Each Layer.
+			//-- Population Layer --
 			var populations = layerPopulation.selectAll("path")
-				.data(LGAGeoPathProjection())
+				.data(LGAGeoPathProjection)
 				.each(createLGAPath)
 				.enter().append("path")
 				.each(createLGAPath)
@@ -323,24 +160,22 @@ function renderMap(filteredData) {
 					$('.population').hide()
 				}
 
-			/////LINE
+			//-- Arcs Layer --
+			// Add the coordinates of each companies  
 			for (item in entries) {
-				if (!adjency[entries[item].value.company]) {
-					adjency[entries[item].value.company] = []
+				if (!adjacency[entries[item].value.company]) {
+					adjacency[entries[item].value.company] = []
 				}
-				adjency[entries[item].value.company].push(getIProjection(entries[item]))
+				adjacency[entries[item].value.company].push(getIProjection(entries[item]))
 			}
-
-			// console.log(adjency);
-
-
+			// Draw it here
 			var paths = layerArc.selectAll("path")
-				.data(d3.entries(adjency))
+				.data(d3.entries(adjacency))
 				.each(createPath)
 				.enter().append("path")
 				.each(createPath)
 
-			/////MARKER
+			//-- Marker Layer --
 			var marker = layer.selectAll("svg")
 				.data(d3.entries(data))
 				.each(transform) // update existing markers
@@ -356,7 +191,7 @@ function renderMap(filteredData) {
 				.style("fill", colorCoding)
 				.style("opacity", 0.7)
 
-			// Add Labels on each nodes
+			// Add labels on each nodes
 			marker.append('text')
 				.attr('class', 'node-label')
 				.attr('x', "50%")
@@ -365,68 +200,10 @@ function renderMap(filteredData) {
 				.style('fill', 'white')
 				.text(labelCoding)
 				.style("opacity", 0.7)
+			
+			// END - 4. Initialise the Content of Each Layer.
 
-			// tooltip position after make larger
-			pos = getIProjection(activePosition)
-
-			tooltip
-				.style("left", (pos.x) + "px")
-				.style("top", (pos.y) + "px")
-
-			marker.on('click', function(d, i) {
-				activePosition.value = {
-					latitude: d.value.latitude,
-					longitude: d.value.longitude
-				}
-				pos = getIProjection(d)
-
-				d = d.value
-				var overlappedPoints = getOverlaps(d.longitude, d.latitude)
-				var tooltipContentVal = []
-				for (i in overlappedPoints) {
-					var bgColour = colorCoding({
-						value: {
-							company: overlappedPoints[i].company
-						}
-					})
-					tooltipContentVal.push(
-						`
-              <div class='tooltip-content-item' style='background: ${bgColour}'>
-                <div>${overlappedPoints[i].creative_work}</div>
-                <div>${overlappedPoints[i].date}</div>
-              </div>
-            `
-					)
-				}
-
-				tooltip.transition()
-					.duration(10)
-					.style("opacity", .9)
-					.style("display", "block")
-				tooltipTitle.html(d.venue)
-				tooltipContent.html(tooltipContentVal.join(`\n`))
-				tooltip
-					.style("left", (pos.x) + "px")
-					.style("top", (pos.y) + "px")
-				layer.selectAll("circle")
-					.style("stroke", 'none')
-				d3.select(this).select("circle")
-					.style("stroke", 'white')
-					.style("stroke-width", 2)
-				// .moveToFront()
-			})
-
-			//Handle close button tooltip
-			var tooltipCloseBtn = $('.close-btn')
-			tooltipCloseBtn.on('click', function() {
-				layer.selectAll("circle")
-					.style("stroke", 'none')
-				tooltip.transition()
-					.duration(200)
-					.style("opacity", .0)
-					.style("display", "none")
-			})
-
+			// Save map state after scroll and zoom 
 			mapState.center[0] =  map.getCenter().lat()
 			mapState.center[1] = map.getCenter().lng()
 			mapState.zoom = map.getZoom()
@@ -436,7 +213,19 @@ function renderMap(filteredData) {
 					.style("left", (pos.x) + "px")
 					.style("top", (pos.y) + "px")
 			})
+			
+			// Tooltip position after make a zoom action, we need new projections
+			pos = getIProjection(activePosition)
+			tooltip
+				.style("left", (pos.x) + "px")
+				.style("top", (pos.y) + "px")
 
+			// Click listener of the Markers (show tooltip)
+			marker.on('click', markerClickHandler)
+
+			// START - HELPER FUNCTIONS
+
+			// This function is to Project all the LGA boundaries coordinate in to pixel 
 			function LGAGeoPathProjection() {
 				var projectedFeatures = []
 				var polygon = {}
@@ -474,35 +263,7 @@ function renderMap(filteredData) {
 				return projectedFeatures
 			}
 
-			function getIProjection(d) {
-				var latLon = new google.maps.LatLng(d.value.latitude, d.value.longitude);
-				var pixelated = projection.fromLatLngToDivPixel(latLon);
-
-				return pixelated
-			}
-
-			function getOverlaps(longitude, latitude) {
-
-				var dataPoints = []
-
-				for (i in data) {
-					if (data[i].longitude == longitude && data[i].latitude == latitude) {
-						dataPoints.push(data[i])
-					}
-				}
-				return dataPoints
-			}
-
-			function labelCoding(d) {
-				var company = d.value.company;
-				return companyConfig[company].label;
-			}
-
-			function colorCoding(d) {
-				var company = d.value.company;
-				return companyConfig[company].color;
-			}
-
+			//  This function is to create Path (polygons) of each LGA and  creates its tooltip
 			function createLGAPath(d) {
 				let thisPath = d3.select(this)
 
@@ -557,6 +318,7 @@ function renderMap(filteredData) {
 					})
 			}
 
+			// This function is to create the arcs' lines
 			function createPath(d) {
 				let thisPath = d3.select(this)
 
@@ -637,6 +399,35 @@ function renderMap(filteredData) {
 					.attr("stroke-dashoffset", 0)
 			}
 
+			function getIProjection(d) {
+				var latLon = new google.maps.LatLng(d.value.latitude, d.value.longitude);
+				var pixelated = projection.fromLatLngToDivPixel(latLon);
+
+				return pixelated
+			}
+
+			function getOverlaps(longitude, latitude) {
+
+				var dataPoints = []
+
+				for (i in data) {
+					if (data[i].longitude == longitude && data[i].latitude == latitude) {
+						dataPoints.push(data[i])
+					}
+				}
+				return dataPoints
+			}
+
+			function labelCoding(d) {
+				var company = d.value.company;
+				return companyConfig[company].label;
+			}
+
+			function colorCoding(d) {
+				var company = d.value.company;
+				return companyConfig[company].color;
+			}
+
 			function transform(d) {
 				d = new google.maps.LatLng(d.value.latitude, d.value.longitude);
 				d = projection.fromLatLngToDivPixel(d);
@@ -644,8 +435,68 @@ function renderMap(filteredData) {
 				return d3.select(this)
 					.attr("transform", "translate(" + (d.x - padding) + "," + (d.y - padding) + ")")
 			}
+
+			function markerClickHandler(d, i) {
+				// Set the position of the tooltip based on the clicked marker's position
+				activePosition.value = {
+					latitude: d.value.latitude,
+					longitude: d.value.longitude
+				}
+
+				// Get the coordinate projection in pixel
+				pos = getIProjection(d)
+				d = d.value
+
+				// Get all Markers that overlapped in a same point, later agregate them in the same tooltip
+				var overlappedPoints = getOverlaps(d.longitude, d.latitude)
+				var tooltipContentVal = []
+				for (i in overlappedPoints) {
+					var bgColour = colorCoding({
+						value: {
+							company: overlappedPoints[i].company
+						}
+					})
+					tooltipContentVal.push(
+						`
+						<div class='tooltip-content-item' style='background: ${bgColour}'>
+							<div>${overlappedPoints[i].creative_work}</div>
+							<div>${overlappedPoints[i].date}</div>
+						</div>
+						`
+					)
+				}
+
+				tooltip.transition()
+					.duration(10)
+					.style("opacity", .9)
+					.style("display", "block")
+				tooltipTitle.html(d.venue)
+				tooltipContent.html(tooltipContentVal.join(`\n`))
+				tooltip
+					.style("left", (pos.x) + "px")
+					.style("top", (pos.y) + "px")
+				layer.selectAll("circle")
+					.style("stroke", 'none')
+				d3.select(this).select("circle")
+					.style("stroke", 'white')
+					.style("stroke-width", 2)
+			}
+
+			//Handle close button tooltip
+			var tooltipCloseBtn = $('.close-btn')
+			tooltipCloseBtn.on('click', function() {
+				layer.selectAll("circle")
+					.style("stroke", 'none')
+				tooltip.transition()
+					.duration(200)
+					.style("opacity", .0)
+					.style("display", "none")
+			})
+
+		// END - HELPER FUNCTIONS
 		};
 	};
 
+	//5. Render Map
 	overlay.setMap(map);
 }

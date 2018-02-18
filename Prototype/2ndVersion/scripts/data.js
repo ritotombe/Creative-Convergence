@@ -8,7 +8,7 @@ var mainData = []; // venues -> organisation
 var completeData = []; //events -> organisation, venue
 var csvDict = [];
 var ABSData = [];
-var adjency = {}
+var adjacency = {}
 
 var SOURCE = 'data'
 
