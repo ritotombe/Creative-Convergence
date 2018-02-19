@@ -265,11 +265,21 @@ function initiateSwitch(){
 	$('#label-switch').bootstrapSwitch('onText', 'On');
 	$('#label-switch').bootstrapSwitch('offText', 'Off');
 	$('.bootstrap-switch').on('switchChange.bootstrapSwitch', function(){
-	if($(this).hasClass('bootstrap-switch-on')){
-		$('.population').show()
-	} else {
-		$('.population').hide()
+		if($(this).hasClass('bootstrap-switch-on')){
+			$('.population').show()
+		} else {
+			$('.population').hide()
 	}
+	});
+
+	$('#arc-label-switch').bootstrapSwitch('onText', 'On');
+	$('#arc-label-switch').bootstrapSwitch('offText', 'Off');
+	$('.bootstrap-switch').on('switchChange.bootstrapSwitch', function(){
+		if($(this).hasClass('bootstrap-switch-on')){
+			$('.arcs').show()
+		} else {
+			$('.arcs').hide()
+		}
 	});
 }
 

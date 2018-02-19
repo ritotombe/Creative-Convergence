@@ -154,7 +154,7 @@ function renderMap(filteredData) {
 				.enter().append("path")
 				.each(createLGAPath)
 
-				if($('.bootstrap-switch').hasClass('bootstrap-switch-on')){
+				if($('.bootstrap-switch-id-label-switch').hasClass('bootstrap-switch-on')){
 					$('.population').show()
 				} else {
 					$('.population').hide()
@@ -174,6 +174,12 @@ function renderMap(filteredData) {
 				.each(createPath)
 				.enter().append("path")
 				.each(createPath)
+			
+			if($('.bootstrap-switch-id-arc-label-switch').hasClass('bootstrap-switch-on')){
+				$('.arcs').show()
+			} else {
+				$('.arcs').hide()
+			}
 
 			//-- Marker Layer --
 			var marker = layer.selectAll("svg")
