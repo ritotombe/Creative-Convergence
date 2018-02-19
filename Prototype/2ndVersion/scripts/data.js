@@ -122,7 +122,7 @@ if (localStorage.getItem("data") == null || localStorage.getItem("data").length 
 } else {
 
 	var data = JSON.parse(localStorage.getItem("data"))
-  var absData = JSON.parse(localStorage.getItem("abs-data"))
+  	var absData = JSON.parse(localStorage.getItem("abs-data"))
 	var lgaPolygon = Object.assign({}, lgaPolygon2016) // JSON.parse(lga_polygon) for v0.1
 	var polygonFeatures = lgaPolygon.features
   

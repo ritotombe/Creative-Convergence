@@ -213,34 +213,34 @@ var dateMin = 0, dateMax = 0
         switch (filterSelected) {
             case (VENUE_SELECTED):
                 columnNumber = 2
-                if (checkAllState.VENUE_SELECTED){
+                if (checkAllState[VENUE_SELECTED]){
                     venuesSelected = []
-                    checkAllState.VENUE_SELECTED = false
+                    checkAllState[VENUE_SELECTED] = false
                 } else {
                     venuesSelected = Object.keys(venues)
-                    checkAllState.VENUE_SELECTED = true
+                    checkAllState[VENUE_SELECTED] = true
                 }
                 source = venuesSelected
                 break
             case (SCHOOL_SELECTED):
                 columnNumber = 6
-                if (checkAllState.SCHOOL_SELECTED){
+                if (checkAllState[SCHOOL_SELECTED]){
                     schoolsSelected = []
-                    checkAllState.SCHOOL_SELECTED = false
+                    checkAllState[SCHOOL_SELECTED] = false
                 } else {
                     schoolsSelected = Object.keys(schools)
-                    checkAllState.SCHOOL_SELECTED = true
+                    checkAllState[SCHOOL_SELECTED] = true
                 }
                 source = schoolsSelected
                 break
             case (TYPE_SELECTED):
                 columnNumber = 7
-                if (checkAllState.TYPE_SELECTED){
+                if (checkAllState[TYPE_SELECTED]){
                     typesSelected = []
-                    checkAllState.TYPE_SELECTED = false 
+                    checkAllState[TYPE_SELECTED] = false 
                 } else {
                     typesSelected = Object.keys(types)
-                    checkAllState.TYPE_SELECTED =  true
+                    checkAllState[TYPE_SELECTED] =  true
                 }
                 source = typesSelected
                 break
@@ -322,9 +322,9 @@ var dateMin = 0, dateMax = 0
         dateMin = 0
         dateMax = 0
 
-        checkAllState.SCHOOL_SELECTED = true
-        checkAllState.TYPE_SELECTED = true
-        checkAllState.VENUE_SELECTED = true  
+        checkAllState[SCHOOL_SELECTED] = true
+        checkAllState[TYPE_SELECTED] = true
+        checkAllState[VENUE_SELECTED] = true  
     })
 
     function renderAll() {
@@ -337,7 +337,8 @@ var dateMin = 0, dateMax = 0
                 filteredData.push(test[item])
             }
         }
-        populateVenues()
+     
+        populateOptions(filteredData)
         renderMap(filteredData);
     }
 
@@ -376,34 +377,6 @@ var dateMin = 0, dateMax = 0
     function prepareQuery(queryTerms) {
         if (!queryTerms) return '';
         return queryTerms.join('|')
-    }
-
-    function populateVenues() {
-        let data = filteredData
-        venues = {}
-        schools = {}
-        types = {}
-        venuesSelected = []
-        schoolsSelected = []
-        typesSelected = []
-
-        
-        for (item in data) {
-            if (!(data[item].venue in venues)) {
-                venues[data[item].venue] = data[item].venue
-            }
-            if (!(data[item].school in schools)) {
-                schools[data[item].school] = data[item].school
-            }
-            if (!(data[item].type in types)) {
-                types[data[item].type] = data[item].type
-            }
-        }
-
-
-        venues =  sortOnKeys(venues)
-
-        populateLists(2)
     }
 
     function containsObject(obj, list) {

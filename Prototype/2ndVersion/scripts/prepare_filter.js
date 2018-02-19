@@ -1,88 +1,31 @@
-// This contains the logic to change the filters UI, for data change please check at ./filter.js
+// This file contains the logic to change the filters UI, 
+// for data change please check at ./filter.js
+// However, this file also contains on how the options filled in.
 
+// Initiate the option type contants
 const VENUE_SELECTED = "venue"
 const TYPE_SELECTED = "type"
 const SCHOOL_SELECTED = "school"
 
+// Initiate selected options array
 var venuesSelected = []
 var schoolsSelected = []
 var typesSelected = []
+
+// Initiate which type of option was selected
 var filterSelected = ""
 
+// Intitate "check all" button state in each option type
 var checkAllState = {
-  VENUE_SELECTED: true,
-  TYPE_SELECTED: true,
-  SCHOOL_SELECTED: true
+  "venue": true,
+  "type": true,
+  "school": true
 }
 
-populateLists(2)
+// Initiate all data into the selected option array
+populateOptions()
 
-$("#venues").on("click", () => {
-  let innerHTML = "";
-  $("#options").html(innerHTML)
-  for (item in venues){
-    if (venuesSelected.indexOf(venues[item]) >= 0){
-      innerHTML += `<li class = "list-item btn btn-block btn-lg btn-info notransition active">${venues[item]}</li>`
-    } else {
-      innerHTML += `<li class = "list-item btn btn-block btn-lg btn-info notransition">${venues[item]}</li>`
-    }
-  }
-  $(".title").html("Venue/s");
-  $("#options").html(innerHTML);
-
-  if (checkAllState.VENUE_SELECTED) {
-    setCheckAllActive(VENUE_SELECTED)
-  } else {
-    setCheckAllInactive(VENUE_SELECTED)
-  }
-
-  filterSelected = VENUE_SELECTED
-})
-
-$("#schools").on("click", () => {
-  let innerHTML = "";
-  $("#options").html(innerHTML)
-  for (item in schools){
-    if (schoolsSelected.indexOf(schools[item]) >= 0){
-      innerHTML += `<li class = "list-item btn btn-block btn-lg btn-info notransition active">${schools[item]}</li>`
-    } else {
-      innerHTML += `<li class = "list-item btn btn-block btn-lg btn-info notransition">${schools[item]}</li>`
-    }
-  }
-  $(".title").html("School/s");
-  $("#options").html(innerHTML);
-
-  if (checkAllState.SCHOOL_SELECTED) {
-    setCheckAllActive(SCHOOL_SELECTED)
-  } else {
-    setCheckAllInactive(SCHOOL_SELECTED)
-  }
-
-  filterSelected = SCHOOL_SELECTED
-})
-
-$("#type").on("click", () => {
-  let innerHTML = "";
-  $("#options").html(innerHTML)
-  for (item in types){
-    if (typesSelected.indexOf(types[item]) >= 0){
-      innerHTML += `<li class = "list-item btn btn-block btn-lg btn-info notransition active">${types[item]}</li>`
-    } else {
-      innerHTML += `<li class = "list-item btn btn-block btn-lg btn-info notransition">${types[item]}</li>`
-    }
-  }
-  $(".title").html("Type/s");
-  $("#options").html(innerHTML);
-
-  if (checkAllState.TYPE_SELECTED) {
-    setCheckAllActive(TYPE_SELECTED)
-  } else {
-    setCheckAllInactive(TYPE_SELECTED)
-  }
-
-  filterSelected = TYPE_SELECTED
-})
-
+// Change the appearance of the chec all button and all the lists if clickled
 $('.check-all').click(function() {
   if ($(this).hasClass("active")) {
     $(".list-item").removeClass("active");
@@ -103,6 +46,8 @@ $('#options').on("click", ".list-item",function() {
   }
 })
 
+
+
 // mode = 2 -> initialise ALL
 function populateLists(mode){
   if (mode == 2){
@@ -120,11 +65,40 @@ function populateLists(mode){
   $("#types-selected").html(typesSelected.length)
   $("#schools-selected").html(schoolsSelected.length)
 
-  // if (!$(".check-all").hasClass("active") && mode != 1) {
-  //   $(".check-all").addClass("active");
-  //   $(".check-all").html("Uncheck All");
-  // }
+  initiateOptionPanePopulateClickListener("#venues", venues, "Venue/s", VENUE_SELECTED, venuesSelected)
+  initiateOptionPanePopulateClickListener("#schools", schools, "School/s", SCHOOL_SELECTED, schoolsSelected)
+  initiateOptionPanePopulateClickListener("#type", types, "Type/s", TYPE_SELECTED, typesSelected)
 }
+
+
+// Click handler on the filter button to populate which data will be shown
+function initiateOptionPanePopulateClickListener(id, items, title, type, selected){
+  $(id).on("click", () => {
+    // Populate the options 
+    let innerHTML = "";
+    $("#options").html(innerHTML)
+    for (item in items){
+      if (selected.indexOf(items[item]) >= 0){
+        innerHTML += `<li class = "list-item btn btn-block btn-lg btn-info notransition active">${items[item]}</li>`
+      } else {
+        innerHTML += `<li class = "list-item btn btn-block btn-lg btn-info notransition">${items[item]}</li>`
+      }
+    }
+    $(".title").html(title);
+    $("#options").html(innerHTML);
+  
+    // Setup the check all status based on the type
+    if (checkAllState[type]) {
+      setCheckAllActive(type)
+    } else {
+      setCheckAllInactive(type)
+    }
+  
+    // set the state of opened option type
+    filterSelected = type
+  })
+}
+
 
 function setCheckAllActive(type){
   $(".check-all").addClass("active")
@@ -134,6 +108,39 @@ function setCheckAllActive(type){
 function setCheckAllInactive(type){
   $(".check-all").removeClass("active")
   $(".check-all").html("Check All")
+}
+
+function populateOptions(filteredData) {
+  // whole data
+	let data = JSON.parse(localStorage.getItem(SOURCE))
+	// filtered data
+	if (filteredData) {
+		data = filteredData
+	}
+
+  venues = {}
+  schools = {}
+  types = {}
+  venuesSelected = []
+  schoolsSelected = []
+  typesSelected = []
+
+  
+  for (item in data) {
+      if (!(data[item].venue in venues)) {
+          venues[data[item].venue] = data[item].venue
+      }
+      if (!(data[item].school in schools)) {
+          schools[data[item].school] = data[item].school
+      }
+      if (!(data[item].type in types)) {
+          types[data[item].type] = data[item].type
+      }
+  }
+
+  venues =  sortOnKeys(venues)
+
+  populateLists(2)
 }
 
 function removeHelper(array, index) {
