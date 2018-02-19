@@ -310,7 +310,7 @@ function renderAll() {
 		search: 'applied'
 	}).data()
 
-	for (item in test) {
+	for (item in afterFilter) {
 		if (typeof afterFilter[item] == "object" && afterFilter[item].company) {
 			filteredData.push(afterFilter[item])
 		}
