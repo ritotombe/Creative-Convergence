@@ -283,7 +283,7 @@ function renderMap(filteredData) {
 								max = populationData[i] / areaData[i]
 							}
 						}
-						return (populationData[d.properties.feature_code] / areaData[d.properties.feature_code] / max) * 300
+						return (populationData[d.properties.feature_code] / areaData[d.properties.feature_code] / max) * 100
 					})
 					.attr("class", function(d) {
 						return d.properties.feature_name
