@@ -12,10 +12,10 @@ var companyConfig = {
     "color": "#c5df61",
     "label": "Ar"
   }, //Arthur
-  "Creative Victoria": {
-    "color": "#96148a",
-    "label": "C"
-  }, //Creative Victoria
+  // "Creative Victoria": {
+  //   "color": "#96148a",
+  //   "label": "C"
+  // }, //Creative Victoria
   "Geelong Performing Arts Centre": {
     "color": "#9f9300",
     "label": "G"

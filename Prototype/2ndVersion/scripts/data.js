@@ -18,7 +18,7 @@ var partnerIDs = {
 	"Bell Shakespeare": 590, //Bell Shakespeare
 	"Arena Theatre Company": 151, //Arena Theatre Company
 	"Arthur": 36308, //Arthur
-	"Creative Victoria": 37428, //Creative Victoria
+	// "Creative Victoria": 37428, //Creative Victoria
 	"Geelong Performing Arts Centre": 8085, //Geelong Performing Arts Centre
 	"HotHouse Theatre": 798, //HotHouse Theatre
 	"Melbourne Theatre Company": 2, //Melbourne Theatre Company
@@ -37,19 +37,23 @@ var ABSIncome;
 
 var dataJson = JSON.parse(localStorage.getItem("data"))
 
-
 if (localStorage.getItem("data") == null || localStorage.getItem("data").length == 0) {
 	getABSData();
-
+	
 	//Initial data collection getting list of venues from given partners ids and store it at mainData
 	if (mainData.length == 0) {
+		var promises = [];
 		for (key in partnerIDs) {
-			getCompaniesVenues(key);
+			promises.push(getCompaniesVenues(key))	
 		}
 	}
 
-	//when the requests finished
-	$(document).ajaxStop(function() {
+	$.when.apply($, promises).then(function () {
+		for (i in arguments){
+			mainData.push(arguments[i][0][0])
+		}
+
+		// when the requests finished
 		// Populate venues - fetch all venue names from mainData and store it to venues (variable)
 		for (data in mainData) {
 			for (venue in mainData[data].venues) {
@@ -58,19 +62,18 @@ if (localStorage.getItem("data") == null || localStorage.getItem("data").length 
 				if (!inside([lon, lat], victoria_polygon)) {
 					delete mainData[data].venues[venue]
 				} else {
-					if (!(mainData[data].venues[venue] in venues)) {
+					if (!(mainData[data].venues[venue] in venues)) {					
 						venues[mainData[data].venues[venue].name] = mainData[data].venues[venue]
 					}
 				}
 			}
 		}
-		// venues.sort()
-
+		
 		// Populate companies - fetch all company names from mainData and store it to companies (variable)
 		for (data in mainData) {
 			companies[mainData[data].extra[0].name] = mainData[data].extra[0]
 		}
-
+		
 		// Populate place - fetch all suburb names from mainData and store it to place (variable)
 		// I will use this to connect with ABS data -?I consider to use postcode here as alternative
 		for (venue in venues) {
@@ -79,18 +82,17 @@ if (localStorage.getItem("data") == null || localStorage.getItem("data").length 
 			}
 		}
 
-		// console.log(Object.keys(venues).length);
-
 		// '''Ajax again here...'''
 		// Get all event(s) of given combination of company id and venue id
 		if (completeData.length == 0) {
-			var cnt = 0
+
 			for (data in mainData) {
-				for (venue in venues) {
+				var locVen = mainData[data].venues
+				for (venue in locVen) {
+					$('#map').html("Loading initial data from AusStage..")
 					let companyId = mainData[data].extra[0].id
-					let venueId = venues[venue].id
+					let venueId = locVen[venue].id
 					$.getJSON(ausstageEventsURI + "task=organisation&id=" + companyId + "&venue=" + venueId + "&callback=?", function(json) {
-						// console.log(cnt++, json);
 						completeData.push(json);
 					});
 				}
@@ -98,7 +100,6 @@ if (localStorage.getItem("data") == null || localStorage.getItem("data").length 
 		}
 
 		// '''End - Ajax again here...'''
-
 		$(document).ajaxStop(function() {
 			if (completeData.length > 0) {
 				for (data in completeData) {
@@ -109,18 +110,22 @@ if (localStorage.getItem("data") == null || localStorage.getItem("data").length 
 							"venue": completeData[data].name + ", " + completeData[data].suburb,
 							"latitude": completeData[data].latitude,
 							"longitude": completeData[data].longitude,
-							"date": completeData[data].events[event].firstDate
+							"date": completeData[data].events[event].firstDate,
+							"type": "In Theatre",
+							"school": "None"
 						}
 						csvDict.push(dict)
 					}
 				}
+				$('#map').html("Please refresh")
 				localStorage.setItem("data", JSON.stringify(csvDict))
 				localStorage.setItem("timestamp", Math.floor(Date.now() / 1000))
+				location.reload();
 			}
 		});
-	});
+		
+	})
 } else {
-
 	var data = JSON.parse(localStorage.getItem("data"))
   	var absData = JSON.parse(localStorage.getItem("abs-data"))
 	var lgaPolygon = Object.assign({}, lgaPolygon2016) // JSON.parse(lga_polygon) for v0.1
@@ -210,38 +215,38 @@ function extractYoungPeoplePercentage(ageData) {
 
 function getCompaniesVenues(key) {
 	return $.getJSON(ausstageVenuesURI + "type=organisation&id=" + partnerIDs[key] + "&callback=?", function(json) {
-		mainData.push(json[0]);
+		// mainData.push(json[0]);
 	});
 }
 
 function extractAURINData(AURINData) {
 	var ageData = {}
-  var incomeData = {}
-  var populationData = {}
-  var areaData = {}
+	var incomeData = {}
+	var populationData = {}
+	var areaData = {}
 	for (i in AURINData.features) {
 		var code = AURINData.features[i].properties.lga_code_2016
 		var age = AURINData.features[i].properties.median_age_persons
 		var income = AURINData.features[i].properties.median_tot_hhd_inc_weekly
 		ageData[code] = age
 		incomeData[code] = income
-  }
+	}
   
-  for (i in AURINPopulation.features){
-    var code = AURINPopulation.features[i].properties.lga_code16
-    var population = AURINPopulation.features[i].properties.erp_2016pr
-    var area = AURINPopulation.features[i].properties.areasqkm16
-    
-    populationData[code] = population
-    areaData[code] = area
+	for (i in AURINPopulation.features){
+		var code = AURINPopulation.features[i].properties.lga_code16
+		var population = AURINPopulation.features[i].properties.erp_2016pr
+		var area = AURINPopulation.features[i].properties.areasqkm16
+		
+		populationData[code] = population
+		areaData[code] = area
 
-  }
+	}
 
 	localStorage.setItem('aurin-data', JSON.stringify({
 		'age': ageData,
-    'income': incomeData,
-    'population': populationData,
-    'area': areaData
+		'income': incomeData,
+		'population': populationData,
+		'area': areaData
 	}))
 }
 

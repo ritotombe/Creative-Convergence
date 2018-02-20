@@ -273,9 +273,15 @@ function renderMap(filteredData) {
 			function createLGAPath(d) {
 				let thisPath = d3.select(this)
 
-				var aurinData = localStorage.getItem('aurin-data')
-				var populationData = JSON.parse(aurinData).population
-				var areaData = JSON.parse(aurinData).area
+				var aurinData = {}
+				var populationData = {}
+				var areaData = {}
+				if(localStorage.getItem('aurin-data')){
+					aurinData = localStorage.getItem('aurin-data')
+					populationData = JSON.parse(aurinData).population
+					areaData = JSON.parse(aurinData).area
+				}
+				
 
 				thisPath.attr("d", d3.geoPath())
 					.attr("fill", '#4ae')
