@@ -48,12 +48,13 @@ if (localStorage.getItem("data") == null || localStorage.getItem("data").length 
 		}
 	}
 
+	// when the requests finished
+
 	$.when.apply($, promises).then(function () {
 		for (i in arguments){
 			mainData.push(arguments[i][0][0])
 		}
 
-		// when the requests finished
 		// Populate venues - fetch all venue names from mainData and store it to venues (variable)
 		for (data in mainData) {
 			for (venue in mainData[data].venues) {
@@ -85,7 +86,6 @@ if (localStorage.getItem("data") == null || localStorage.getItem("data").length 
 		// '''Ajax again here...'''
 		// Get all event(s) of given combination of company id and venue id
 		if (completeData.length == 0) {
-
 			for (data in mainData) {
 				var locVen = mainData[data].venues
 				for (venue in locVen) {
@@ -184,7 +184,7 @@ if (localStorage.getItem("data") == null || localStorage.getItem("data").length 
 				let lgaCode = polygonFeatures[i].properties.feature_code
 				//Match the lga name with the abs data then map the socio economic data in to the main data
 				var aurinAge = AURINlocal['age'][lgaCode]
-        var aurinIncome = AURINlocal['income'][lgaCode]
+        		var aurinIncome = AURINlocal['income'][lgaCode]
 
 				data[item].age = extractYoungPeoplePercentage(absData.age[lgaCode]).toFixed(2)
 				data[item].income = aurinIncome
@@ -316,8 +316,6 @@ function extractDataBasedOnAreaAndCategory(source) {
 
 	for (i in areaNames) {
     var areaName = areaNames[i].id
-    console.log(areaName);
-    
 		data[areaName] = {}
 		for (j in objectNames) {
 			data[areaName][objectNames[j].name] = observations[`0:${j}:0:0:${i}:0`][0]

@@ -89,8 +89,6 @@ $(function () {
             
                                             geocoded[mainData[i].venue]  = coord;
                                         }
-
-                                       
                                     }
                                 }
     
