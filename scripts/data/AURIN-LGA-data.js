@@ -10,6 +10,15 @@ var AURINData = {
     -1.0
   ],
   "features": [
+    { //NSW
+			"type": "Feature",
+			"properties": {
+				"median_tot_hhd_inc_weekly": 1185,
+				"median_age_persons": 39,
+				"lga_code_2016": "10050"
+			},
+			"id": "lga_g02_selected_medians_and_averages_census_2016.fid--2ea3ac96_163d4196019_-57af"
+		},
     {
       "type": "Feature",
       "properties": {

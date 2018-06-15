@@ -2,6 +2,30 @@
 // https://wambachers-osm.website/boundaries/exportBoundaries?apiversion=1.0&apikey=6f728fc2-3519-441d-b4d3-ef6d62050db6&exportFormat=json&exportLayout=levels&exportAreas=water&from_al=2&to_al=4&union=false&selected=2316741
 var victoria_polygon = [[[
 	[
+		147.04,
+		-36.11
+	  ],
+	  [
+		146.82,
+		-36.07
+	  ],
+	  [
+		146.82,
+		-36.05
+	  ],
+	  [
+		146.97,
+		-35.91
+	  ],
+	  [
+		147.1,
+		-36.04
+	  ],
+	  [
+		147.04,
+		-36.11
+	  ],
+	[
 		140.9619017,
 		-35.7997885
 	],

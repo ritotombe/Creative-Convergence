@@ -6,7 +6,17 @@ var AURINPopulation = {
        -1.0,
        -1.0
     ],
-    "features":[  
+    "features":[ 
+        { //NSW
+			"type": "Feature",
+			"properties": {
+				"areasqkm16": 305.9459,
+				"erp_2016pr": 52165,
+				"lga_name16": " Albury (C)",
+				"lga_code16": 10050
+			},
+			"id": "abs_erp_2001_2016_aust_lga.fid--2ea3ac96_163d4196019_-5d59"
+		}, 
        {  
           "type":"Feature",
           "properties":{  

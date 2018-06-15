@@ -11,6 +11,46 @@ var lgaPolygon2016 = {
     }
   },
   "features": [
+    { //NSW
+      "type": "Feature",
+      "properties": {
+        "feature_code": "10050",
+        "feature_name": "Albury (C)"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                147.04,
+                -36.11
+              ],
+              [
+                146.82,
+                -36.07
+              ],
+              [
+                146.82,
+                -36.05
+              ],
+              [
+                146.97,
+                -35.91
+              ],
+              [
+                147.1,
+                -36.04
+              ],
+              [
+                147.04,
+                -36.11
+              ]
+            ]
+          ]
+        ]
+      }
+    },
     {
       "type": "Feature",
       "properties": {
