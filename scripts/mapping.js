@@ -101,7 +101,7 @@ function renderMap(filteredData) {
 										.attr('x', "50%")
 										.attr('y', "50%")
 										.attr('dy', ".4em")
-										.style('fill', 'white')
+										.style('fill', '#000')
 										.style('font-size', '10pt')
 					
 		var populationTooltipTextName = populationTooltipText.append('tspan')
@@ -284,9 +284,9 @@ function renderMap(filteredData) {
 				
 
 				thisPath.attr("d", d3.geoPath())
-					.attr("fill", '#4ae')
+					.attr("fill", '#4ae') //#4ae
 					.attr("stroke-width", '1px')
-					.attr("stroke", '#fff')
+					.attr("stroke", '#555')
 					.style("stroke-opacity", "0.6")
 					.style("fill-opacity", function(d) {
 						var max = 0
@@ -295,7 +295,8 @@ function renderMap(filteredData) {
 								max = populationData[i] / areaData[i]
 							}
 						}
-						return (populationData[d.properties.feature_code] / areaData[d.properties.feature_code] / max) * 100
+						// Set up color opacity
+						return (populationData[d.properties.feature_code] / (areaData[d.properties.feature_code] * 10) / max) * 2500
 					})
 					.attr("class", function(d) {
 						return d.properties.feature_name
@@ -313,16 +314,16 @@ function renderMap(filteredData) {
 							.style("top", d3.event.pageY)
 							.style("position", "absolute")
 							.style("display", "block")
-						
+							
 						populationTooltipTextName
 							.text(function(){
 								return d.properties.feature_name
 							})
 
 						populationTooltipTextDensity
-						.text(function(){
-							return `Density: ${(populationData[d.properties.feature_code] / areaData[d.properties.feature_code]).toFixed(2)}/km2`
-						})
+							.text(function(){
+								return `Density: ${(populationData[d.properties.feature_code] / areaData[d.properties.feature_code]).toFixed(2)}/km2`
+							})
 					})
 					.on("mouseout", function(d) {
 						populationTooltip
@@ -377,7 +378,7 @@ function renderMap(filteredData) {
 							circles = circles.filter(function(d) {
 								return d.value.company == company
 							})
-							circles.select('circle').style("stroke", 'white')
+							circles.select('circle').style("stroke", '#000')
 								.style("stroke-width", 2)
 						} else {
 							layerArc.selectAll('path')
@@ -490,7 +491,7 @@ function renderMap(filteredData) {
 				layer.selectAll("circle")
 					.style("stroke", 'none')
 				d3.select(this).select("circle")
-					.style("stroke", 'white')
+					.style("stroke", '#000')
 					.style("stroke-width", 2)
 			}
 
