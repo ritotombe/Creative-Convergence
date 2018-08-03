@@ -7,6 +7,16 @@ var AURINPopulation = {
        -1.0
     ],
     "features":[ 
+        { //Sa
+            "type":"Feature",
+            "properties":{
+                "areasqkm16":33.8938,
+                "erp_2016pr":26993,
+                "lga_name16":" Mount Gambier (C)",
+                "lga_code16":44620
+            },
+            "id":"abs_erp_2001_2016_aust_lga.fid-5543fba4_164ff5ede91_-1a22"
+        },
         { //NSW
 			"type": "Feature",
 			"properties": {
