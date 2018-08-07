@@ -376,3 +376,8 @@ function inside(point, vs) {
 
 	return inside;
 };
+
+function clearData(){
+	localStorage.clear();
+	location.reload();
+}

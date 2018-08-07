@@ -46,7 +46,8 @@ function renderMap(filteredData) {
 		center: new google.maps.LatLng(mapState.center[0], mapState.center[1]),
 		mapTypeId: google.maps.MapTypeId.TERRAIN,
 		gestureHandling: 'cooperative',
-		styles: mapConfig
+		styles: mapConfig,
+		scaleControl: true,
 	});
 	// Initialise the legend
 	var legend = document.getElementById('legend');
@@ -296,7 +297,7 @@ function renderMap(filteredData) {
 							}
 						}
 						// Set up color opacity
-						return (populationData[d.properties.feature_code] / (areaData[d.properties.feature_code] * 10) / max) * 2500
+						return (populationData[d.properties.feature_code] / (areaData[d.properties.feature_code]) / max) * 5
 					})
 					.attr("class", function(d) {
 						return d.properties.feature_name

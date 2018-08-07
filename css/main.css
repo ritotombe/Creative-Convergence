@@ -1,11 +1,13 @@
 body {
   margin : 0;
   font-family: "Lato", Helvetica, Arial, sans-serif !important;
+  max-height: 100vh;
 }
 
 #container {
   width: 100%;
   min-height: 100vh;
+  max-height: 100vh;
   padding: 0;
   margin: 0;
 }
@@ -53,6 +55,7 @@ hr {
 .main-panel-item{
   width: 33.33%;
   min-height: 100vh;
+  max-height: 100vh;
   display: inline-block;
   vertical-align: top;
   margin:0;
@@ -68,7 +71,7 @@ hr {
 
 #filter_panel {
   width: 20%;
-  min-height: 100vh;
+  max-height: 100vh;
   position: absolute;
   right: 0;
   /*padding: 0 0.5%;*/
@@ -76,6 +79,7 @@ hr {
   background-color: #0c304a;
   color: white;
   overflow: hidden;
+  overflow-y: scroll;
 }
 
 #main-search-panel {
