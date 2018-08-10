@@ -291,13 +291,29 @@ function renderMap(filteredData) {
 					.style("stroke-opacity", "0.6")
 					.style("fill-opacity", function(d) {
 						var max = 0
+						var min = 1
+						
+							// .range([0, 1])
+						// const colorScaleLog = d3.scaleSequential(
+						// 	(d) => d3.interpolateReds(logScale(d))
+						// )   
 						for (let i in populationData) {
-							if (populationData[i] / areaData[i] > max) {
+							if ((populationData[i] / areaData[i]) > max) {
 								max = populationData[i] / areaData[i]
-							}
+							} 
+							if ((populationData[i] / areaData[i]) < min) {
+								min = populationData[i] / areaData[i]
+							} 
 						}
-						// Set up color opacity
-						return (populationData[d.properties.feature_code] / (areaData[d.properties.feature_code]) / max) * 5
+
+						logScale = d3.scaleLog()
+							.domain([min, max])
+							.range([0, 1]);
+
+						color = (populationData[d.properties.feature_code] / (areaData[d.properties.feature_code]))
+						
+						return logScale(color)
+          
 					})
 					.attr("class", function(d) {
 						return d.properties.feature_name
