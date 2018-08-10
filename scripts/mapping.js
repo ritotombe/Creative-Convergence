@@ -46,7 +46,8 @@ function renderMap(filteredData) {
 		center: new google.maps.LatLng(mapState.center[0], mapState.center[1]),
 		mapTypeId: google.maps.MapTypeId.TERRAIN,
 		gestureHandling: 'cooperative',
-		styles: mapConfig
+		styles: mapConfig,
+		scaleControl: true,
 	});
 	// Initialise the legend
 	var legend = document.getElementById('legend');
@@ -312,7 +313,7 @@ function renderMap(filteredData) {
 						color = (populationData[d.properties.feature_code] / (areaData[d.properties.feature_code]))
 						
 						return logScale(color)
-						
+          
 					})
 					.attr("class", function(d) {
 						return d.properties.feature_name

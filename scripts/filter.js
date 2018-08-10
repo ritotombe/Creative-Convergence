@@ -304,6 +304,10 @@ $("#reset-btn").on("click", function() {
 	checkAllState[VENUE_SELECTED] = true
 })
 
+$("#reset-data-btn").on("click", function() {
+	clearData()
+})
+
 // rerender map along with the filtered data
 function renderAll() {
 	let afterFilter = rawDataTable.rows({
