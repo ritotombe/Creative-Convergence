@@ -25,7 +25,8 @@ $(function () {
             complete: function (results, file) { //if parse successful
                 var promises = [];
                 var calledObjects = [];
-                if (file.type == 'text/csv') {
+
+                if (file.type == 'text/csv' | file.type == 'application/vnd.ms-excel') {
 
                     //this is the parsed data
                     var mainData = results.data 
@@ -57,7 +58,7 @@ $(function () {
                         } else {
                             load()
                         }
-                        $('#upload-status span').html(`${i} of ${searchCoordData.length} rows has been processed`)
+                        $('#upload-status span').html(`${i} of ${searchCoordData.length} rows have been processed`)
                         // $('#upload-status span').html((((i)/mainData.length) * 100).toFixed(0)+ " %")
                     }
                     f();   

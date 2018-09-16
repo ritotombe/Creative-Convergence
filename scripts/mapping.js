@@ -64,7 +64,7 @@ function renderMap(filteredData) {
 		div.innerHTML = icon + name;
 		legend.appendChild(div);
 	}
-	map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
+	map.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
 
 	//  determine which data that will be used in the map
 
