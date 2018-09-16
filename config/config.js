@@ -1,3 +1,24 @@
+
+
+//List of performance type
+var typeConfig = {
+  "Performance": {
+    "iconURL": "img/icons/performance.png"
+  },
+  "In Theatre": {
+    "iconURL": "img/icons/performance.png"
+  },
+  "Workshop": {
+    "iconURL": "img/icons/workshop.png"
+  },
+  "Talk": {
+    "iconURL": "img/icons/talk.png"
+  },
+  "Influencer": {
+    "iconURL": "img/icons/influencer.png"
+  }
+}
+
 // List of the companies and with the color coding and labels
 var companyConfig = {
   "Bell Shakespeare Company": {

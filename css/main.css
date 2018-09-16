@@ -35,7 +35,7 @@ hr {
 
 #main_panel {
   width: 80%;
-  min-height: 100vh;
+  max-height: 100vh;
   position: absolute;
   left: 0;
   padding: 0;
@@ -46,7 +46,7 @@ hr {
 
 #main-panel-container{
   width: 300%;
-  min-height: 100vh;
+  max-height: 100vh;
   overflow: hidden;
   position: relative;
 }
@@ -63,6 +63,7 @@ hr {
 
 #second-panel{
   /* background: red; */
+  overflow-y: scroll;
 }
 
 #third-panel{
@@ -71,7 +72,7 @@ hr {
 
 #filter_panel {
   width: 20%;
-  min-height: 100vh;
+  max-height: 100vh;
   position: absolute;
   right: 0;
   /*padding: 0 0.5%;*/
@@ -553,15 +554,30 @@ input.tt-input, input.tt-hint{
   background-color: rgba(255,255,255,0.5);
 }
 
-#legend svg{
+#legend svg, #legend img{
   margin-right: 5px;
   margin-bottom: 5px;
   opacity: 0.85;
   padding-left: 5px;
 }
 
-#legend h3{
+#legend h6{
   margin: 5px;
+}
+
+#legend #legend-control {
+    display: inline-block;
+    width: 10px;
+    background-color: rgba(255,255,255,0.8);
+    cursor: pointer;
+}
+
+#legend #legend-control:hover {
+  background-color: rgba(100,100,100,0.5);
+}
+#legend #legend-content {
+  display: inline-block;
+  vertical-align: top;
 }
 
 div.tooltip {
@@ -633,4 +649,20 @@ table.dataTable thead > tr > td.sorting {
 
 div.dataTables_filter {
   visibility: hidden;
+}
+
+.nodes .tooltip-info {
+  display: inline-block;
+  width: 80%;
+}
+
+.nodes .tooltip-additional-info {
+  display: inline-block;
+  width: 15%;
+  vertical-align:top;
+}
+
+.nodes .tooltip-additional-info img {
+  width: 100%;
+  height: auto;
 }

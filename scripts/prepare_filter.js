@@ -143,6 +143,12 @@ function populateOptions(filteredData) {
   populateLists(2)
 }
 
+	
+$('#toggle-legend').click(function(){
+  $('#legend').toggle()
+})
+
+
 function removeHelper(array, index) {
   if (index > -1) {
     array.splice(index, 1);

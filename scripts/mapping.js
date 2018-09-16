@@ -40,7 +40,7 @@ var pos = {
 function renderMap(filteredData) {
 
 	// START - 2. Initialises the Google Maps and its components 
-	$('<div id="legend"><h4>Companies</h4></div>').insertAfter("#map");
+	$('<div id="legend"><div id="legend-content"></div></div>').insertAfter("#map");
 	map = new google.maps.Map(d3.select("#map").node(), {
 		zoom: mapState.zoom,
 		center: new google.maps.LatLng(mapState.center[0], mapState.center[1]),
@@ -51,6 +51,10 @@ function renderMap(filteredData) {
 	});
 	// Initialise the legend
 	var legend = document.getElementById('legend');
+	var legendContent = document.getElementById('legend-content');
+	var typeHeader = document.createElement('h6');
+	typeHeader.innerHTML = 'Companies'
+	legendContent.appendChild(typeHeader);
 	for (item in companyConfig) {
 		var color = companyConfig[item].color;
 		var label = companyConfig[item].label;
@@ -62,8 +66,21 @@ function renderMap(filteredData) {
       </svg>`;
 		var div = document.createElement('div');
 		div.innerHTML = icon + name;
-		legend.appendChild(div);
+		legendContent.appendChild(div);
 	}
+
+	var typeHeader = document.createElement('h6');
+	typeHeader.innerHTML = 'Types'
+	legendContent.appendChild(typeHeader);
+
+	for (item in typeConfig) {
+		var icon = `<img height="20px" width="20px" src=${typeConfig[item].iconURL}>`;
+		var name = item;
+		var div = document.createElement('div');
+		div.innerHTML = icon + name;
+		legendContent.appendChild(div);
+	}
+
 	map.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
 
 	//  determine which data that will be used in the map
@@ -458,6 +475,11 @@ function renderMap(filteredData) {
 				return companyConfig[company].color;
 			}
 
+			function typeCoding(d) {
+				var type = d.value.type
+				return typeConfig[type].iconURL;
+			}
+
 			function transform(d) {
 				d = new google.maps.LatLng(d.value.latitude, d.value.longitude);
 				d = projection.fromLatLngToDivPixel(d);
@@ -486,11 +508,22 @@ function renderMap(filteredData) {
 							company: overlappedPoints[i].company
 						}
 					})
+
+					var typeIcon = typeCoding({
+						value: {
+							type: overlappedPoints[i].type
+						}
+					})
 					tooltipContentVal.push(
 						`
 						<div class='tooltip-content-item' style='background: ${bgColour}'>
-							<div>${overlappedPoints[i].creative_work}</div>
-							<div>${overlappedPoints[i].date}</div>
+							<div class='tooltip-info'>
+								<div>${overlappedPoints[i].creative_work}</div>
+								<div>${overlappedPoints[i].date}</div>
+							</div>
+							<div class='tooltip-additional-info'>
+								<img src=${typeIcon} alt=${overlappedPoints[i].type}>
+							</div>
 						</div>
 						`
 					)
