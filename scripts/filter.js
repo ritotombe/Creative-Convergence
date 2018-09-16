@@ -109,9 +109,9 @@ $.fn.dataTable.ext.search.push(
 		let minAge = $("#flat-slider-age").slider("values", 0)
 		let maxAge = $("#flat-slider-age").slider("values", 1)
 		var age = data[8] || 0;
-		if ((minAge == 0 && maxAge == 30) ||
-			(minAge == 0 && age <= maxAge) ||
-			(minAge <= age && maxAge == 30) ||
+		if ((minAge == 20 && maxAge == 60) ||
+			(minAge == 20 && age <= maxAge) ||
+			(minAge <= age && maxAge == 60) ||
 			(minAge <= age && age <= maxAge)) {
 			return true;
 		}
@@ -125,9 +125,9 @@ $.fn.dataTable.ext.search.push(
 		let minIncome = $("#flat-slider-household").slider("values", 0)
 		let maxIncome = $("#flat-slider-household").slider("values", 1)
 		var income = data[9] || 0;
-		if ((minIncome == 200 && maxIncome == 3000) ||
-			(minIncome == 200 && income <= maxIncome) ||
-			(minIncome <= income && maxIncome == 3000) ||
+		if ((minIncome == 700 && maxIncome == 2100) ||
+			(minIncome == 700 && income <= maxIncome) ||
+			(minIncome <= income && maxIncome == 2100) ||
 			(minIncome <= income && income <= maxIncome)) {
 			return true;
         }

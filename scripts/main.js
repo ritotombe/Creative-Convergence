@@ -222,9 +222,9 @@ function initiateSliders() {
 	$('#flat-slider-age').slider({
 		orientation: 'horizontal',
 		range: true,
-		values: [0, 30],
-		max: 30,
-		min: 0,
+		values: [20, 60],
+		max: 60,
+		min: 20,
 		slide: function(event, ui) {
 			$("#min-age").html(ui.values[0] + " %");
 			$("#max-age").html(ui.values[1] + " %");
@@ -236,9 +236,9 @@ function initiateSliders() {
 	$('#flat-slider-household').slider({
 		orientation: 'horizontal',
 		range: true,
-		values: [200, 3000],
-		max: 3000,
-		min: 200,
+		values: [700, 2100],
+		max: 2100,
+		min: 700,
 		slide: function(event, ui) {
 			$("#min-income").html("$" + ui.values[0]);
 			$("#max-income").html("$" + ui.values[1]);
