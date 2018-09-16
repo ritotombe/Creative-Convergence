@@ -327,7 +327,12 @@ function initiateRawData() {
 			extend: 'excel',
 			text: 'Export to Spreadsheet..',
 			exportOptions: {
-				rows: ':visible'
+				format: {
+							header:  function (data, columnIdx) {
+								return  data.toLowerCase().replace(/ /g,"_");
+							}
+						},
+				page: "all" 
 			}
 		}],
 		scrollX: true
