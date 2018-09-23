@@ -5,9 +5,6 @@ var typeConfig = {
   "Performance": {
     "iconURL": "img/icons/performance.png"
   },
-  "In Theatre": {
-    "iconURL": "img/icons/performance.png"
-  },
   "Workshop": {
     "iconURL": "img/icons/workshop.png"
   },

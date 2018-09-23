@@ -115,6 +115,7 @@ if (localStorage.getItem("data") == null || localStorage.getItem("data").length 
 			if (completeData.length > 0) {
 				for (data in completeData) {
 					for (event in completeData[data].events) {
+						type = checkType(completeData[data].events[event].name)
 						let dict = {
 							"company": completeData[data].organisation.name,
 							"creative_work": completeData[data].events[event].name,
@@ -122,7 +123,7 @@ if (localStorage.getItem("data") == null || localStorage.getItem("data").length 
 							"latitude": completeData[data].latitude,
 							"longitude": completeData[data].longitude,
 							"date": completeData[data].events[event].firstDate,
-							"type": "In Theatre",
+							"type": type,
 							"school": "None"
 						}
 						csvDict.push(dict)
@@ -380,4 +381,16 @@ function inside(point, vs) {
 function clearData(){
 	localStorage.clear();
 	location.reload();
+}
+
+function checkType(event){
+	if (event.includes("Workshop")){
+		return "Workshop"
+	} else if (event.includes("Residency")){
+		return "Workshop"
+	} else if (event.includes("Talk")) {
+		return "Talk"
+	} else {
+		return "Performance"
+	}
 }
