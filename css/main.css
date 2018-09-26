@@ -667,3 +667,10 @@ div.dataTables_filter {
   width: 100%;
   height: auto;
 }
+
+.upload-icon{
+  filter: invert(1);
+  width: 15px;
+  margin: 3px;
+  vertical-align: bottom;
+}
