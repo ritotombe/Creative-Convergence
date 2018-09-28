@@ -1,5 +1,6 @@
 
 
+
 //List of performance type
 var typeConfig = {
   "Performance": {

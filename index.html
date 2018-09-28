@@ -1,6 +1,7 @@
 <html>
 <meta charset="utf-8">
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
 <head>
   <title>Creative Convergence Map</title>
 
@@ -8,81 +9,128 @@
   <link rel="stylesheet" type="text/css" href="css/flatpickr.min.css">
   <link rel="stylesheet" type="text/css" href="css/flat-ui.css">
   <link rel="stylesheet" type="text/css" href="css/flatslider.css">
-  <link rel="stylesheet" type="text/css" href="css/datatables.css"/>
+  <link rel="stylesheet" type="text/css" href="css/datatables.css" />
   <link rel="stylesheet" type="text/css" href="css/main.css">
   <!-- <link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css"> -->
 </head>
 
 <body>
-  <div id = "container">
-    <div id = "main_panel">
-      <div id = "main-panel-container">
-        <div id="map" class= "main-panel-item">
-        </div><div id="second-panel" class = "main-panel-item">
-          <div class = "form-group">
-                <label for = 'company-file-input' class= 'mdl-shadow--2dp filter_content btn btn-block btn-lg btn-inverse'>
-                    <div class="display-inline-block">
-                      Upload Company Data Here
-                    </div>
-                  <input class = 'form-control file' type = 'file' id='company-file-input'></input>
-                </label>
-                <small style='float: right;'>
-                  <span id='upload-status'>
+  <div id="container">
+    <div id="main_panel">
+      <div id="main-panel-container">
+        <div id="map" class="main-panel-item">
+        </div>
+        <div id="second-panel" class="main-panel-item">
+          <div class="form-group">
+            <label for='company-file-input' class='mdl-shadow--2dp filter_content btn btn-block btn-lg btn-inverse'>
+              <div style="text-align: left;">
+                <img id="company-upload-icon" src="images/stage.svg" alt="stage" class="upload-icon">
+                Upload Company Data Here
+              </div>
+              <input class='form-control file' type='file' id='company-file-input'>
+            </label>
+            <small style='display: block;text-align: right;width: 100%;'>
+              <span id='upload-status-company' style='margin-right: 10px'>
 
-                  </span>
-                </small>
-            </div>
-            <table id="raw-data" class ="row-border stripe hover">
-              <thead>
-                <tr>
-                    <th name='company'>Company</th>
-                    <th name='creative_work'>Creative Work</th>
-                    <th name='venue'>Venue</th>
-                    <th name='latitude'>Latitude</th>
-                    <th name='longitude'>Longitude</th>
-                    <th name='date'>Date</th>  
-                    <th name='schools'>Schools Attended</th>  
-                    <th name='type'>Type</th>        
-                    <th name='ypp'>Young People Pecentage (%)</th>
-                    <th name='mhi'>Median Household Income ($)</th>                     
-                </tr>
-              </thead>
+              </span>
+            </small>
+            <label for='school-file-input' class='mdl-shadow--2dp filter_content btn btn-block btn-lg btn-inverse'>
+              <div style="text-align: left;">
+                <img id="school-upload-icon" src="images/open-magazine.svg" alt="school" class="upload-icon">
+                Upload School Data Here
+              </div>
+              <input class='form-control file' type='file' id='school-file-input'>
+            </label>
+            <small style='display: block;text-align: right;width: 100%;'>
+              <span id='upload-status-school' style='margin-right: 10px'>
+              </span>
+            </small>
+            <label id="toggle-table" class='filter_content '>
+              <small>Toggle Table</small>
+              <div class="bootstrap-switch-square">
+                <input type="checkbox" checked data-toggle="switch" name="square-switch" id="datatable-switch" />
+              </div>
+            </label>
 
-            </table>
           </div>
-          <!-- <div id="third-panel" class= "main-panel-item">
+          <table id="raw-data" class="row-border stripe hover">
+            <thead>
+              <tr>
+                <th name='company'>Company</th>
+                <th name='creative_work'>Creative Work</th>
+                <th name='venue'>Venue</th>
+                <th name='suburb'>Suburb</th>
+                <th name='latitude'>Latitude</th>
+                <th name='longitude'>Longitude</th>
+                <th name='date'>Date</th>
+                <th name='schools'>Schools Attended</th>
+                <th name='type'>Type</th>    
+                <th name='ypp'>Young People Pecentage (%)</th>
+                <th name='mhi'>Median Household Income ($)</th>                    
+              </tr>
+            </thead>
+          </table>
+          <table id="school-data" class="row-border stripe hover">
+            <thead>
+              <tr>
+                <th name='company'>Company</th>
+                <th name='creative_work'>Creative Work</th>
+                <th name='school'>School</th>
+                <th name='suburb'>Suburb</th>
+                <th name='avg_ticket_cost'>Average Ticket Cost</th>
+                <th name='student_attended'>Student Attended</th>
+                <th name='date'>Date</th>
+                <th name='venue'>Venue</th>
+                <th name='type'>Type</th>     
+                <th name='ypp'>Young People Pecentage (%)</th>
+                <th name='mhi'>Median Household Income ($)</th>               
+              </tr>
+            </thead>
+          </table>
+
+        </div>
+        <!-- <div id="third-panel" class= "main-panel-item">
           </div> -->
       </div>
     </div>
-    <div id = "filter_panel" class="mdl-ta mdl-shadow--8dp">
-      <div id = "filter_top_panel" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
-        <div id = "tab-buttons" class="mdl-tabs__tab-bar">
-          <a href="#map" class="mdl-tabs__tab is-active">
-            <img src="images/australia-map.svg" alt="Map">
-          </a>
-          <a href="#list" class="mdl-tabs__tab">
-            <img src="images/list.svg" alt="List">
-          </a>
-          <!-- <a href="#charts" class="mdl-tabs__tab">
+    
+    <div style="" id="filter_panel" class="mdl-ta mdl-shadow--8dp">
+        <div style="height: 35px; width: 20%; background: #0c304a; position: fixed; top: 0; right:0; box-shadow: 3px 0 3px #000000; z-index: 9999;">
+            <img style="height: 25px; padding: 5px; display: block; vertical-align: top; margin: auto;"
+              src="images/the-circuit.svg" alt="Map">
+        </div>
+      <div id="filter_top_panel container-center" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+       
+        <div style="display: block; margin-top: 35px;">
+          <div id="tab-buttons" class="mdl-tabs__tab-bar">
+
+            <a href="#map" class="mdl-tabs__tab is-active">
+              <img src="images/australia-map.svg" alt="Map">
+            </a>
+            <a href="#list" class="mdl-tabs__tab">
+              <img src="images/list.svg" alt="List">
+            </a>
+            <!-- <a href="#charts" class="mdl-tabs__tab">
             <img src="images/icon-chart.svg" alt="Chart">
           </a> -->
+          </div>
         </div>
       </div>
 
       <!-- Options Pane Start Here -->
-      <div class = "options-pane mdl-shadow--4dp container-center col-xs-12">
-        <div class = "options-pane-head mdl-shadow--4dp">
-          <div class = "back-button">
+      <div class="options-pane mdl-shadow--4dp container-center col-xs-12">
+        <div class="options-pane-head mdl-shadow--4dp">
+          <div class="back-button">
             <span class="fui-arrow-left"></span>
           </div>
-          <div class = "title">TITLE
+          <div class="title">TITLE
           </div>
-          <div class = "check-button">
+          <div class="check-button">
             <!-- <span class="fui-check"></span> -->
           </div>
         </div>
-        <div class = "options-pane-body container">
-          <div class = "list-item check-all btn btn-block btn-lg btn-info notransition">
+        <div class="options-pane-body container">
+          <div class="list-item check-all btn btn-block btn-lg btn-info notransition">
             Check All
           </div>
           <div id="options-container">
@@ -93,49 +141,59 @@
       </div>
       <!-- Options Pane End Here-->
 
-      <div class = "col-xs-12">
-        <div id = 'main-search-panel'>
+      <div class="col-xs-12">
+        <div id='main-search-panel'>
           <div class="tagsinput-primary col-xs-12">
+            <small class="filter-group-title">Companies | Titles | Places | Schools</small>
             <input name="tagsinput" placeholder="" class="tagsinput form-control" value="" style="display: none;">
             <!-- <div style="position: absolute;top:0;left:0;width: 100%;height:40px;background-color: blue;z-index:2;opacity:0.4;filter: alpha(opacity = 50)"></div> -->
           </div>
           <hr>
-          <a id="toggle-legend" class="btn btn-block btn-xs btn-default"  style="text-align: center; color: #000; margin-bottom: 10px;">Toggle Legend</a>
+          <a id="toggle-legend" class="btn btn-block btn-xs btn-default" style="text-align: center; color: #000; margin-bottom: 10px;">Toggle
+            Legend</a>
+
+          <div class="btn-toolbar container-center">
+            <div class="btn-group">
+              <a id="show-only-venue" class="btn btn-primary" href="#fakelink">V</a>
+              <a id="show-both" class="btn btn-primary active" href="#fakelink">V+S</a>
+              <a id="show-only-school" class="btn btn-primary" href="#fakelink">S</a>
+            </div>
+          </div>
         </div>
         <small class="filter-group-title">Company Data</small>
-        <div class = "filter-group container-center col-xs-12">
-          <div class = "date-filter-group">
-            <input type="text" name="date_range" placeholder="From Date" id ="date_picker_from" class = "filter_content form-control date-picker">
-            <input type="text" name="date_range" placeholder="To Date" id ="date_picker_to" class = "filter_content form-control date-picker">
+        <div class="filter-group container-center col-xs-12">
+          <div class="date-filter-group">
+            <input type="text" name="date_range" placeholder="From Date" id="date_picker_from" class="filter_content form-control date-picker">
+            <input type="text" name="date_range" placeholder="To Date" id="date_picker_to" class="filter_content form-control date-picker">
           </div>
 
           <div id="venues" class="mdl-shadow--2dp  filter_content filter-btn btn btn-block btn-lg btn-inverse">
-            <div class = "display-inline-block float-left">
+            <div class="display-inline-block float-left">
               Venue/s
             </div>
-            <div id="venues-selected" class = "display-inline-block float-right">
+            <div id="venues-selected" class="display-inline-block float-right">
               0
             </div>
             <div style="clear: both;"></div>
           </div>
 
           <div id="schools" class="mdl-shadow--2dp  filter_content filter-btn btn btn-block btn-lg btn-inverse">
-            <div class = "display-inline-block float-left">
-              Participating School/s
+            <div class="display-inline-block float-left">
+              School/s
             </div>
-            <div id="schools-selected" class = "display-inline-block float-right">
+            <div id="schools-selected" class="display-inline-block float-right">
               0
             </div>
             <div style="clear: both;"></div>
           </div>
 
           <div id="type" class="mdl-shadow--2dp filter_content filter-btn btn btn-block btn-lg btn-inverse">
-            <div class = "display-inline-block float-left">
+            <div class="display-inline-block float-left">
               Type/s
             </div>
-            <div id="types-selected" class = "display-inline-block float-right">
+            <div id="types-selected" class="display-inline-block float-right">
               0
-             </div>
+            </div>
             <div style="clear: both;"></div>
           </div>
           <small>Connections Layer</small>
@@ -144,18 +202,20 @@
           </div>
         </div>
 
-    
+
 
         <small class="filter-group-title">Socio-Economic</small>
-        <div class = "filter-group container-center col-xs-12">
-          
-          <small id = "popover-age">Young People <span id = "popover-age-info" class="info fui-info-circle" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Young People is actually percentage of people aged < 18 of a particular area. The data are collected from ABS."></span></small>
+        <div class="filter-group container-center col-xs-12">
+
+          <small id="popover-age">Young People <span id="popover-age-info" class="info fui-info-circle" class="btn btn-default"
+              data-container="body" data-toggle="popover" data-placement="top" data-content="Young People is actually percentage of people aged < 18 of a particular area. The data are collected from ABS."></span></small>
           <div class="flat-slider" id="flat-slider-age"></div>
           <div class="slider-value">
             <small class="age-value" id="min-age"></small> - <small class="age-value" id="max-age"></small>
           </div>
 
-          <small id = "popover-income">Household Income <span id = "popover-income-info" class="info fui-info-circle" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Household Income is actually median of weekly household income of a particular area. Data points that show Income 0 means there is no data on the area or failed to fetch data from ABS."></span></small>
+          <small id="popover-income">Household Income <span id="popover-income-info" class="info fui-info-circle" class="btn btn-default"
+              data-container="body" data-toggle="popover" data-placement="top" data-content="Household Income is actually median of weekly household income of a particular area. Data points that show Income 0 means there is no data on the area or failed to fetch data from ABS."></span></small>
           <div class="flat-slider" id="flat-slider-household"></div>
           <div class="slider-value">
             <small class="income-value" id="min-income"></small> - <small class="income-value" id="max-income"></small>
@@ -167,12 +227,12 @@
           </div>
 
         </div>
-        <div class = "container-center col-xs-12">
+        <div class="container-center col-xs-12">
           <a class="btn btn-block btn-lg btn-warning" id="reset-btn" style="margin:0 5px;">Clear Filter</a>
         </div>
 
         <hr>
-        <div class = "container-center col-xs-12">
+        <div class="container-center col-xs-12">
           <a class="btn btn-block btn-lg btn-danger" id="reset-data-btn" style="margin:0 5px;">Reset Data</a>
         </div>
         <hr>
@@ -194,7 +254,7 @@
   <!-- LIBRARIES -->
   <script src="scripts/libraries/d3/d3.min.js"></script>
   <script src="https://d3js.org/d3-geo.v1.min.js"></script>
-  <script src="https://maps.google.com/maps/api/js?sensor=true"></script>
+  <script src="https://maps.google.com/maps/api/js?sensor=true&key=AIzaSyA-1zmQgHV0mECAbC-Uj0JWfLKyS8ygPB4"></script>
   <script src="scripts/libraries/jquery-3.2.1.min.js"></script>
   <script src="scripts/libraries/papaparse.min.js"></script>
   <script src="scripts/libraries/material.js"></script>

@@ -14,13 +14,15 @@ Here are the list of the components:
 
 //  All component content initiation
 var rawDataTable;
+var rawSchoolTable;
 var searchQuery = []
 var selectedCompany = [];
 var selectedWork = [];
 var selectedPlace = [];
+var selectedSchool = [];
 
 // Main Pane Selector
-$('#tab-buttons a').click(function() {
+$('#tab-buttons a').click(function () {
 	var $index = $(this).index();
 	$('#main-panel-container').animate({
 		left: -$('#main_panel').width() * $index
@@ -37,6 +39,10 @@ initiateSwitch();
 
 // initiate table
 rawDataTable = initiateRawData();
+schoolDataTable = initiateSchoolData();
+
+
+
 
 // FUNCTIONS
 function initiateTypeahead() {
@@ -45,16 +51,19 @@ function initiateTypeahead() {
 	let companyNames = []
 	let workNames = []
 	let placeNames = []
+	let schoolNames = []
 
 	// Do not show an item if it has been selected
-	let filter = function(suggestions, selected) {
-		return $.grep(suggestions, function(suggestion) {
+	let filter = function (suggestions, selected) {
+		return $.grep(suggestions, function (suggestion) {
 			return $.inArray(suggestion, selected) === -1;
 		});
 	}
 
 	// Get all data and fill the list of company, works, and place
 	let data = JSON.parse(localStorage.getItem(SOURCE))
+	let schoolData = JSON.parse(localStorage.getItem('school-data'))
+
 	for (item in data) {
 		if (companyNames.indexOf(data[item].company) == -1) {
 			companyNames.push(data[item].company)
@@ -64,6 +73,14 @@ function initiateTypeahead() {
 		}
 		if (placeNames.indexOf(data[item].venue.split(', ')[1]) == -1) {
 			placeNames.push(data[item].venue.split(', ')[1])
+		}
+	}
+
+	// School data
+	for (item in schoolData) {
+
+		if (schoolNames.indexOf(schoolData[item].school) == -1) {
+			schoolNames.push(schoolData[item].school)
 		}
 	}
 
@@ -86,13 +103,22 @@ function initiateTypeahead() {
 		limit: 5,
 		local: placeNames
 	});
+	let school = new Bloodhound({
+		datumTokenizer: Bloodhound.tokenizers.whitespace,
+		queryTokenizer: Bloodhound.tokenizers.whitespace,
+		limit: 5,
+		local: schoolNames
+	});
+
+
 	company.initialize()
 	work.initialize()
 	place.initialize()
+	school.initialize()
 
 	// set colors based on item category
 	$(".tagsinput").tagsinput({
-		tagClass: function(item) {
+		tagClass: function (item) {
 			switch (item.kind) {
 				case 'company':
 					return 'label label-blue';
@@ -100,6 +126,8 @@ function initiateTypeahead() {
 					return 'label label-green';
 				case 'place':
 					return 'label label-brown';
+				case 'school':
+					return 'label label-purple';
 			}
 		},
 		itemValue: 'text',
@@ -107,19 +135,19 @@ function initiateTypeahead() {
 	});
 
 	// The input field initiation
-	$('.bootstrap-tagsinput input').attr("placeholder", "Companies/Work Titles/Places");
+	$('.bootstrap-tagsinput input').attr("placeholder", "");
 
 	// Set up the suggestion engine to the input field
 	$('.bootstrap-tagsinput input').typeahead({
-			highlight: true
-		}, {
+		highlight: true
+	}, {
 			name: 'company',
-			source: function(query, cb) {
-				company.get(query, function(suggestions) {
+			source: function (query, cb) {
+				company.get(query, function (suggestions) {
 					cb(filter(suggestions, searchQueryCompany));
 				});
 			},
-			displayKey: function(s) {
+			displayKey: function (s) {
 				return s
 			},
 			templates: {
@@ -127,12 +155,12 @@ function initiateTypeahead() {
 			}
 		}, {
 			name: 'work',
-			source: function(query, cb) {
-				work.get(query, function(suggestions) {
+			source: function (query, cb) {
+				work.get(query, function (suggestions) {
 					cb(filter(suggestions, searchQueryWork));
 				});
 			},
-			displayKey: function(s) {
+			displayKey: function (s) {
 				return s
 			},
 			templates: {
@@ -140,25 +168,40 @@ function initiateTypeahead() {
 			}
 		}, {
 			name: 'place',
-			source: function(query, cb) {
-				place.get(query, function(suggestions) {
+			source: function (query, cb) {
+				place.get(query, function (suggestions) {
 					cb(filter(suggestions, searchQueryLocation));
 				});
 			},
-			displayKey: function(s) {
+			displayKey: function (s) {
 				return s
 			},
 			templates: {
 				header: '<hr><small class="tt-category-header">Place</small><hr>'
 			}
+		}, {
+			name: 'school',
+			source: function (query, cb) {
+				school.get(query, function (suggestions) {
+					cb(filter(suggestions, searchQuerySchool));
+				});
+			},
+			displayKey: function (s) {
+				return s
+			},
+			templates: {
+				header: '<hr><small class="tt-category-header">School</small><hr>'
+			}
 		})
-		.on('typeahead:selected', function(ev, s, dsName) {
+		.on('typeahead:selected', function (ev, s, dsName) {
 			if (dsName == 'company') {
 				selectedCompany.push(s)
 			} else if (dsName == 'work') {
 				selectedWork.push(s)
 			} else if (dsName == 'place') {
 				selectedPlace.push(s)
+			} else if (dsName == 'school') {
+				selectedSchool.push(s)
 			}
 
 			$('.tagsinput').tagsinput('add', {
@@ -184,7 +227,7 @@ function initiateDatePicker() {
 
 }
 
-function initiateOptions(){
+function initiateOptions() {
 	$("#options-container").css('height',
 		$("#filter_panel").height() -
 		(
@@ -195,25 +238,25 @@ function initiateOptions(){
 		)
 	)
 
-	$('.filter-btn').click(function() {
+	$('.filter-btn').click(function () {
 		$('.filter-group, #main-search-panel').animate({
 			left: -$('#filter_panel').width(),
-		}, 200, function() {
+		}, 200, function () {
 		});
 		$('.options-pane').animate({
 			right: 0,
-		}, 200, function() {
+		}, 200, function () {
 		});
 	})
 
-	$('.back-button').click(function() {
+	$('.back-button').click(function () {
 		$('.filter-group, #main-search-panel').animate({
 			left: 0,
-		}, 200, function() {
+		}, 200, function () {
 		});
 		$('.options-pane').animate({
 			right: -$('#filter_panel').width(),
-		}, 200, function() {
+		}, 200, function () {
 		});
 	})
 }
@@ -225,7 +268,7 @@ function initiateSliders() {
 		values: [20, 60],
 		max: 60,
 		min: 20,
-		slide: function(event, ui) {
+		slide: function (event, ui) {
 			$("#min-age").html(ui.values[0] + " %");
 			$("#max-age").html(ui.values[1] + " %");
 		}
@@ -239,7 +282,7 @@ function initiateSliders() {
 		values: [700, 2100],
 		max: 2100,
 		min: 700,
-		slide: function(event, ui) {
+		slide: function (event, ui) {
 			$("#min-income").html("$" + ui.values[0]);
 			$("#max-income").html("$" + ui.values[1]);
 		}
@@ -261,65 +304,123 @@ function initiateInfo() {
 	});
 }
 
-function initiateSwitch(){
+function initiateSwitch() {
 	$('#label-switch').bootstrapSwitch('onText', 'On');
 	$('#label-switch').bootstrapSwitch('offText', 'Off');
-	$('.bootstrap-switch-id-label-switch').on('switchChange.bootstrapSwitch', function(){
-		if($(this).hasClass('bootstrap-switch-on')){
+	$('.bootstrap-switch-id-label-switch').on('switchChange.bootstrapSwitch', function () {
+		if ($(this).hasClass('bootstrap-switch-on')) {
 			$('.population').show()
 		} else {
 			$('.population').hide()
-	}
+		}
 	});
 
 	$('#arc-label-switch').bootstrapSwitch('onText', 'On');
 	$('#arc-label-switch').bootstrapSwitch('offText', 'Off');
-	$('.bootstrap-switch-id-arc-label-switch').on('switchChange.bootstrapSwitch', function(){
-		if($(this).hasClass('bootstrap-switch-on')){
+	$('.bootstrap-switch-id-arc-label-switch').on('switchChange.bootstrapSwitch', function () {
+		if ($(this).hasClass('bootstrap-switch-on')) {
 			$('.arcs').show()
 		} else {
 			$('.arcs').hide()
 		}
 	});
+
+	$('#datatable-switch').bootstrapSwitch('onText', 'Main');
+	$('#datatable-switch').bootstrapSwitch('offText', 'School');
+	$(function () {
+		$('#school-data_wrapper').hide()
+		$('#toggle-table').hide()
+		if (localStorage.getItem('school-data')) {
+			$('#toggle-table').show()
+		} else {
+			$('#toggle-table').hide()
+		}
+	})
+	$('.bootstrap-switch-id-datatable-switch').on('switchChange.bootstrapSwitch', function () {
+		if ($(this).hasClass('bootstrap-switch-on')) {
+			$('#raw-data_wrapper').show()
+			$('#school-data_wrapper').hide()
+		} else {
+			$('#raw-data_wrapper').hide()
+			$('#school-data_wrapper').show()
+		}
+	});
+
+	$('#toggle-legend').click(function () {
+		$('#legend').toggle()
+	})
+
+	$('#show-only-venue').click(function () {
+		$('#show-only-venue').addClass('active')
+		$('#show-both').removeClass('active')
+		$('#show-only-school').removeClass('active')
+		$('#arc-label-switch').bootstrapSwitch('state', true);
+		$('.arcs').show()
+		$('.nodes').show()
+		$('.school-nodes').hide()
+	})
+
+	$('#show-both').click(function () {
+		$('#show-only-venue').removeClass('active')
+		$('#show-both').addClass('active')
+		$('#show-only-school').removeClass('active')
+		$('#arc-label-switch').bootstrapSwitch('state', true);
+		$('.arcs').show()
+		$('.nodes').show()
+		$('.school-nodes').show()
+	})
+
+	$('#show-only-school').click(function () {
+		$('#show-only-venue').removeClass('active')
+		$('#show-both').removeClass('active')
+		$('#show-only-school').addClass('active')
+		$('#arc-label-switch').bootstrapSwitch('state', false);
+		$('.arcs').hide()
+		$('.nodes').hide()
+		$('.school-nodes').show()
+	})
 }
 
 function initiateRawData() {
 	return $('#raw-data').DataTable({
 		data: JSON.parse(localStorage.getItem(SOURCE)),
 		columns: [{
-				"data": "company"
-			},
-			{
-				"data": "creative_work"
-			},
-			{
-				"data": "venue"
-			},
-			{
-				"data": "latitude"
-			},
-			{
-				"data": "longitude"
-			},
-			{
-				"data": "date",
-				"type": "date"
-			},
-			{
-				"data": "school"
-			},
-			{
-				"data": "type"
-			},
-			{
-				"data": "age"
-			},
-			{
-				"data": "income"
-			},
+			"data": "company"
+		},
+		{
+			"data": "creative_work"
+		},
+		{
+			"data": "venue"
+		},
+		{
+			"data": "suburb"
+		},
+		{
+			"data": "latitude"
+		},
+		{
+			"data": "longitude"
+		},
+		{
+			"data": "date",
+			"type": "date"
+		},
+		{
+			"data": "school"
+		},
+		{
+			"data": "type"
+		},
+		{
+			"data": "age"
+		},
+		{
+			"data": "income"
+		},
 		],
 		order: [
-			[5, "asc"]
+			[6, "asc"]
 		],
 		//  searching: false,
 		dom: 'flBtip',
@@ -328,11 +429,70 @@ function initiateRawData() {
 			text: 'Export to Spreadsheet..',
 			exportOptions: {
 				format: {
-							header:  function (data, columnIdx) {
-								return  data.toLowerCase().replace(/ /g,"_");
-							}
-						},
-				page: "all" 
+					header: function (data, columnIdx) {
+						return data.toLowerCase().replace(/ /g, "_");
+					}
+				},
+				page: "all"
+			}
+		}],
+		scrollX: true
+	});
+}
+
+function initiateSchoolData() {
+	return $('#school-data').DataTable({
+		data: JSON.parse(localStorage.getItem('school-data')),
+		columns: [{
+			"data": "company"
+		},
+		{
+			"data": "creative_work"
+		},
+		{
+			"data": "school"
+		},
+		{
+			"data": "suburb"
+		},
+		{
+			"data": "avg_ticket_cost"
+		},
+		{
+			"data": "student_attended"
+		},
+		{
+			"data": "date",
+			"type": "date"
+		},
+		{
+			"data": "venue"
+		},
+		{
+			"data": "type"
+		},
+		{
+			"data": "age"
+		},
+		{
+			"data": "income"
+		},
+		],
+		order: [
+			[6, "asc"]
+		],
+		//  searching: false,
+		dom: 'flBtip',
+		buttons: [{
+			extend: 'excel',
+			text: 'Export to Spreadsheet..',
+			exportOptions: {
+				format: {
+					header: function (data, columnIdx) {
+						return data.toLowerCase().replace(/ /g, "_");
+					}
+				},
+				page: "all"
 			}
 		}],
 		scrollX: true

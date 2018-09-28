@@ -119,7 +119,8 @@ if (localStorage.getItem("data") == null || localStorage.getItem("data").length 
 						let dict = {
 							"company": completeData[data].organisation.name,
 							"creative_work": completeData[data].events[event].name,
-							"venue": completeData[data].name + ", " + completeData[data].suburb,
+							"venue": completeData[data].name,
+							"suburb":  completeData[data].suburb,
 							"latitude": completeData[data].latitude,
 							"longitude": completeData[data].longitude,
 							"date": completeData[data].events[event].firstDate,
