@@ -14,6 +14,7 @@ Here are the list of the components:
 
 //  All component content initiation
 var rawDataTable;
+var rawSchoolTable;
 var searchQuery = []
 var selectedCompany = [];
 var selectedWork = [];
@@ -37,6 +38,10 @@ initiateSwitch();
 
 // initiate table
 rawDataTable = initiateRawData();
+schoolDataTable = initiateSchoolData();
+
+
+
 
 // FUNCTIONS
 function initiateTypeahead() {
@@ -281,6 +286,27 @@ function initiateSwitch(){
 			$('.arcs').hide()
 		}
 	});
+
+	$('#datatable-switch').bootstrapSwitch('onText', 'Main');
+	$('#datatable-switch').bootstrapSwitch('offText', 'School');
+	$(function () {
+		$('#school-data_wrapper').hide()
+		$('#toggle-table').hide()
+		if(localStorage.getItem('school-data')){
+			$('#toggle-table').show()
+		} else {
+			$('#toggle-table').hide()
+		}
+	})
+	$('.bootstrap-switch-id-datatable-switch').on('switchChange.bootstrapSwitch', function(){
+		if($(this).hasClass('bootstrap-switch-on')){
+			$('#raw-data_wrapper').show()
+			$('#school-data_wrapper').hide()
+		} else {
+			$('#raw-data_wrapper').hide()
+			$('#school-data_wrapper').show()
+		}
+	});
 }
 
 function initiateRawData() {
@@ -310,6 +336,65 @@ function initiateRawData() {
 			},
 			{
 				"data": "type"
+			},
+			{
+				"data": "age"
+			},
+			{
+				"data": "income"
+			},
+		],
+		order: [
+			[5, "asc"]
+		],
+		//  searching: false,
+		dom: 'flBtip',
+		buttons: [{
+			extend: 'excel',
+			text: 'Export to Spreadsheet..',
+			exportOptions: {
+				format: {
+							header:  function (data, columnIdx) {
+								return  data.toLowerCase().replace(/ /g,"_");
+							}
+						},
+				page: "all" 
+			}
+		}],
+		scrollX: true
+	});
+}
+
+function initiateSchoolData() {
+	return $('#school-data').DataTable({
+		data: JSON.parse(localStorage.getItem('school-data')),
+		columns: [{
+				"data": "company"
+			},
+			{
+				"data": "creative_work"
+			},
+			{
+				"data": "school"
+			},
+			{
+				"data": "suburb"
+			},
+			{
+				"data": "student_attended"
+			},
+			{
+				"data": "date",
+				"type": "date"
+			},
+			{
+				"data": "venue"
+			},
+			{
+				"data": "type"
+			},
+			{
+				"data": "avg_ticket_cost"
 			},
 			{
 				"data": "age"

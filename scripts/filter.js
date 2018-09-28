@@ -314,6 +314,10 @@ function renderAll() {
 		search: 'applied'
 	}).data()
 
+	let afterFilterSchool = schoolDataTable.rows({
+		search: 'applied'
+	}).data()
+
 	for (item in afterFilter) {
 		if (typeof afterFilter[item] == "object" && afterFilter[item].company) {
 			filteredData.push(afterFilter[item])

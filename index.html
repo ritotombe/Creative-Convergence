@@ -41,9 +41,18 @@
               </label>
               <small style='display: block;text-align: right;width: 100%;'>
                 <span id='upload-status-school' style='margin-right: 10px'>
-
                 </span>
               </small>
+              <label id="toggle-table" class= 'filter_content '>
+                <small>Toggle Table</small>
+                <div class="bootstrap-switch-square">
+                  <input 
+                          type="checkbox" 
+                          checked data-toggle="switch" 
+                          name="square-switch"
+                          id="datatable-switch" />
+                </div>
+              </label>
                
             </div>
             <table id="raw-data" class ="row-border stripe hover">
@@ -61,8 +70,25 @@
                     <th name='mhi'>Median Household Income ($)</th>                     
                 </tr>
               </thead>
-
             </table>
+            <table id="school-data" class ="row-border stripe hover">
+              <thead>
+                <tr>
+                    <th name='company'>Company</th>
+                    <th name='creative_work'>Creative Work</th>
+                    <th name='school'>School</th>
+                    <th name='suburb'>Suburb</th>
+                    <th name='student_attended'>Student Attended</th>
+                    <th name='date'>Date</th>  
+                    <th name='venue'>Venue</th>  
+                    <th name='type'>Type</th>       
+                    <th name='avg_ticket_cost'>Average Ticket Cost</th>      
+                    <th name='ypp'>Young People Pecentage (%)</th>
+                    <th name='mhi'>Median Household Income ($)</th>                     
+                </tr>
+              </thead>
+            </table>
+
           </div>
           <!-- <div id="third-panel" class= "main-panel-item">
           </div> -->

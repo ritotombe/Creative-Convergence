@@ -57,7 +57,7 @@ padding = 10;
 function renderMap(filteredData) {
 
 	// START - 2. Initialises the Google Maps and its components 
-	$('<div id="legend"><div id="legend-content"></div></div>').insertAfter("#map");
+	
 	map = new google.maps.Map(d3.select("#map").node(), {
 		zoom: mapState.zoom,
 		center: new google.maps.LatLng(mapState.center[0], mapState.center[1]),
@@ -67,38 +67,52 @@ function renderMap(filteredData) {
 		scaleControl: true,
 	});
 	// Initialise the legend
+	if (!document.getElementById('legend')){
+		$('<div id="legend"><div id="legend-content"></div></div>').insertAfter("#map");
+	}
+
 	var legend = document.getElementById('legend');
 	var legendContent = document.getElementById('legend-content');
-	var typeHeader = document.createElement('h6');
-	typeHeader.innerHTML = 'Companies'
-	legendContent.appendChild(typeHeader);
-	for (item in companyConfig) {
-		var color = companyConfig[item].color;
-		var label = companyConfig[item].label;
-		var name = item;
-		var icon = `
-      <svg height="20px" width="20px">  
-        <circle r="10" cx ="10" cy="10" fill="${color}"/>
-        <text x="50%" y="50%" text-anchor="middle" dy=".4em" fill="white">${label}</text>
-      </svg>`;
-		var div = document.createElement('div');
-		div.innerHTML = icon + name;
-		legendContent.appendChild(div);
+
+	if (!document.getElementById('legend-created')) {
+		var typeHeader = document.createElement('h6');
+		typeHeader.setAttribute("id", "legend-created");
+
+	
+		typeHeader.innerHTML = 'Companies'
+		legendContent.appendChild(typeHeader);
+		for (item in companyConfig) {
+			var color = companyConfig[item].color;
+			var label = companyConfig[item].label;
+			var name = item;
+			var icon = `
+			<svg height="20px" width="20px">  
+			<circle r="10" cx ="10" cy="10" fill="${color}"/>
+			<text x="50%" y="50%" text-anchor="middle" dy=".4em" fill="white">${label}</text>
+			</svg>`;
+			var div = document.createElement('div');
+			div.innerHTML = icon + name;
+			legendContent.appendChild(div);
+		}
+
+		var typeHeader = document.createElement('h6');
+		typeHeader.innerHTML = 'Types'
+		legendContent.appendChild(typeHeader);
+
+		for (item in typeConfig) {
+			var icon = `<img height="20px" width="20px" src=${typeConfig[item].iconURL}>`;
+			var name = item;
+			var div = document.createElement('div');
+			div.innerHTML = icon + name;
+			legendContent.appendChild(div);
+		}
 	}
-
-	var typeHeader = document.createElement('h6');
-	typeHeader.innerHTML = 'Types'
-	legendContent.appendChild(typeHeader);
-
-	for (item in typeConfig) {
-		var icon = `<img height="20px" width="20px" src=${typeConfig[item].iconURL}>`;
-		var name = item;
-		var div = document.createElement('div');
-		div.innerHTML = icon + name;
-		legendContent.appendChild(div);
+	
+	
+	if (document.getElementById('legend')){
+		map.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
 	}
-
-	map.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
+		
 
 	//  determine which data that will be used in the map
 
