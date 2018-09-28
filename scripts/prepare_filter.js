@@ -26,7 +26,7 @@ var checkAllState = {
 populateOptions()
 
 // Change the appearance of the chec all button and all the lists if clickled
-$('.check-all').click(function() {
+$('.check-all').click(function () {
   if ($(this).hasClass("active")) {
     $(".list-item").removeClass("active");
     $(".check-all").removeClass("active")
@@ -38,7 +38,7 @@ $('.check-all').click(function() {
   }
 })
 
-$('#options').on("click", ".list-item",function() {
+$('#options').on("click", ".list-item", function () {
   if ($(this).hasClass("active")) {
     $(this).removeClass("active");
   } else {
@@ -49,8 +49,8 @@ $('#options').on("click", ".list-item",function() {
 
 
 // mode = 2 -> initialise ALL
-function populateLists(mode){
-  if (mode == 2){
+function populateLists(mode) {
+  if (mode == 2) {
     venues = sortOnKeys(venues)
     venuesSelected = Object.keys(venues)
     types = sortOnKeys(types)
@@ -72,13 +72,13 @@ function populateLists(mode){
 
 
 // Click handler on the filter button to populate which data will be shown
-function initiateOptionPanePopulateClickListener(id, items, title, type, selected){
+function initiateOptionPanePopulateClickListener(id, items, title, type, selected) {
   $(id).on("click", () => {
     // Populate the options 
     let innerHTML = "";
     $("#options").html(innerHTML)
-    for (item in items){
-      if (selected.indexOf(items[item]) >= 0){
+    for (item in items) {
+      if (selected.indexOf(items[item]) >= 0) {
         innerHTML += `<li class = "list-item btn btn-block btn-lg btn-info notransition active">${items[item]}</li>`
       } else {
         innerHTML += `<li class = "list-item btn btn-block btn-lg btn-info notransition">${items[item]}</li>`
@@ -86,67 +86,86 @@ function initiateOptionPanePopulateClickListener(id, items, title, type, selecte
     }
     $(".title").html(title);
     $("#options").html(innerHTML);
-  
+
     // Setup the check all status based on the type
     if (checkAllState[type]) {
       setCheckAllActive(type)
     } else {
       setCheckAllInactive(type)
     }
-  
+
     // set the state of opened option type
     filterSelected = type
   })
 }
 
 
-function setCheckAllActive(type){
+function setCheckAllActive(type) {
   $(".check-all").addClass("active")
   $(".check-all").html("Uncheck All")
 }
 
-function setCheckAllInactive(type){
+function setCheckAllInactive(type) {
   $(".check-all").removeClass("active")
   $(".check-all").html("Check All")
 }
 
-function populateOptions(filteredData) {
+function populateOptions(filteredData, schoolFilteredData) {
   // whole data
-	let data = JSON.parse(localStorage.getItem(SOURCE))
-	// filtered data
-	if (filteredData) {
-		data = filteredData
-	}
+  let data = JSON.parse(localStorage.getItem(SOURCE))
+  let schoolData = JSON.parse(localStorage.getItem('school-data'))
+
+  // filtered data
+  if (filteredData) {
+    data = filteredData
+  }
+  if (schoolFilteredData) {
+    schoolData = schoolFilteredData
+  }
 
   venues = {}
   schools = {}
   types = {}
+  schoolVenues = {}
+  schoolSchools = {}
+  schoolTypes = {}
   venuesSelected = []
   schoolsSelected = []
   typesSelected = []
 
-  
+
   for (item in data) {
-      if (!(data[item].venue in venues)) {
-          venues[data[item].venue] = data[item].venue
-      }
-      if (!(data[item].school in schools)) {
-          schools[data[item].school] = data[item].school
-      }
-      if (!(data[item].type in types)) {
-          types[data[item].type] = data[item].type
-      }
+    if (!(data[item].venue in venues)) {
+      venues[data[item].venue] = data[item].venue
+    }
+    if (!(data[item].school in schools)) {
+      schools[data[item].school] = data[item].school
+    }
+    if (!(data[item].type in types)) {
+      types[data[item].type] = data[item].type
+    }
   }
 
-  venues =  sortOnKeys(venues)
+  for (item in schoolData) {
+    if (!(schoolData[item].venue in schoolVenues)) {
+      schoolVenues[schoolData[item].venue] = schoolData[item].venue
+    }
+    if (!(schoolData[item].school in schools)) {
+      schoolSchools[schoolData[item].school] = schoolData[item].school
+    }
+    if (!(schoolData[item].type in types)) {
+      schoolTypes[schoolData[item].type] = schoolData[item].type
+    }
+  }
+
+  venues = Object.assign(venues, schoolVenues)
+  schools = Object.assign(schools, schoolSchools)
+  types = Object.assign(types, schoolTypes)
+
+  venues = sortOnKeys(venues)
 
   populateLists(2)
 }
-
-	
-$('#toggle-legend').click(function(){
-  $('#legend').toggle()
-})
 
 
 function removeHelper(array, index) {
@@ -159,14 +178,14 @@ function removeHelper(array, index) {
 function sortOnKeys(dict) {
 
   var sorted = [];
-  for(var key in dict) {
-      sorted[sorted.length] = key;
+  for (var key in dict) {
+    sorted[sorted.length] = key;
   }
   sorted.sort();
 
   var tempDict = {};
-  for(var i = 0; i < sorted.length; i++) {
-      tempDict[sorted[i]] = dict[sorted[i]];
+  for (var i = 0; i < sorted.length; i++) {
+    tempDict[sorted[i]] = dict[sorted[i]];
   }
 
   return tempDict;

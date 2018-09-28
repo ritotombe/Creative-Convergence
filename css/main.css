@@ -310,7 +310,7 @@ hr {
   width: 15%;
 }
 
-.close-btn {
+.close-btn, .school-close-btn {
   width: 20px;
   height: 15px;
   margin-right: 0;
@@ -318,7 +318,7 @@ hr {
   cursor: pointer;
 }
 
-.close-btn div {
+.close-btn div, .school-close-btn div {
   margin: auto;
   width: 100%;
   text-align: center;
@@ -505,18 +505,18 @@ input.tt-input, input.tt-hint{
 }
 /* MAPPING */
 
-.nodes, .nodes svg {
+.nodes, .nodes svg, .school-nodes, .school-nodes svg {
   position: absolute;
   overflow: visible;
 }
 
-.nodes svg {
+.nodes svg, .school-nodes svg {
   width: 20px;
   height: 20px;
   text-anchor: middle;
 }
 
-.nodes svg:hover, .arcs svg path:hover{
+.nodes svg:hover, .arcs svg path:hover, .school-nodes svg:hover{
   cursor: pointer;
 }
 
@@ -656,18 +656,18 @@ div.dataTables_filter {
   visibility: hidden;
 }
 
-.nodes .tooltip-info {
+.nodes .tooltip-info, .school-nodes .tooltip-info {
   display: inline-block;
   width: 80%;
 }
 
-.nodes .tooltip-additional-info {
+.nodes .tooltip-additional-info, .school-nodes .tooltip-additional-info {
   display: inline-block;
   width: 15%;
   vertical-align:top;
 }
 
-.nodes .tooltip-additional-info img {
+.nodes .tooltip-additional-info img, .school-nodes .tooltip-additional-info img {
   width: 100%;
   height: auto;
 }
@@ -695,4 +695,9 @@ div.dataTables_filter {
 }
 .bootstrap-tagsinput .twitter-typeahead .tt-input, .bootstrap-tagsinput .twitter-typeahead  {
   width: 100% !important;
+}
+
+.btn-toolbar .btn {
+  margin: 0;
+  display: inline-block;
 }

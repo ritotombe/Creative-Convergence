@@ -3,6 +3,7 @@
 
 // initiate filtered data (subset of whole data that has been filtered)
 var filteredData = []
+var schoolFilteredData = []
 
 // Search query fom main search, divided by its category
 var searchQueryCompany = []
@@ -109,7 +110,7 @@ $('.tagsinput-primary > input').on('change', () => {
 // Add custom search function for date filter automatically changes if table rendered
 $.fn.dataTable.ext.search.push(
 	function(settings, data, dataIndex) {
-		var date = Date.parse(data[5]) || 0;
+		var date = Date.parse(data[6]) || 0;
 		if ((dateMin == 0 && dateMax == 0) ||
 			(dateMin == 0 && date <= dateMax) ||
 			(dateMin <= date && dateMax == 0) ||
@@ -125,7 +126,7 @@ $.fn.dataTable.ext.search.push(
 	function(settings, data, dataIndex) {
 		let minAge = $("#flat-slider-age").slider("values", 0)
 		let maxAge = $("#flat-slider-age").slider("values", 1)
-		var age = data[8] || 0;
+		var age = data[9] || 0;
 		if ((minAge == 20 && maxAge == 60) ||
 			(minAge == 20 && age <= maxAge) ||
 			(minAge <= age && maxAge == 60) ||
@@ -141,7 +142,7 @@ $.fn.dataTable.ext.search.push(
 	function(settings, data, dataIndex) {
 		let minIncome = $("#flat-slider-household").slider("values", 0)
 		let maxIncome = $("#flat-slider-household").slider("values", 1)
-		var income = data[9] || 0;
+		var income = data[10] || 0;
 		if ((minIncome == 700 && maxIncome == 2100) ||
 			(minIncome == 700 && income <= maxIncome) ||
 			(minIncome <= income && maxIncome == 2100) ||
@@ -190,16 +191,19 @@ $('.income-value').on('DOMSubtreeModified', function() {
 
 // Populate the options list and variables if 
 $('.check-all').click(function() {
-    filteredData = []
+	filteredData = []
+	schoolFilteredData = []
 
     // Column number in the table in which we were going to filter
 	let columnNumber = ""
-    let source = ""
+	let schoolColumnNumber = ""
+	let source = ""
     
     // if there is a filter selected, set the source of the query and column to filter. Furthermore, set the check all state.
 	switch (filterSelected) {
 		case (VENUE_SELECTED):
 			columnNumber = 2 
+			schoolColumnNumber = 7 //venue school
 			if (checkAllState[VENUE_SELECTED]) {
 				venuesSelected = []
 				checkAllState[VENUE_SELECTED] = false
@@ -210,7 +214,8 @@ $('.check-all').click(function() {
 			source = venuesSelected
 			break
 		case (SCHOOL_SELECTED):
-			columnNumber = 6
+			columnNumber = 7
+			schoolColumnNumber = 2
 			if (checkAllState[SCHOOL_SELECTED]) {
 				schoolsSelected = []
 				checkAllState[SCHOOL_SELECTED] = false
@@ -221,7 +226,8 @@ $('.check-all').click(function() {
 			source = schoolsSelected
 			break
 		case (TYPE_SELECTED):
-			columnNumber = 7
+			columnNumber = 8
+			schoolColumnNumber = 8
 			if (checkAllState[TYPE_SELECTED]) {
 				typesSelected = []
 				checkAllState[TYPE_SELECTED] = false
@@ -240,15 +246,27 @@ $('.check-all').click(function() {
 			.columns(columnNumber)
 			.search("%%/", true, false)
 			.draw();
+		schoolDataTable
+			.columns(schoolColumnNumber)
+			.search("%%/", true, false)
+			.draw();
 	} else {
         // there is source, this filter it
 		rawDataTable
 			.columns(columnNumber)
 			.search(prepareQuery(source), true, false)
 			.draw();
+		schoolDataTable
+			.columns(schoolColumnNumber)
+			.search(prepareQuery(source), true, false)
+			.draw();
 	}
 
 	let afterFilter = rawDataTable.rows({
+		search: 'applied'
+	}).data()
+
+	let schoolAfterFilter = schoolDataTable.rows({
 		search: 'applied'
 	}).data()
 
@@ -259,28 +277,41 @@ $('.check-all').click(function() {
 		}
 	}
 
-	renderMap(filteredData);
+	for (item in schoolAfterFilter) {
+		if (typeof schoolAfterFilter[item] == "object" && schoolAfterFilter[item].company) {
+			schoolFilteredData.push(schoolAfterFilter[item])
+		}
+	}
+
+	renderMap(filteredData, schoolFilteredData);
 	populateLists();
 })
 
 // The logic is about the same with the check all button 
 $('#options').on("click", ".list-item", function() {
 	filteredData = []
+	schoolFilteredData = []
 
+    // Column number in the table in which we were going to filter
 	let columnNumber = ""
+	let schoolColumnNumber = ""
 	let source = ""
+    
 
 	switch (filterSelected) {
 		case (VENUE_SELECTED):
 			columnNumber = 2
+			schoolColumnNumber = 7
 			source = venuesSelected
 			break
 		case (SCHOOL_SELECTED):
-			columnNumber = 6
+			columnNumber = 7
+			schoolColumnNumber = 2
 			source = schoolsSelected
 			break
 		case (TYPE_SELECTED):
-			columnNumber = 7
+			columnNumber = 8
+			schoolColumnNumber = 8
 			source = typesSelected
 			break
 	}
@@ -292,9 +323,13 @@ $('#options').on("click", ".list-item", function() {
 		source = removeHelper(source, source.indexOf(selectedItem))
 	}
 
-	queryData(columnNumber, source)
+	queryData(columnNumber, schoolColumnNumber, source)
 
 	let afterFilter = rawDataTable.rows({
+		search: 'applied'
+	}).data()
+
+	let schoolAfterFilter = schoolDataTable.rows({
 		search: 'applied'
 	}).data()
 
@@ -304,7 +339,13 @@ $('#options').on("click", ".list-item", function() {
 		}
 	}
 
-	renderMap(filteredData);
+	for (item in schoolAfterFilter) {
+		if (typeof schoolAfterFilter[item] == "object" && schoolAfterFilter[item].company) {
+			schoolFilteredData.push(schoolAfterFilter[item])
+		}
+	}
+
+	renderMap(filteredData, schoolFilteredData);
 	populateLists()
 })
 
@@ -334,7 +375,7 @@ function renderAll() {
 		search: 'applied'
 	}).data()
 
-	let afterFilterSchool = schoolDataTable.rows({
+	let schoolAfterFilter = schoolDataTable.rows({
 		search: 'applied'
 	}).data()
 
@@ -344,14 +385,24 @@ function renderAll() {
 		}
 	}
 
-	populateOptions(filteredData)
-	renderMap(filteredData);
+	for (item in schoolAfterFilter) {
+		if (typeof schoolAfterFilter[item] == "object" && schoolAfterFilter[item].company) {
+			schoolFilteredData.push(schoolAfterFilter[item])
+		}
+	}
+
+	populateOptions(filteredData, schoolFilteredData)
+	renderMap(filteredData, schoolFilteredData);
 }
 
 // does the querying of the data based on the column number and query terms
-function queryData(columnNumber, source) {
+function queryData(columnNumber, schoolColumnNumber, source) {
 	rawDataTable
 		.columns(columnNumber)
+		.search(prepareQuery(source), true, false)
+		.draw();
+	schoolDataTable
+		.columns(schoolColumnNumber)
 		.search(prepareQuery(source), true, false)
 		.draw();
 }
@@ -385,7 +436,7 @@ function searchBar(mode, queryTerms) {
 			break;
 		case 'place':
 			rawDataTable
-				.columns(2)
+				.columns(3)
 				.search(queryTerms, true, false)
 				.draw();
 			schoolDataTable
@@ -395,7 +446,7 @@ function searchBar(mode, queryTerms) {
 			break;
 		case  'school':
 			rawDataTable
-				.columns(6)
+				.columns(7)
 				.search(queryTerms, true, false)
 				.draw();
 			schoolDataTable
