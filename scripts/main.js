@@ -19,6 +19,7 @@ var searchQuery = []
 var selectedCompany = [];
 var selectedWork = [];
 var selectedPlace = [];
+var selectedSchool = [];
 
 // Main Pane Selector
 $('#tab-buttons a').click(function() {
@@ -50,6 +51,7 @@ function initiateTypeahead() {
 	let companyNames = []
 	let workNames = []
 	let placeNames = []
+	let schoolNames = []
 
 	// Do not show an item if it has been selected
 	let filter = function(suggestions, selected) {
@@ -60,6 +62,8 @@ function initiateTypeahead() {
 
 	// Get all data and fill the list of company, works, and place
 	let data = JSON.parse(localStorage.getItem(SOURCE))
+	let schoolData = JSON.parse(localStorage.getItem('school-data'))
+
 	for (item in data) {
 		if (companyNames.indexOf(data[item].company) == -1) {
 			companyNames.push(data[item].company)
@@ -69,6 +73,14 @@ function initiateTypeahead() {
 		}
 		if (placeNames.indexOf(data[item].venue.split(', ')[1]) == -1) {
 			placeNames.push(data[item].venue.split(', ')[1])
+		}	
+	}
+
+	// School data
+	for (item in schoolData) {
+
+		if (schoolNames.indexOf(schoolData[item].school) == -1) {
+			schoolNames.push(schoolData[item].school)
 		}
 	}
 
@@ -91,9 +103,18 @@ function initiateTypeahead() {
 		limit: 5,
 		local: placeNames
 	});
+	let school = new Bloodhound({
+		datumTokenizer: Bloodhound.tokenizers.whitespace,
+		queryTokenizer: Bloodhound.tokenizers.whitespace,
+		limit: 5,
+		local: schoolNames
+	});
+
+
 	company.initialize()
 	work.initialize()
 	place.initialize()
+	school.initialize()
 
 	// set colors based on item category
 	$(".tagsinput").tagsinput({
@@ -105,6 +126,8 @@ function initiateTypeahead() {
 					return 'label label-green';
 				case 'place':
 					return 'label label-brown';
+				case 'school':
+					return 'label label-purple';
 			}
 		},
 		itemValue: 'text',
@@ -112,7 +135,7 @@ function initiateTypeahead() {
 	});
 
 	// The input field initiation
-	$('.bootstrap-tagsinput input').attr("placeholder", "Companies/Work Titles/Places");
+	$('.bootstrap-tagsinput input').attr("placeholder", "");
 
 	// Set up the suggestion engine to the input field
 	$('.bootstrap-tagsinput input').typeahead({
@@ -156,6 +179,19 @@ function initiateTypeahead() {
 			templates: {
 				header: '<hr><small class="tt-category-header">Place</small><hr>'
 			}
+		},  {
+			name: 'school',
+			source: function(query, cb) {
+				school.get(query, function(suggestions) {
+					cb(filter(suggestions, searchQuerySchool));
+				});
+			},
+			displayKey: function(s) {
+				return s
+			},
+			templates: {
+				header: '<hr><small class="tt-category-header">School</small><hr>'
+			}
 		})
 		.on('typeahead:selected', function(ev, s, dsName) {
 			if (dsName == 'company') {
@@ -164,6 +200,8 @@ function initiateTypeahead() {
 				selectedWork.push(s)
 			} else if (dsName == 'place') {
 				selectedPlace.push(s)
+			} else if (dsName == 'school') {
+				selectedSchool.push(s)
 			}
 
 			$('.tagsinput').tagsinput('add', {
@@ -394,13 +432,13 @@ function initiateSchoolData() {
 				"data": "type"
 			},
 			{
-				"data": "avg_ticket_cost"
-			},
-			{
 				"data": "age"
 			},
 			{
 				"data": "income"
+			},
+			{
+				"data": "avg_ticket_cost"
 			},
 		],
 		order: [

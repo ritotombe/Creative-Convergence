@@ -249,6 +249,10 @@ hr {
   border-bottom: 1px  #ddd9aa solid;
 }
 
+.label-purple, .label-purple:hover  {
+  background-color: #BF00FF !important;
+}
+
 .label-brown, .label-brown:hover  {
   background-color: #aa6a00 !important;
 }
@@ -688,4 +692,7 @@ div.dataTables_filter {
 #toggle-table .bootstrap-switch-off .bootstrap-switch-handle-on ~ .bootstrap-switch-handle-off.bootstrap-switch-default:before {
   border-color: #bdc3c7;
   background-color: #34495e !important;
+}
+.bootstrap-tagsinput .twitter-typeahead .tt-input, .bootstrap-tagsinput .twitter-typeahead  {
+  width: 100% !important;
 }

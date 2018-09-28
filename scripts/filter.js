@@ -8,6 +8,7 @@ var filteredData = []
 var searchQueryCompany = []
 var searchQueryWork = []
 var searchQueryLocation = []
+var searchQuerySchool = []
 
 // Initiate min date and max date
 var dateMin = 0,
@@ -21,6 +22,7 @@ $('.tagsinput-primary > input').on('change', () => {
 	searchQueryCompany = []
 	searchQueryWork = []
 	searchQueryLocation = []
+	searchQuerySchool = []
 
     // 2. Populate all the inputs from the search field into query variable
 	searchQuery = $('.tagsinput-primary > input').tagsinput('items');
@@ -33,10 +35,17 @@ $('.tagsinput-primary > input').on('change', () => {
 				searchQueryWork.push(searchQuery[item].text)
 			} else if (searchQuery[item].kind == 'place') {
 				searchQueryLocation.push(searchQuery[item].text)
+			} else if (searchQuery[item].kind == 'school') {
+				searchQuerySchool.push(searchQuery[item].text)
 			}
 		}
         // 3. Reinitialise the table in the list view to show all the data
 		rawDataTable
+			.search('')
+			.columns().search('')
+			.draw();
+
+		schoolDataTable
 			.search('')
 			.columns().search('')
 			.draw();
@@ -51,9 +60,17 @@ $('.tagsinput-primary > input').on('change', () => {
 		if (searchQueryLocation.length > 0) {
 			searchBar('place', searchQueryLocation)
 		}
+		if (searchQuerySchool.length > 0) {
+			searchBar('school', searchQuerySchool)
+		}
 
 	} else {
 		rawDataTable
+			.search('')
+			.columns().search('')
+			.draw();
+
+		schoolDataTable
 			.search('')
 			.columns().search('')
 			.draw();
@@ -147,6 +164,7 @@ function changeDate() {
 	dateMin = getDateFromFormat(filteredDateMin, 'dd/MM/yyyy')
 	dateMax = getDateFromFormat(filteredDateMax, 'dd/MM/yyyy')
 	rawDataTable.draw()
+	schoolDataTable.draw()
 	renderAll()
 }
 
@@ -156,6 +174,7 @@ $('.age-value').on('DOMSubtreeModified', function() {
 	$(this).data('keytimer', setTimeout(function() {
 		filteredData = []
 		rawDataTable.draw()
+		schoolDataTable.draw()
 		renderAll()
 	}, 500));
 })
@@ -164,6 +183,7 @@ $('.income-value').on('DOMSubtreeModified', function() {
 	$(this).data('keytimer', setTimeout(function() {
 		filteredData = []
 		rawDataTable.draw()
+		schoolDataTable.draw()
 		renderAll()
 	}, 500));
 })
@@ -348,9 +368,17 @@ function searchBar(mode, queryTerms) {
 				.columns(0)
 				.search(queryTerms, true, false)
 				.draw();
+			schoolDataTable
+				.columns(0)
+				.search(queryTerms, true, false)
+				.draw();
 			break;
 		case 'creative_work':
 			rawDataTable
+				.columns(1)
+				.search(queryTerms, true, false)
+				.draw();
+			schoolDataTable
 				.columns(1)
 				.search(queryTerms, true, false)
 				.draw();
@@ -360,7 +388,22 @@ function searchBar(mode, queryTerms) {
 				.columns(2)
 				.search(queryTerms, true, false)
 				.draw();
+			schoolDataTable
+				.columns(3)
+				.search(queryTerms, true, false)
+				.draw();
 			break;
+		case  'school':
+			rawDataTable
+				.columns(6)
+				.search(queryTerms, true, false)
+				.draw();
+			schoolDataTable
+				.columns(2)
+				.search(queryTerms, true, false)
+				.draw();
+			break;
+
 	}
 
 }
