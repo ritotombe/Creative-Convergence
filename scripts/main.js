@@ -335,6 +335,9 @@ function initiateSwitch() {
 		} else {
 			$('#toggle-table').hide()
 		}
+
+		var el = document.querySelector('#second-panel');
+		el.innerHTML = el.innerHTML.replace(/&nbsp;/g,'');
 	})
 	$('.bootstrap-switch-id-datatable-switch').on('switchChange.bootstrapSwitch', function () {
 		if ($(this).hasClass('bootstrap-switch-on')) {

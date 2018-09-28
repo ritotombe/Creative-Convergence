@@ -130,9 +130,28 @@ $(function () {
 
                                     localStorage.setItem(localData, JSON.stringify(mainData.concat(searchCoordData)))
                                     localStorage.setItem(geocodeData, JSON.stringify(Object.assign({}, geocoded, geocodedNew)))
+                                    reinitialise(status, file, mode)
                                 }
 
-                                
+                                if (mode == 1 && localStorage.getItem('company-data')) {
+                                    SOURCE = 'company-data'
+                                }
+                                $(".tagsinput").tagsinput("removeAll");
+                                $('.bootstrap-tagsinput input').typeahead('destroy');
+                                initiateTypeahead()
+                                filteredData = []
+                                initiateSwitch()
+                                renderAll()
+                                rawDataTable.destroy()
+                                rawDataTable = initiateRawData()
+                                schoolDataTable.destroy()
+                                schoolDataTable = initiateSchoolData()
+                        
+                                status.html(file.name + " is uploaded and data is updated.")
+                        
+                                location.reload()
+
+
                             }, function () {
                                 // error occurred
                             });
@@ -140,28 +159,8 @@ $(function () {
                     } else {
                         localStorage.setItem(localData, JSON.stringify(mainData.concat(searchCoordData)))
                         localStorage.setItem(geocodeData, JSON.stringify(Object.assign({}, geocoded, geocodedNew)))
+                        reinitialise(status, file, mode)
                     }
-
-
-                    if (mode == 1 && localStorage.getItem('company-data')) {
-                        SOURCE = 'company-data'
-                    }
-
-                    //Reinitialise all contents and filters
-                    //TODO: Put it in separate function
-                    
-                    $(".tagsinput").tagsinput("removeAll");
-                    $('.bootstrap-tagsinput input').typeahead('destroy');
-                    initiateTypeahead()
-                    filteredData = []
-                    initiateSwitch()
-                    renderAll()
-                    rawDataTable.destroy()
-                    rawDataTable = initiateRawData()
-                    schoolDataTable.destroy()
-                    schoolDataTable = initiateSchoolData()
-
-                    status.html(file.name + " is uploaded and data is updated.")
 
                 } else {
                     status.html("<span style='color:#c0392b'>Please upload only csv file</span>")
@@ -181,13 +180,21 @@ $(function () {
             if (inside([lon, lat], polygonFeatures[j].geometry.coordinates)) {
                 let lgaCode = polygonFeatures[j].properties.feature_code
                 //Match the lga name with the abs data then map the socio economic data in to the main data
-                
+
                 var aurinAge = extractYoungPeoplePercentage(absData.age[lgaCode]).toFixed(2)
                 var aurinIncome = AURINlocal['income'][lgaCode]
-                
+
                 return [aurinAge, aurinIncome]
             }
         }
         return [0, 0]
+    }
+
+    function reinitialise(status, file, mode) {
+        
+        //Reinitialise all contents and filters
+        //TODO: Put it in separate function
+
+       
     }
 })
