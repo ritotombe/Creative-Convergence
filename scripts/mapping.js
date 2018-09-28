@@ -124,6 +124,17 @@ function renderMap(filteredData, schoolFilteredData) {
 			div.innerHTML = icon + name;
 			legendContent.appendChild(div);
 		}
+
+		var icon = `<svg height="20" width="20">  
+		<rect width="20" height="20" rx="3" ry="3" fill="#FFFE00"></rect>
+		<text x="50%" y="50%" dy=".4em" fill="black" text-anchor="middle">S</text>
+		</svg>`
+		var name = 'School'
+		var div = document.createElement('div');
+			div.innerHTML = icon + name;
+			legendContent.appendChild(div);
+		legendContent.appendChild(document.createElement('hr'))
+		legendContent.appendChild(div)
 	}
 
 
@@ -343,13 +354,6 @@ function renderMap(filteredData, schoolFilteredData) {
 			// .style("opacity", 0.7)
 
 			//-- School Marker Layer --
-			
-			// for (i in schoolData){
-			// 	if (!schoolData[i].longitude){
-			// 		console.log(schoolData[i]);
-			// 		schoolData[]
-			// 	}
-			// }
 			
 			var schoolMarker = schoolLayer.selectAll("svg")
 				.data(d3.entries(schoolData))
