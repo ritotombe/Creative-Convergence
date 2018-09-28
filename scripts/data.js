@@ -391,6 +391,8 @@ function checkType(event){
 		return "Workshop"
 	} else if (event.includes("Talk")) {
 		return "Talk"
+	} else if (event.includes("Influencer")) {
+		return "Influencer"
 	} else {
 		return "Performance"
 	}
