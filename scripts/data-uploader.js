@@ -113,6 +113,9 @@ $(function () {
                                     if (calledObjects.indexOf(searchCoordData[i].place) >= 0) {
                                         var argIndex = calledObjects.indexOf(searchCoordData[i].place)
                                         var data = arguments[argIndex][0]
+
+                                        console.log(searchCoordData[i].place, calledObjects, place);
+                                        
                                         if (data.status == 'OK') {
                                             var coord = data.results[0].geometry.location
 
@@ -133,23 +136,7 @@ $(function () {
                                     reinitialise(status, file, mode)
                                 }
 
-                                if (mode == 1 && localStorage.getItem('company-data')) {
-                                    SOURCE = 'company-data'
-                                }
-                                $(".tagsinput").tagsinput("removeAll");
-                                $('.bootstrap-tagsinput input').typeahead('destroy');
-                                initiateTypeahead()
-                                filteredData = []
-                                initiateSwitch()
-                                renderAll()
-                                rawDataTable.destroy()
-                                rawDataTable = initiateRawData()
-                                schoolDataTable.destroy()
-                                schoolDataTable = initiateSchoolData()
-                        
-                                status.html(file.name + " is uploaded and data is updated.")
-                        
-                                location.reload()
+                                
 
 
                             }, function () {
@@ -161,6 +148,25 @@ $(function () {
                         localStorage.setItem(geocodeData, JSON.stringify(Object.assign({}, geocoded, geocodedNew)))
                         reinitialise(status, file, mode)
                     }
+
+
+                    if (mode == 1 && localStorage.getItem('company-data')) {
+                        SOURCE = 'company-data'
+                    }
+                    $(".tagsinput").tagsinput("removeAll");
+                    $('.bootstrap-tagsinput input').typeahead('destroy');
+                    initiateTypeahead()
+                    filteredData = []
+                    initiateSwitch()
+                    renderAll()
+                    rawDataTable.destroy()
+                    rawDataTable = initiateRawData()
+                    schoolDataTable.destroy()
+                    schoolDataTable = initiateSchoolData()
+            
+                    status.html(file.name + " is uploaded and data is updated.")
+            
+                    location.reload()
 
                 } else {
                     status.html("<span style='color:#c0392b'>Please upload only csv file</span>")
