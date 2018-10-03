@@ -74,10 +74,13 @@ $(function () {
                             mainData[i].income = demoData[1]
                         }
                     }
+                    
 
-                    for (i in deleteIndex) {
-                        mainData.splice(i, 1)
+                    for (i = deleteIndex.length; i>=0; i--) {
+                        mainData.splice(deleteIndex[i], 1)
                     }
+
+                    // console.log(deleteIndex, mainData[deleteIndex[0]], mainData);
 
                     // 2. If not exists call Google API
                     if (searchCoordData.length > 0) {
@@ -98,11 +101,16 @@ $(function () {
                                 load()
                             }
                             status.html(`${i} of ${searchCoordData.length} rows have been processed`)
+                            // console.log("i json call", i);
+                            
                             // $('#upload-status span').html((((i)/mainData.length) * 100).toFixed(0)+ " %")
                         }
                         f();
                         function load() {
                             $.when.apply($, promises).then(function () {
+                                // console.log("called:", calledObjects.length);
+                                
+                                cnt = 0
                                 for (i in searchCoordData) {
 
                                     searchCoordData[i].age = 0
@@ -114,8 +122,8 @@ $(function () {
                                         var argIndex = calledObjects.indexOf(searchCoordData[i].place)
                                         var data = arguments[argIndex][0]
 
-                                        console.log(searchCoordData[i].place, calledObjects, place);
-                                        
+                                        // console.log(searchCoordData[i].place, calledObjects, place);
+                                    
                                         if (data.status == 'OK') {
                                             var coord = data.results[0].geometry.location
 
@@ -123,6 +131,8 @@ $(function () {
                                             searchCoordData[i].longitude = coord.lng
 
                                             geocodedNew[searchCoordData[i].place] = coord;
+                                        } else {
+                                            console.log("Map API not found:", searchCoordData[i].place, cnt++);
                                         }
                                     }
 

@@ -20,6 +20,7 @@ $('.tagsinput-primary > input').on('change', () => {
     
     // 1. Clear all filtered data as this is always the start point
 	filteredData = []
+	schoolFilteredData = []
 	searchQueryCompany = []
 	searchQueryWork = []
 	searchQueryLocation = []
@@ -160,6 +161,7 @@ $('#date_picker_from, #date_picker_to').on('change', changeDate)
 // Handler function if date schanges
 function changeDate() {
 	filteredData = []
+	schoolFilteredData = []
 	filteredDateMin = $("#date_picker_from").val()
 	filteredDateMax = $("#date_picker_to").val()
 	dateMin = getDateFromFormat(filteredDateMin, 'dd/MM/yyyy')
@@ -174,6 +176,7 @@ $('.age-value').on('DOMSubtreeModified', function() {
 	clearTimeout($(this).data('keytimer'));
 	$(this).data('keytimer', setTimeout(function() {
 		filteredData = []
+		schoolFilteredData = []
 		rawDataTable.draw()
 		schoolDataTable.draw()
 		renderAll()
@@ -183,6 +186,7 @@ $('.income-value').on('DOMSubtreeModified', function() {
 	clearTimeout($(this).data('keytimer'));
 	$(this).data('keytimer', setTimeout(function() {
 		filteredData = []
+		schoolFilteredData = []
 		rawDataTable.draw()
 		schoolDataTable.draw()
 		renderAll()
@@ -386,7 +390,7 @@ function renderAll() {
 	}
 
 	for (item in schoolAfterFilter) {
-		if (typeof schoolAfterFilter[item] == "object" && schoolAfterFilter[item].company) {
+		if (typeof schoolAfterFilter[item] == "object" && schoolAfterFilter[item].company) {	
 			schoolFilteredData.push(schoolAfterFilter[item])
 		}
 	}
