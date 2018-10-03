@@ -76,7 +76,7 @@ $(function () {
                     }
                     
 
-                    for (i = deleteIndex.length; i>=0; i--) {
+                    for (i = deleteIndex.length-1; i>=0; i--) {
                         mainData.splice(deleteIndex[i], 1)
                     }
 
