@@ -25,6 +25,7 @@ var populationTooltip
 var populationTooltipText
 var populationTooltipTextName
 var populationTooltipTextDensity
+var populationTooltipTextAncestry
 
 var tooltip
 var tooltipTitle
@@ -187,12 +188,35 @@ function renderMap(filteredData, schoolFilteredData) {
 		// Population tooltip
 		populationTooltip = d3.select('body').append('svg')
 			.attr("class", "population-tooltip")
+
+		
+			populationTooltip.append('rect')
+			.attr('x', "-10")
+			.attr('y', "-5")
+			.attr('rx', "6")
+			.attr('ry', "6")
+			.attr('height', "176")
+			.attr('width', "161")
+			.style('fill', 'rgba(0,0,0,0.2)')
+
+			populationTooltip.append('rect')
+			.attr('x', "-10")
+			.attr('y', "-5")
+			.attr('rx', "6")
+			.attr('ry', "6")
+			.attr('height', "175")
+			.attr('width', "160")
+			.style('fill', 'white')
+
+			
+
 		populationTooltipText = populationTooltip.append('text')
 			.attr('x', "50%")
 			.attr('y', "50%")
 			.attr('dy', ".4em")
 			.style('fill', '#000')
 			.style('font-size', '10pt')
+			.style('font-weight', 'bold')
 
 		populationTooltipTextName = populationTooltipText.append('tspan')
 			.attr('x', 0)
@@ -200,6 +224,14 @@ function renderMap(filteredData, schoolFilteredData) {
 		populationTooltipTextDensity = populationTooltipText.append('tspan')
 			.attr('x', 0)
 			.attr('dy', "1.2em")
+
+		populationTooltipTextAncestry = populationTooltip.append('text')
+			.attr('x', "50%")
+			.attr('y', "50%")
+			.attr('dy', "4em")
+			.style('fill', '#000')
+			.style('font-size', '10pt')
+
 
 		// Marker tooltip 
 		tooltip = layer.select(".tooltip")
@@ -478,11 +510,13 @@ function renderMap(filteredData, schoolFilteredData) {
 
 		var aurinData = {}
 		var populationData = {}
+		var ancestryData = {}
 		var areaData = {}
 		if (localStorage.getItem('aurin-data')) {
 			aurinData = localStorage.getItem('aurin-data')
 			populationData = JSON.parse(aurinData).population
 			areaData = JSON.parse(aurinData).area
+			ancestryData = JSON.parse(aurinData).ancestry
 		}
 
 
@@ -543,6 +577,67 @@ function renderMap(filteredData, schoolFilteredData) {
 					.text(function () {
 						return `Density: ${(populationData[d.properties.feature_code] / areaData[d.properties.feature_code]).toFixed(2)}/km2`
 					})
+
+				populationTooltipTextAncestry
+					.html(function () {
+
+						var ethnics = {
+							"Croatian": ancestryData[d.properties.feature_code].croatian_tot_responses,
+							"Russian": ancestryData[d.properties.feature_code].russian_tot_responses,
+							"Dutch" : ancestryData[d.properties.feature_code].dutch_tot_responses,
+							"Korean" : ancestryData[d.properties.feature_code].korean_tot_responses,
+							"Chinese" : ancestryData[d.properties.feature_code].chinese_tot_responses,
+							"Indian": ancestryData[d.properties.feature_code].indian_tot_responses,
+							"Serbian": ancestryData[d.properties.feature_code].serbian_tot_responses,
+							"French" : ancestryData[d.properties.feature_code].french_tot_responses,
+							"Greek" : ancestryData[d.properties.feature_code].greek_tot_responses,
+							"Maltese" : ancestryData[d.properties.feature_code].maltese_tot_responses,
+							"Scottish" : ancestryData[d.properties.feature_code].scottish_tot_responses,
+							"English" : ancestryData[d.properties.feature_code].english_tot_responses,
+							"Aborigin" : ancestryData[d.properties.feature_code].aust_abor_tot_responses,
+							"New Zealand" : ancestryData[d.properties.feature_code].nz_tot_responses,
+							"Not Stated" : ancestryData[d.properties.feature_code].ancestry_notstated_tot_responses,
+							"Macedonian" : ancestryData[d.properties.feature_code].macedonian_tot_responses,
+							"Hungarian" : ancestryData[d.properties.feature_code].hungarian_tot_responses,
+							"Filipino" : ancestryData[d.properties.feature_code].filipino_tot_responses,
+							"Total" : ancestryData[d.properties.feature_code].tot_p_tot_responses,
+							"Polish" : ancestryData[d.properties.feature_code].polish_tot_responses,
+							"Welsh" : ancestryData[d.properties.feature_code].welsh_tot_responses,
+							"Sri Lankan" : ancestryData[d.properties.feature_code].sri_lankan_tot_responses,
+							"German" : ancestryData[d.properties.feature_code].german_tot_responses,
+							"Italian" : ancestryData[d.properties.feature_code].italian_tot_responses,
+							"Australia" : ancestryData[d.properties.feature_code].aust_tot_responses,
+							"Spanish" : ancestryData[d.properties.feature_code].spanish_tot_responses,
+							"Irish" : ancestryData[d.properties.feature_code].irish_tot_responses,
+							"Maori" : ancestryData[d.properties.feature_code].maori_tot_responses,
+							"Other" : ancestryData[d.properties.feature_code].other_tot_responses,
+							"Turkish" : ancestryData[d.properties.feature_code].turkish_tot_responses,
+							"South African" : ancestryData[d.properties.feature_code].sth_african_tot_responses,
+							"Lebanese" : ancestryData[d.properties.feature_code].lebanese_tot_responses,
+							"Vietnamese" : ancestryData[d.properties.feature_code].vietnamese_tot_responses
+						 }
+						 
+
+						var sortable = [];
+						for (var ethnic in ethnics) {
+							sortable.push([ethnic, ethnics[ethnic]]);
+						}
+
+						sortable.sort(function(a, b) {
+							return b[1] - a[1];
+						});
+
+						
+						return `Ethnicity: 
+						<tspan x="0" dy="1.2em"> ${sortable[1][0]} : ${(sortable[1][1]/sortable[0][1]*100).toFixed(2)} % </tspan> 
+						<tspan x="0" dy="1.2em"> ${sortable[2][0]} : ${(sortable[2][1]/sortable[0][1]*100).toFixed(2)} % </tspan>
+						<tspan x="0" dy="1.2em"> ${sortable[3][0]} : ${(sortable[3][1]/sortable[0][1]*100).toFixed(2)} % </tspan>
+						<tspan x="0" dy="1.2em"> ${sortable[4][0]} : ${(sortable[4][1]/sortable[0][1]*100).toFixed(2)} % </tspan>
+						<tspan x="0" dy="1.2em"> ${sortable[5][0]} : ${(sortable[5][1]/sortable[0][1]*100).toFixed(2)} % </tspan>
+						<tspan x="0" dy="1.2em"> Indigenous : ${(ethnics.Aborigin/sortable[0][1]*100).toFixed(2)} % </tspan>
+						`
+					})
+					
 			})
 			.on("mouseout", function (d) {
 				populationTooltip

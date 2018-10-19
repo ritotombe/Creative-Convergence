@@ -317,6 +317,7 @@ function initiateSwitch() {
 
 	$('#arc-label-switch').bootstrapSwitch('onText', 'On');
 	$('#arc-label-switch').bootstrapSwitch('offText', 'Off');
+	$('#arc-label-switch').bootstrapSwitch('state', false);
 	$('.bootstrap-switch-id-arc-label-switch').on('switchChange.bootstrapSwitch', function () {
 		if ($(this).hasClass('bootstrap-switch-on')) {
 			$('.arcs').show()

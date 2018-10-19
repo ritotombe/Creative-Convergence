@@ -236,6 +236,7 @@ function getCompaniesVenues(key) {
 function extractAURINData(AURINData) {
 	var ageData = {}
 	var incomeData = {}
+	var ancestryData = {}
 	var populationData = {}
 	var areaData = {}
 	for (i in AURINData.features) {
@@ -256,11 +257,21 @@ function extractAURINData(AURINData) {
 
 	}
 
+	for (i in AURINAncestry.features){
+		var code = AURINAncestry.features[i].properties.lga_code_2016
+		var ethnic = AURINAncestry.features[i].properties
+
+		ancestryData[code] = ethnic
+	}
+
+
+
 	localStorage.setItem('aurin-data', JSON.stringify({
 		'age': ageData,
 		'income': incomeData,
 		'population': populationData,
-		'area': areaData
+		'area': areaData,
+		'ancestry': ancestryData
 	}))
 }
 
