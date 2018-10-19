@@ -132,8 +132,8 @@ function renderMap(filteredData, schoolFilteredData) {
 		</svg>`
 		var name = 'School'
 		var div = document.createElement('div');
-			div.innerHTML = icon + name;
-			legendContent.appendChild(div);
+		div.innerHTML = icon + name;
+		legendContent.appendChild(div);
 		legendContent.appendChild(document.createElement('hr'))
 		legendContent.appendChild(div)
 	}
@@ -174,11 +174,11 @@ function renderMap(filteredData, schoolFilteredData) {
 		// Marker layer - Please notice that the other two layers are wrapped into one big svg tag.
 		// However, the marker layer did not do the same way because each marker has to be its own svg.
 		// In this way, I can put multiple svg compenent in a single marker (in this case the circle and label) 
-		
-		
+
+
 		schoolLayer = d3.select(this.getPanes().overlayMouseTarget).append("div")
 			.attr("class", "school-nodes")
-	
+
 		layer = d3.select(this.getPanes().overlayMouseTarget).append("div")
 			.attr("class", "nodes")
 
@@ -189,8 +189,8 @@ function renderMap(filteredData, schoolFilteredData) {
 		populationTooltip = d3.select('body').append('svg')
 			.attr("class", "population-tooltip")
 
-		
-			populationTooltip.append('rect')
+
+		populationTooltip.append('rect')
 			.attr('x', "-10")
 			.attr('y', "-5")
 			.attr('rx', "6")
@@ -199,7 +199,7 @@ function renderMap(filteredData, schoolFilteredData) {
 			.attr('width', "161")
 			.style('fill', 'rgba(0,0,0,0.2)')
 
-			populationTooltip.append('rect')
+		populationTooltip.append('rect')
 			.attr('x', "-10")
 			.attr('y', "-5")
 			.attr('rx', "6")
@@ -208,7 +208,7 @@ function renderMap(filteredData, schoolFilteredData) {
 			.attr('width', "160")
 			.style('fill', 'white')
 
-			
+
 
 		populationTooltipText = populationTooltip.append('text')
 			.attr('x', "50%")
@@ -386,7 +386,7 @@ function renderMap(filteredData, schoolFilteredData) {
 			// .style("opacity", 0.7)
 
 			//-- School Marker Layer --
-			
+
 			var schoolMarker = schoolLayer.selectAll("svg")
 				.data(d3.entries(schoolData))
 				.each(function (d) {
@@ -445,7 +445,7 @@ function renderMap(filteredData, schoolFilteredData) {
 			tooltip
 				.style("left", (pos.x) + "px")
 				.style("top", (pos.y) + "px")
-			
+
 			schoolTooltip
 				.style("left", (schoolPos.x) + "px")
 				.style("top", (schoolPos.y) + "px")
@@ -554,94 +554,98 @@ function renderMap(filteredData, schoolFilteredData) {
 			.attr("class", function (d) {
 				return d.properties.feature_name
 			})
-			.on("mousemove", function (d) {
-				layerPopulation.selectAll("path")
-					.attr("stroke-width", '1px')
-				// .style("stroke-opacity", "0.6")
-				d3.select(this)
-					.attr("stroke-width", '3px')
-				// .style("stroke-opacity", "1")
+			.on("mouseover mousemove", function (d) {
+				if (populationTooltip.style("display") != 'block') {
+					layerPopulation.selectAll("path")
+						.attr("stroke-width", '1px')
+					// .style("stroke-opacity", "0.6")
+					d3.select(this)
+						.attr("stroke-width", '3px')
+					// .style("stroke-opacity", "1")
 
-				populationTooltip
-					.style("left", d3.event.pageX)
-					.style("top", d3.event.pageY)
-					.style("position", "absolute")
-					.style("display", "block")
+					populationTooltip
+						.style("left", d3.event.pageX)
+						.style("top", d3.event.pageY)
+						.style("position", "absolute")
+						.style("display", "block")
 
-				populationTooltipTextName
-					.text(function () {
-						return d.properties.feature_name
-					})
+					populationTooltipTextName
+						.text(function () {
+							return d.properties.feature_name
+						})
 
-				populationTooltipTextDensity
-					.text(function () {
-						return `Density: ${(populationData[d.properties.feature_code] / areaData[d.properties.feature_code]).toFixed(2)}/km2`
-					})
+					populationTooltipTextDensity
+						.text(function () {
+							return `Density: ${(populationData[d.properties.feature_code] / areaData[d.properties.feature_code]).toFixed(2)}/km2`
+						})
 
-				populationTooltipTextAncestry
-					.html(function () {
+					populationTooltipTextAncestry
+						.html(function () {
 
-						var ethnics = {
-							"Croatian": ancestryData[d.properties.feature_code].croatian_tot_responses,
-							"Russian": ancestryData[d.properties.feature_code].russian_tot_responses,
-							"Dutch" : ancestryData[d.properties.feature_code].dutch_tot_responses,
-							"Korean" : ancestryData[d.properties.feature_code].korean_tot_responses,
-							"Chinese" : ancestryData[d.properties.feature_code].chinese_tot_responses,
-							"Indian": ancestryData[d.properties.feature_code].indian_tot_responses,
-							"Serbian": ancestryData[d.properties.feature_code].serbian_tot_responses,
-							"French" : ancestryData[d.properties.feature_code].french_tot_responses,
-							"Greek" : ancestryData[d.properties.feature_code].greek_tot_responses,
-							"Maltese" : ancestryData[d.properties.feature_code].maltese_tot_responses,
-							"Scottish" : ancestryData[d.properties.feature_code].scottish_tot_responses,
-							"English" : ancestryData[d.properties.feature_code].english_tot_responses,
-							"Aborigin" : ancestryData[d.properties.feature_code].aust_abor_tot_responses,
-							"New Zealand" : ancestryData[d.properties.feature_code].nz_tot_responses,
-							"Not Stated" : ancestryData[d.properties.feature_code].ancestry_notstated_tot_responses,
-							"Macedonian" : ancestryData[d.properties.feature_code].macedonian_tot_responses,
-							"Hungarian" : ancestryData[d.properties.feature_code].hungarian_tot_responses,
-							"Filipino" : ancestryData[d.properties.feature_code].filipino_tot_responses,
-							"Total" : ancestryData[d.properties.feature_code].tot_p_tot_responses,
-							"Polish" : ancestryData[d.properties.feature_code].polish_tot_responses,
-							"Welsh" : ancestryData[d.properties.feature_code].welsh_tot_responses,
-							"Sri Lankan" : ancestryData[d.properties.feature_code].sri_lankan_tot_responses,
-							"German" : ancestryData[d.properties.feature_code].german_tot_responses,
-							"Italian" : ancestryData[d.properties.feature_code].italian_tot_responses,
-							"Australia" : ancestryData[d.properties.feature_code].aust_tot_responses,
-							"Spanish" : ancestryData[d.properties.feature_code].spanish_tot_responses,
-							"Irish" : ancestryData[d.properties.feature_code].irish_tot_responses,
-							"Maori" : ancestryData[d.properties.feature_code].maori_tot_responses,
-							"Other" : ancestryData[d.properties.feature_code].other_tot_responses,
-							"Turkish" : ancestryData[d.properties.feature_code].turkish_tot_responses,
-							"South African" : ancestryData[d.properties.feature_code].sth_african_tot_responses,
-							"Lebanese" : ancestryData[d.properties.feature_code].lebanese_tot_responses,
-							"Vietnamese" : ancestryData[d.properties.feature_code].vietnamese_tot_responses
-						 }
-						 
+							var ethnics = {
+								"Croatian": ancestryData[d.properties.feature_code].croatian_tot_responses,
+								"Russian": ancestryData[d.properties.feature_code].russian_tot_responses,
+								"Dutch": ancestryData[d.properties.feature_code].dutch_tot_responses,
+								"Korean": ancestryData[d.properties.feature_code].korean_tot_responses,
+								"Chinese": ancestryData[d.properties.feature_code].chinese_tot_responses,
+								"Indian": ancestryData[d.properties.feature_code].indian_tot_responses,
+								"Serbian": ancestryData[d.properties.feature_code].serbian_tot_responses,
+								"French": ancestryData[d.properties.feature_code].french_tot_responses,
+								"Greek": ancestryData[d.properties.feature_code].greek_tot_responses,
+								"Maltese": ancestryData[d.properties.feature_code].maltese_tot_responses,
+								"Scottish": ancestryData[d.properties.feature_code].scottish_tot_responses,
+								"English": ancestryData[d.properties.feature_code].english_tot_responses,
+								"Aborigin": ancestryData[d.properties.feature_code].aust_abor_tot_responses,
+								"New Zealand": ancestryData[d.properties.feature_code].nz_tot_responses,
+								"Not Stated": ancestryData[d.properties.feature_code].ancestry_notstated_tot_responses,
+								"Macedonian": ancestryData[d.properties.feature_code].macedonian_tot_responses,
+								"Hungarian": ancestryData[d.properties.feature_code].hungarian_tot_responses,
+								"Filipino": ancestryData[d.properties.feature_code].filipino_tot_responses,
+								"Total": ancestryData[d.properties.feature_code].tot_p_tot_responses,
+								"Polish": ancestryData[d.properties.feature_code].polish_tot_responses,
+								"Welsh": ancestryData[d.properties.feature_code].welsh_tot_responses,
+								"Sri Lankan": ancestryData[d.properties.feature_code].sri_lankan_tot_responses,
+								"German": ancestryData[d.properties.feature_code].german_tot_responses,
+								"Italian": ancestryData[d.properties.feature_code].italian_tot_responses,
+								"Australia": ancestryData[d.properties.feature_code].aust_tot_responses,
+								"Spanish": ancestryData[d.properties.feature_code].spanish_tot_responses,
+								"Irish": ancestryData[d.properties.feature_code].irish_tot_responses,
+								"Maori": ancestryData[d.properties.feature_code].maori_tot_responses,
+								"Other": ancestryData[d.properties.feature_code].other_tot_responses,
+								"Turkish": ancestryData[d.properties.feature_code].turkish_tot_responses,
+								"South African": ancestryData[d.properties.feature_code].sth_african_tot_responses,
+								"Lebanese": ancestryData[d.properties.feature_code].lebanese_tot_responses,
+								"Vietnamese": ancestryData[d.properties.feature_code].vietnamese_tot_responses
+							}
 
-						var sortable = [];
-						for (var ethnic in ethnics) {
-							sortable.push([ethnic, ethnics[ethnic]]);
-						}
 
-						sortable.sort(function(a, b) {
-							return b[1] - a[1];
-						});
+							var sortable = [];
+							for (var ethnic in ethnics) {
+								sortable.push([ethnic, ethnics[ethnic]]);
+							}
 
-						
-						return `Ethnicity: 
-						<tspan x="0" dy="1.2em"> ${sortable[1][0]} : ${(sortable[1][1]/sortable[0][1]*100).toFixed(2)} % </tspan> 
-						<tspan x="0" dy="1.2em"> ${sortable[2][0]} : ${(sortable[2][1]/sortable[0][1]*100).toFixed(2)} % </tspan>
-						<tspan x="0" dy="1.2em"> ${sortable[3][0]} : ${(sortable[3][1]/sortable[0][1]*100).toFixed(2)} % </tspan>
-						<tspan x="0" dy="1.2em"> ${sortable[4][0]} : ${(sortable[4][1]/sortable[0][1]*100).toFixed(2)} % </tspan>
-						<tspan x="0" dy="1.2em"> ${sortable[5][0]} : ${(sortable[5][1]/sortable[0][1]*100).toFixed(2)} % </tspan>
-						<tspan x="0" dy="1.2em"> Indigenous : ${(ethnics.Aborigin/sortable[0][1]*100).toFixed(2)} % </tspan>
+							sortable.sort(function (a, b) {
+								return b[1] - a[1];
+							});
+
+
+							return `Ethnicity: 
+						<tspan x="0" dy="1.2em"> ${sortable[1][0]} : ${(sortable[1][1] / sortable[0][1] * 100).toFixed(2)} % </tspan> 
+						<tspan x="0" dy="1.2em"> ${sortable[2][0]} : ${(sortable[2][1] / sortable[0][1] * 100).toFixed(2)} % </tspan>
+						<tspan x="0" dy="1.2em"> ${sortable[3][0]} : ${(sortable[3][1] / sortable[0][1] * 100).toFixed(2)} % </tspan>
+						<tspan x="0" dy="1.2em"> ${sortable[4][0]} : ${(sortable[4][1] / sortable[0][1] * 100).toFixed(2)} % </tspan>
+						<tspan x="0" dy="1.2em"> ${sortable[5][0]} : ${(sortable[5][1] / sortable[0][1] * 100).toFixed(2)} % </tspan>
+						<tspan x="0" dy="1.2em"> Indigenous : ${(ethnics.Aborigin / sortable[0][1] * 100).toFixed(2)} % </tspan>
 						`
-					})
-					
+						})
+				}
 			})
 			.on("mouseout", function (d) {
-				populationTooltip
+				if (populationTooltip.style("display") != 'none'){
+					populationTooltip
 					.style("display", "none")
+				}
+				
 			})
 	}
 
@@ -772,7 +776,7 @@ function renderMap(filteredData, schoolFilteredData) {
 
 	function markerClickHandler(d, i, projection, context) {
 		// Set the position of the tooltip based on the clicked marker's position
-		
+
 		activePosition.value = {
 			latitude: d.value.latitude,
 			longitude: d.value.longitude
@@ -831,7 +835,7 @@ function renderMap(filteredData, schoolFilteredData) {
 
 	function schoolMarkerClickHandler(d, i, projection, context) {
 		// Set the position of the tooltip based on the clicked marker's position
-		
+
 		schoolActivePosition.value = {
 			latitude: d.value.latitude,
 			longitude: d.value.longitude
