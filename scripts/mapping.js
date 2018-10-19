@@ -554,7 +554,7 @@ function renderMap(filteredData, schoolFilteredData) {
 			.attr("class", function (d) {
 				return d.properties.feature_name
 			})
-			.on("mouseover mousemove", function (d) {
+			.on("mousemove", function (d) {
 				layerPopulation.selectAll("path")
 					.attr("stroke-width", '1px')
 				// .style("stroke-opacity", "0.6")
