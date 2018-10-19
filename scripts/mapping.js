@@ -165,7 +165,8 @@ function renderMap(filteredData, schoolFilteredData) {
 	overlay.onAdd = function () {
 		// Population layer
 		layerPopulation = d3.select(this.getPanes().overlayMouseTarget).append("div")
-			.attr("class", "population").append("svg");
+			.attr("class", "population").append("svg")
+			
 
 		// Arcs layer
 		layerArc = d3.select(this.getPanes().overlayMouseTarget).append("div")
@@ -188,7 +189,7 @@ function renderMap(filteredData, schoolFilteredData) {
 		// Population tooltip
 		populationTooltip = d3.select('body').append('svg')
 			.attr("class", "population-tooltip")
-
+			.style("pointer-events", "none")
 
 		populationTooltip.append('rect')
 			.attr('x', "-10")
@@ -555,7 +556,7 @@ function renderMap(filteredData, schoolFilteredData) {
 				return d.properties.feature_name
 			})
 			.on("mouseover mousemove", function (d) {
-				if (populationTooltip.style("display") != 'block') {
+				
 					layerPopulation.selectAll("path")
 						.attr("stroke-width", '1px')
 					// .style("stroke-opacity", "0.6")
@@ -638,15 +639,13 @@ function renderMap(filteredData, schoolFilteredData) {
 						<tspan x="0" dy="1.2em"> Indigenous : ${(ethnics.Aborigin / sortable[0][1] * 100).toFixed(2)} % </tspan>
 						`
 						})
-				}
-			})
-			.on("mouseout", function (d) {
-				if (populationTooltip.style("display") != 'none'){
-					populationTooltip
-					.style("display", "none")
-				}
 				
 			})
+			.on("mouseout", function(){
+				populationTooltip
+					.style("display","none")
+			})
+			
 	}
 
 	// This function is to create the arcs' lines
