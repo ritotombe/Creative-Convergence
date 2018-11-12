@@ -391,7 +391,9 @@ function inside(point, vs) {
 };
 
 function clearData(){
+	var myItem = localStorage.getItem('school-geocode');
 	localStorage.clear();
+	localStorage.setItem('school-geocode',myItem);
 	location.reload();
 }
 

@@ -59,6 +59,7 @@ $(function () {
                     var searchCoordData = []
                     var deleteIndex = []
 
+
                     // 1. If coordinates have been collected directly to the main data 
                     for (i in mainData) {
                         coordinates = geocoded[`${mainData[i][place]}, ${mainData[i].suburb}`]
@@ -80,6 +81,7 @@ $(function () {
                         mainData.splice(deleteIndex[i], 1)
                     }
 
+
                     // console.log(deleteIndex, mainData[deleteIndex[0]], mainData);
 
                     // 2. If not exists call Google API
@@ -92,8 +94,8 @@ $(function () {
                             calledObjects.push(`${searchCoordData[i][place]}, ${searchCoordData[i].suburb}`)
                             i++;
                             if (i < searchCoordData.length) {
-                                if (i % 500 == 0) {
-                                    setTimeout(f, 1001);
+                                if (i % 10 == 0) {
+                                    setTimeout(f, 1100);
                                 } else {
                                     f()
                                 }
@@ -109,7 +111,6 @@ $(function () {
                         function load() {
                             $.when.apply($, promises).then(function () {
                                 // console.log("called:", calledObjects.length);
-                                
                                 cnt = 0
                                 for (i in searchCoordData) {
 
@@ -132,7 +133,7 @@ $(function () {
 
                                             geocodedNew[searchCoordData[i].place] = coord;
                                         } else {
-                                            console.log("Map API not found:", searchCoordData[i].place, cnt++);
+                                            console.log("Map API not found1:", searchCoordData[i].place, cnt++, data);
                                         }
                                     }
 
@@ -146,38 +147,39 @@ $(function () {
                                     reinitialise(status, file, mode)
                                 }
 
-                                
-
-
-                            }, function () {
+                            }, function (e) {
                                 // error occurred
+                                console.log("Map API not found:", e);
                             });
+
+                            if (mode == 1 && localStorage.getItem('company-data')) {
+                                SOURCE = 'company-data'
+                            }
+                            $(".tagsinput").tagsinput("removeAll");
+                            $('.bootstrap-tagsinput input').typeahead('destroy');
+                            initiateTypeahead()
+                            filteredData = []
+                            initiateSwitch()
+                            renderAll()
+                            rawDataTable.destroy()
+                            rawDataTable = initiateRawData()
+                            schoolDataTable.destroy()
+                            schoolDataTable = initiateSchoolData()
+                    
+                            status.html(file.name + " is uploaded and data is updated. Please refresh the page")
+                            
+                            location.reload()
                         }
                     } else {
                         localStorage.setItem(localData, JSON.stringify(mainData.concat(searchCoordData)))
                         localStorage.setItem(geocodeData, JSON.stringify(Object.assign({}, geocoded, geocodedNew)))
                         reinitialise(status, file, mode)
+
+                        location.reload()
                     }
 
 
-                    if (mode == 1 && localStorage.getItem('company-data')) {
-                        SOURCE = 'company-data'
-                    }
-                    $(".tagsinput").tagsinput("removeAll");
-                    $('.bootstrap-tagsinput input').typeahead('destroy');
-                    initiateTypeahead()
-                    filteredData = []
-                    initiateSwitch()
-                    renderAll()
-                    rawDataTable.destroy()
-                    rawDataTable = initiateRawData()
-                    schoolDataTable.destroy()
-                    schoolDataTable = initiateSchoolData()
-            
-                    status.html(file.name + " is uploaded and data is updated.")
-            
-                    location.reload()
-
+              
                 } else {
                     status.html("<span style='color:#c0392b'>Please upload only csv file</span>")
                 }
