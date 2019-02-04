@@ -306,19 +306,37 @@ function getMedian(obj) {
 
 function getABSData() {
   
-	var promises = []
+	// var promises = []
 
-	promises.push($.getJSON(ABSLanguageURI))
-	promises.push($.getJSON(ABSAgeURI))
-	promises.push($.getJSON(ABSIncomeURI))
+	// promises.push($.getJSON(ABSLanguageURI))
+	// promises.push($.getJSON(ABSAgeURI))
+	// promises.push($.getJSON(ABSIncomeURI))
 
-	$.when.apply($, promises).then(function() {
-		ABSLanguage = arguments[0][0];
-		ABSAge = arguments[1][0];
-		ABSIncome = arguments[2][0];
+	// $.when.apply($, promises).then(function() {
+	// 	ABSLanguage = arguments[0][0];
+	// 	ABSAge = arguments[1][0];
+	// 	ABSIncome = arguments[2][0];
 
-		console.log(ABSAge.dataSets);
+	// 	console.log(ABSAge.dataSets);
 		
+
+	// 	var jsonLanguageData = extractDataBasedOnAreaAndCategory(ABSLanguage)
+	// 	var jsonIncomeData = extractDataBasedOnAreaAndCategory(ABSIncome)
+	// 	var jsonAgeData = extractDataBasedOnAreaAndCategory(ABSAge)
+
+	// 	localStorage.setItem('abs-data', JSON.stringify({
+	// 		'language': jsonLanguageData,
+	// 		'income': jsonIncomeData,
+	// 		'age': jsonAgeData,
+	// 	}))
+
+	// })
+
+	// Tweek for the ABS dataset
+
+		ABSLanguage = absLanguage;
+		ABSAge = absAge;
+		ABSIncome = absIncome;
 
 		var jsonLanguageData = extractDataBasedOnAreaAndCategory(ABSLanguage)
 		var jsonIncomeData = extractDataBasedOnAreaAndCategory(ABSIncome)
@@ -329,8 +347,7 @@ function getABSData() {
 			'income': jsonIncomeData,
 			'age': jsonAgeData,
 		}))
-
-	})
+	
 }
 
 
